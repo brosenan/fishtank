@@ -4,8 +4,8 @@
 '/bootstrap':signature(continuation(Task,RetVal,RetType,Continuation,Res,ResultType)::response(T),[Task::task(RetType),RetVal::RetType,RetType::'/bootstrap':type,Continuation::impred,Res::ResultType,ResultType::'/bootstrap':type]).
 '/bootstrap':projection(continuation(Task,RetVal,RetType,Continuation,Res,ResultType)::response(T),'/bootstrap':horiz(['/bootstrap':label(!do),'/bootstrap':vis(Task::task(RetType)),'/bootstrap':symbol(8680),'/bootstrap':vis(RetVal::RetType),'/bootstrap':label(! (::)),'/bootstrap':vis(RetType::'/bootstrap':type),'/bootstrap':label(!then),'/bootstrap':vis(Continuation::impred),'/bootstrap':label(!into),'/bootstrap':vis(Res::ResultType),'/bootstrap':label(! (::)),'/bootstrap':vis(ResultType::'/bootstrap':type)])).
 '/bootstrap':defAtom(userInput::task('/bootstrap':string)).
-'/bootstrap':unitTest(solve(task(userInput,Str,'/bootstrap':string),Res,T,continuation(userInput,Str,'/bootstrap':string,pred(builtin:true),Res,T))).
-solve(task(Task,Ret,RetType),Res,ResType,continuation(Task,Ret,RetType,pred(builtin:true),Res,ResType)):-builtin:true.
-'/bootstrap':unitTest(solve(annotation:parentheses(conj(task(userInput,Str,'/bootstrap':string),pred(builtin:strcat(Str,!'X',Res)))),Res,'/bootstrap':string,continuation(userInput,Str,'/bootstrap':string,conj(pred(builtin:true),pred(builtin:strcat(Str,!'X',Res))),Res,'/bootstrap':string))).
+'/bootstrap':unitTest(solve(task(userInput,Str,'/bootstrap':string),Res,T,continuation(userInput,Str,'/bootstrap':string,true,Res,T))).
+solve(task(Task,Ret,RetType),Res,ResType,continuation(Task,Ret,RetType,true,Res,ResType)):-builtin:true.
+'/bootstrap':unitTest(solve(annotation:parentheses(conj(task(userInput,Str,'/bootstrap':string),pred(builtin:strcat(Str,!'X',Res)))),Res,'/bootstrap':string,continuation(userInput,Str,'/bootstrap':string,conj(true,pred(builtin:strcat(Str,!'X',Res))),Res,'/bootstrap':string))).
 '/bootstrap':unitTest(\+solve(conj(task(userInput,Str,'/bootstrap':string),pred(builtin:strcat(Str,!'X',Res))),Res,'/bootstrap':string,continuation(userInput,Str1,'/bootstrap':string,pred(builtin:true),_,_))).
 annotation:shrink((solve(annotation:parentheses(conj(A,B)),Res,ResT,continuation(Task,Ret,RetT,annotation:parentheses(conj(APrime,B)),Res,ResT)):-solve(A,Res,ResT,continuation(Task,Ret,RetT,APrime,Res,ResT)))).
