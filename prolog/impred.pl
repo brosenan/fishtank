@@ -16,4 +16,4 @@ evalImpred(Res, Impred) :-
     write('.'), nl.
 
 writeResponse('/impred#solution'(Value)) :- write(': '), write_term(Value, []), nl.
-writeResponse('/impred#continuation'(Task,RetVal,RetType,Continuation,Res,ResultType)) :- write('? '), write_term(cont(Task, RetVal, Continuation, Res), []), nl.
+writeResponse('/impred#continuation'(Task,RetVal,RetType,Continuation,Res)) :- write('? '), write_term(cont(Task, RetVal, Continuation, Res), []), nl.

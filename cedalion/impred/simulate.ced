@@ -5,11 +5,11 @@
 '/bootstrap':unitTest(\+simulate(task(userInput,X,'/bootstrap':string),[],true)).
 simulate(Impred,_,true):-solve(Impred,_,_,solution(_)).
 '/bootstrap':unitTest(simulate(conj(task(userInput,X,'/bootstrap':string),pred(builtin:strcat(X,!', world',!'hello, world'))),[],task(userInput,X,'/bootstrap':string))).
-simulate(Impred,[],task(Task,Ret,RetT)):-solve(Impred,_,_,continuation(Task,Ret,RetT,_,_,_)).
+simulate(Impred,[],task(Task,Ret,RetT)):-solve(Impred,_,_,continuation(Task,Ret,RetT,_,_)).
 '/bootstrap':unitTest(simulate(annotation:parentheses(conj(task(userInput,!hello,'/bootstrap':string),pred(builtin:strcat(!hello,!', world',!'hello, world')))),[task(userInput,!hello,'/bootstrap':string)],true)).
 '/bootstrap':unitTest(\+simulate(annotation:parentheses(conj(task(userInput,Greet,'/bootstrap':string),pred(builtin:strcat(Greet,!', world',!'goodbye, world')))),[task(userInput,!hello,'/bootstrap':string)],true)).
 '/bootstrap':unitTest(simulate(conj(task(userInput,!hello,'/bootstrap':string),task(userInput,Y,'/bootstrap':string)),[task(userInput,!hello,'/bootstrap':string)],task(userInput,Y,'/bootstrap':string))).
-annotation:shrink((simulate(Impred,[task(Task,Ret,RetT)|Rest],Next):-solve(Impred,_,_,continuation(Task,Ret,RetT,Cont,_,_)),simulate(Cont,Rest,Next))).
+annotation:shrink((simulate(Impred,[task(Task,Ret,RetT)|Rest],Next):-solve(Impred,_,_,continuation(Task,Ret,RetT,Cont,_)),simulate(Cont,Rest,Next))).
 '/bootstrap':signature(appendNext(Simulate,Path,VNs)::'/bootstrap':procedure,[Simulate::'/bootstrap':pred,Path::cpi:path,VNs::'/bootstrap':list('/bootstrap':varName)]).
 cpi:procedureCommand(appendNext(simulate(Impred,Having,Next),Path,VNs),'/bootstrap':doProc(cpi:edit(Path,simulate(Impred,HavingPrime,Next)::'/bootstrap':pred,VNs))):-simulate(Impred,Having,N),'/bootstrap':append(Having,[N],HavingPrime,impred).
 '/bootstrap':contextMenuEntry(simulate(Impred,Having,Next)::'/bootstrap':pred,VNs,Path,!'Append Next',appendNext(simulate(Impred,Having,Next),Path,VNs)).
