@@ -409,7 +409,10 @@ generateLines(_, _, _).
 'builtin#copyTerm'(TTermOrig,TTermCopy) :- copy_term(TTermOrig,TTermCopy).
 'builtin#structurallyEqual'(TTerm1,TTerm2) :- TTerm1 =@= TTerm2.
 'builtin#removeAnnotations'(With, Without) :- removeAnnotations(With, Without).
-
+'builtin#rawTermToString'(Term::_, !String) :- copy_term(Term, Term1), 
+                                               numbervars(Term1, 0, _),
+                                               write_term_to_codes(Term1, Codes, [numbervars(true), ignore_ops(true), quoted(true)]),
+                                               atom_codes(String, Codes).
 
 
 % Write a term to a stream from a term(Term, VarNames) tupple
