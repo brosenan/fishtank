@@ -17,3 +17,6 @@ evalImpred(Res, Impred) :-
 
 writeResponse('/impred#solution'(Value)) :- write(': '), write_term(Value, []), nl.
 writeResponse('/impred#continuation'(Task,RetVal,RetType,Continuation,Res)) :- write('? '), write_term(cont(Task, RetVal, Continuation, Res), []), nl.
+
+runTests :-
+    forall('/bootstrap#testHasFailed'(Test, _, File, Result), (write(File), write(': '), write(Test), write(' --> '), write(Result), nl)).
