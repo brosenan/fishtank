@@ -7,6 +7,9 @@
 "!"                   return "!";
 "("                   return "(";
 ")"                   return ")";
+"["                   return "[";
+"]"                   return "]";
+","                   return ",";
 "'"                   this.begin("quoted"); strBuff = []; return "QUOTE";
 [a-z][a-zA-Z0-9_]*    return "ATOM";
 <<EOF>>               return 'EOF';
@@ -25,6 +28,17 @@
     default: return c;
     }
   }
+  var listStack = [];
+  var currList;
+  function pushList() {
+    currList = [];
+    listStack.push(currList);
+    return currList;
+  }
+  function popList() {
+    currList = listStack[listStack.length - 2];
+    return listStack.pop();
+  }
 %}
 %start term
 
@@ -37,6 +51,14 @@ term
 
 t
     :  '!' strBody
+        {$$ = $2;}
+    |  atom
+        {$$ = {name: $1, args: []};}
+    |  atom "(" termList ")"
+        {$$ = {name: $1, args: $3};}
+    |  "[" "]"
+        {$$ = [];}
+    |  "[" termList "]"
         {$$ = $2;}
     ;
 
@@ -60,3 +82,22 @@ quotedAtom
     |  /* empty */
     ;
 
+termList
+    : beginTermList termListBody
+       {$$ = popList();}
+    ;
+
+beginTermList
+    :
+       { pushList(); }
+    ;
+
+termListBody
+    :  listElem
+    |  listElem "," termListBody
+    ;
+
+listElem
+    :  t
+       { currList.push($1); }
+    ;
