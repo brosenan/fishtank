@@ -4,7 +4,7 @@
   "description": "A deductive database for the 21st century",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --harmony js"
+    "test": "./node_modules/mocha/bin/mocha --harmony -C -R dot js/test"
   },
   "repository": {
     "type": "git",
@@ -18,5 +18,8 @@
   "homepage": "https://github.com/brosenan/cloudlog1",
   "devDependencies": {
     "mocha": "^2.2.5"
+  },
+  "dependencies": {
+    "jison": "^0.4.15"
   }
 }
