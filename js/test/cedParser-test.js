@@ -4,7 +4,10 @@ var assert = require("assert");
 var cedParser = require("../cedParser.js");
 
 describe('CedParser', function(){
-    var parser = new cedParser.CedParser();
+    var parser;
+    beforeEach(function() {
+	parser = new cedParser.CedParser();
+    });
     describe('.parse(str)', function(){
 	it('should ignore whitespaces', function(){
 	    assert.deepEqual(parser.parse('abc(a, b,\tc)\n'), parser.parse('abc(a,b,c)'));
@@ -65,16 +68,15 @@ describe('CedParser', function(){
 	    parser.parse('~>(S, :-(Head, Body))');
 	});
 	it('should parse cedalion code', function(){
-	    parser.parse(":-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#signature'(::('/Functional#binOp'(A),'/bootstrap#type'),'.'(::(A,'/bootstrap#type'),[])),'.'('builtin#varName'(::(A,B),!('T')),[])),'builtin#true')");
-	    parser.parse("'/bootstrap#signature'(::('/Functional#binOp'(A),'/bootstrap#type'),'.'(::(A,'/bootstrap#type'),[]))");
-	    parser.parse(":-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#defAtom'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number'))),[]),'builtin#true')");
-	    parser.parse("'/bootstrap#defAtom'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number')))");
-	    parser.parse(":-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#projection'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number')),'/bootstrap#label'(!(+))),[]),'builtin#true')");
-	    parser.parse("'/bootstrap#projection'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number')),'/bootstrap#label'(!(+)))");
-	    parser.parse(":-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#signature'(::('/Functional#applyBinOp'(A,B,C),'/Functional#expr'(D)),'.'(::(A,'/Functional#expr'(D)),'.'(::(B,'/Functional#binOp'(D)),'.'(::(C,'/Functional#expr'(D)),[])))),'.'('builtin#varName'(::(A,E),!('Arg1')),'.'('builtin#varName'(::(B,F),!('Op')),'.'('builtin#varName'(::(C,G),!('Arg2')),'.'('builtin#varName'(::(D,H),!('T')),[]))))),'builtin#true')");
-	    parser.parse(":-('builtin#loadedStatement'(!('/home/boaz/cedalion/bootstrap/typesystem.ced'),'/bootstrap#projection'(::('/bootstrap#true'(A),'/bootstrap#pred'),'/bootstrap#horiz'('.'('/bootstrap#vis'(::(A,'/bootstrap#pred')),'.'('/bootstrap#label'(!(!)),[])))),'.'('builtin#varName'(::(A,B),!('Goal')),[])),'builtin#true')");
-
+	    parser.parse("[:-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#signature'(::('/Functional#binOp'(A),'/bootstrap#type'),'.'(::(A,'/bootstrap#type'),[])),'.'('builtin#varName'(::(A,B),!('T')),[])),'builtin#true'), '/bootstrap#signature'(::('/Functional#binOp'(A),'/bootstrap#type'),'.'(::(A,'/bootstrap#type'),[])), :-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#defAtom'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number'))),[]),'builtin#true'), '/bootstrap#defAtom'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number'))), :-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#projection'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number')),'/bootstrap#label'(!(+))),[]),'builtin#true'), '/bootstrap#projection'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number')),'/bootstrap#label'(!(+))), :-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#signature'(::('/Functional#applyBinOp'(A,B,C),'/Functional#expr'(D)),'.'(::(A,'/Functional#expr'(D)),'.'(::(B,'/Functional#binOp'(D)),'.'(::(C,'/Functional#expr'(D)),[])))),'.'('builtin#varName'(::(A,E),!('Arg1')),'.'('builtin#varName'(::(B,F),!('Op')),'.'('builtin#varName'(::(C,G),!('Arg2')),'.'('builtin#varName'(::(D,H),!('T')),[]))))),'builtin#true'), :-('builtin#loadedStatement'(!('/home/boaz/cedalion/bootstrap/typesystem.ced'),'/bootstrap#projection'(::('/bootstrap#true'(A),'/bootstrap#pred'),'/bootstrap#horiz'('.'('/bootstrap#vis'(::(A,'/bootstrap#pred')),'.'('/bootstrap#label'(!(!)),[])))),'.'('builtin#varName'(::(A,B),!('Goal')),[])),'builtin#true')]");
 	});
-
     });
+    describe('.register(concept, ctor)', function(){
+	it('should register a constructor for evaluating compound terms', function(){
+	    parser.register('+/2', function(a, b) { return a+b; });
+	    parser.register('*/2', function(a, b) { return a*b; });
+	    assert.equal(parser.parse('+(1, *(2, 3))'), 7);
+	});
+    });
+
 });

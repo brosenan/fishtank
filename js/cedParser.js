@@ -10,3 +10,7 @@ clazz.parse = function(str) {
     cedGrammar.parser.yy = this;
     return cedGrammar.parse(str);
 };
+
+clazz.register = function(concept, ctor) {
+    this.registered[concept] = ctor;
+};
