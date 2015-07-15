@@ -4,7 +4,6 @@
 
 %%
 \s+                                          /* skip whitespace */
-"!"                                          return "!";
 "("                                          return "(";
 ")"                                          return ")";
 "["                                          return "[";
@@ -13,11 +12,11 @@
 "'"                                          this.begin("quoted"); strBuff = []; return "QUOTE";
 [a-z][a-zA-Z0-9_]*                           return "ATOM";
 [A-Z_][a-zA-Z0-9_]*                          return "VAR";
-[:\-~<>]+                                    return "ATOM";
 <quoted>"'"                                  this.popState(); return "QUOTE";
 <quoted>[^\\]                                strBuff.push(yytext); return "QUOTED_CHAR";
 <quoted>\\.                                  strBuff.push(unescape(yytext[1])); return "ESC_SEQ";
 [0-9]+(\.[0-9]*)?([eE][+\-][0-9]+)?          return "NUMBER";
+[^a-zA-Z_0-9()]+                             return "ATOM";
 <<EOF>>                                      return 'EOF';
 
 /lex
@@ -42,6 +41,15 @@
     currList = listStack[listStack.length - 2];
     return listStack.pop();
   }
+  function createTerm(scope, name, args) {
+    var key = name + '/' + args.length;
+    var ctor = scope.registered[key];
+    if(ctor) {
+      return ctor.apply(this, args);
+    } else {
+      return {name: name, args: args};
+    }
+  }
 %}
 %start term
 
@@ -53,12 +61,10 @@ term
     ;
 
 t
-    :  '!' strBody
-        {$$ = $2;}
-    |  atom
-        {$$ = {name: $1, args: []};}
+    :  atom
+    {$$ = createTerm(yy.parser.yy, $1, []);}
     |  atom "(" termList ")"
-        {$$ = {name: $1, args: $3};}
+    {$$ = createTerm(yy.parser.yy, $1, $3);}
     |  "[" "]"
         {$$ = [];}
     |  "[" termList "]"

@@ -9,11 +9,6 @@ describe('CedParser', function(){
 	it('should ignore whitespaces', function(){
 	    assert.deepEqual(parser.parse('abc(a, b,\tc)\n'), parser.parse('abc(a,b,c)'));
 	});
-	it('should parse a Cedalion string to a JS string', function(){
-	    var str = parser.parse("!string");
-	    assert.equal(typeof str, 'string');
-	    assert.equal(str, 'string');
-	});
 	it('should handle strings with parentheses', function(){
 	    assert.equal(parser.parse("!(string)"), 'string');
 	});
@@ -21,13 +16,13 @@ describe('CedParser', function(){
 	    assert.equal(parser.parse("!('string')"), 'string');
 	});
 	it('should handle quoted strings with arbitrary characters', function(){
-	    assert.equal(parser.parse("!'This is a string'"), 'This is a string');
+	    assert.equal(parser.parse("!('This is a string')"), 'This is a string');
 	});
 	it('should handle quoted strings with escape sequences', function(){
 	    assert.equal(parser.parse("!('\\'string\\\\')"), "\'string\\");
 	});
 	it('should handle quoted strings with non-identity escape sequences', function(){
-	    assert.equal(parser.parse("!'string\\n\\t\\r'"), "string\n\t\r");
+	    assert.equal(parser.parse("!('string\\n\\t\\r')"), "string\n\t\r");
 	});
 	it('should handle atomic terms', function(){
 	    var term = parser.parse("atomic");
@@ -68,6 +63,17 @@ describe('CedParser', function(){
 
 	it('should support atoms made of special characters', function(){
 	    parser.parse('~>(S, :-(Head, Body))');
+	});
+	it('should parse cedalion code', function(){
+	    parser.parse(":-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#signature'(::('/Functional#binOp'(A),'/bootstrap#type'),'.'(::(A,'/bootstrap#type'),[])),'.'('builtin#varName'(::(A,B),!('T')),[])),'builtin#true')");
+	    parser.parse("'/bootstrap#signature'(::('/Functional#binOp'(A),'/bootstrap#type'),'.'(::(A,'/bootstrap#type'),[]))");
+	    parser.parse(":-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#defAtom'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number'))),[]),'builtin#true')");
+	    parser.parse("'/bootstrap#defAtom'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number')))");
+	    parser.parse(":-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#projection'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number')),'/bootstrap#label'(!(+))),[]),'builtin#true')");
+	    parser.parse("'/bootstrap#projection'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number')),'/bootstrap#label'(!(+)))");
+	    parser.parse(":-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#signature'(::('/Functional#applyBinOp'(A,B,C),'/Functional#expr'(D)),'.'(::(A,'/Functional#expr'(D)),'.'(::(B,'/Functional#binOp'(D)),'.'(::(C,'/Functional#expr'(D)),[])))),'.'('builtin#varName'(::(A,E),!('Arg1')),'.'('builtin#varName'(::(B,F),!('Op')),'.'('builtin#varName'(::(C,G),!('Arg2')),'.'('builtin#varName'(::(D,H),!('T')),[]))))),'builtin#true')");
+	    parser.parse(":-('builtin#loadedStatement'(!('/home/boaz/cedalion/bootstrap/typesystem.ced'),'/bootstrap#projection'(::('/bootstrap#true'(A),'/bootstrap#pred'),'/bootstrap#horiz'('.'('/bootstrap#vis'(::(A,'/bootstrap#pred')),'.'('/bootstrap#label'(!(!)),[])))),'.'('builtin#varName'(::(A,B),!('Goal')),[])),'builtin#true')");
+
 	});
 
     });
