@@ -1,0 +1,22 @@
+{
+  "name": "cloudlog1",
+  "version": "0.1.0",
+  "description": "A deductive database for the 21st century",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha --harmony js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brosenan/cloudlog1.git"
+  },
+  "author": "Boaz Rosenan <brosenan@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brosenan/cloudlog1/issues"
+  },
+  "homepage": "https://github.com/brosenan/cloudlog1",
+  "devDependencies": {
+    "mocha": "^2.2.5"
+  }
+}
