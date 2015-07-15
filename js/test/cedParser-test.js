@@ -57,5 +57,18 @@ describe('CedParser', function(){
 	    assert.equal(list[0].name, 'a');
 	});
 
+	it('should parse numbers', function(){
+	    assert.deepEqual(parser.parse('[1, 2e+5, 3.14]'), [1, 2e+5, 3.14]);
+	});
+	
+	it('should parse variables', function(){
+	    var v = parser.parse('Foo');
+	    assert.equal(v.var, 'Foo');
+	});
+
+	it('should support atoms made of special characters', function(){
+	    parser.parse('~>(S, :-(Head, Body))');
+	});
+
     });
 });

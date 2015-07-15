@@ -3,19 +3,22 @@
 %x quoted
 
 %%
-\s+                   /* skip whitespace */
-"!"                   return "!";
-"("                   return "(";
-")"                   return ")";
-"["                   return "[";
-"]"                   return "]";
-","                   return ",";
-"'"                   this.begin("quoted"); strBuff = []; return "QUOTE";
-[a-z][a-zA-Z0-9_]*    return "ATOM";
-<<EOF>>               return 'EOF';
-<quoted>"'"           this.popState(); return "QUOTE";
-<quoted>[^\\]         strBuff.push(yytext); return "QUOTED_CHAR";
-<quoted>\\.           strBuff.push(unescape(yytext[1])); return "ESC_SEQ";
+\s+                                          /* skip whitespace */
+"!"                                          return "!";
+"("                                          return "(";
+")"                                          return ")";
+"["                                          return "[";
+"]"                                          return "]";
+","                                          return ",";
+"'"                                          this.begin("quoted"); strBuff = []; return "QUOTE";
+[a-z][a-zA-Z0-9_]*                           return "ATOM";
+[A-Z_][a-zA-Z0-9_]*                          return "VAR";
+[:\-~<>]+                                    return "ATOM";
+<quoted>"'"                                  this.popState(); return "QUOTE";
+<quoted>[^\\]                                strBuff.push(yytext); return "QUOTED_CHAR";
+<quoted>\\.                                  strBuff.push(unescape(yytext[1])); return "ESC_SEQ";
+[0-9]+(\.[0-9]*)?([eE][+\-][0-9]+)?          return "NUMBER";
+<<EOF>>                                      return 'EOF';
 
 /lex
 %{
@@ -60,6 +63,10 @@ t
         {$$ = [];}
     |  "[" termList "]"
         {$$ = $2;}
+    |  NUMBER
+        {$$ = Number(yytext);}
+    |  VAR
+        {$$ = {var: yytext};}
     ;
 
 strBody
