@@ -4,7 +4,7 @@
   "description": "A deductive database for the 21st century",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --harmony -C -R dot js/test"
+    "test": "node ./node_modules/jison/lib/cli.js js/cedGrammar.jison && mv ./cedGrammar.js js/ && ./node_modules/mocha/bin/mocha --harmony -C -R dot js/test"
   },
   "repository": {
     "type": "git",
