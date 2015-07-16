@@ -8,7 +8,7 @@
 '/bootstrap':adapter(Pred::'/bootstrap':pred,pred(Pred)::impred).
 '/bootstrap':signature(solve(Impred,Res,T,Resp)::'/bootstrap':pred,[Impred::impred,Res::T,T::'/bootstrap':type,Resp::response(T)]).
 annotation:shrink('/bootstrap':projection(solve(Impred,Res,T,Resp)::'/bootstrap':pred,'/bootstrap':horiz(['/bootstrap':label(!find),'/bootstrap':vis(Res::T),'/bootstrap':label(! (::)),'/bootstrap':vis(T::'/bootstrap':type),'/bootstrap':label(!for),'/bootstrap':vis(Impred::impred),'/bootstrap':label(!into),'/bootstrap':vis(Resp::response(T))]))).
-solve(pred(Pred),Res,T,solution(Res)):-Pred.
+solve(pred(Pred),Res,T,Solution):-builtin:catch((Pred,Solution::response(T)=solution(Res)::response(T)),Exception,Solution::response(T)=throws(Exception)::response(T)).
 '/bootstrap':unitTest(solve(conj(pred(builtin:plus(1,2,Y)),pred(builtin:plus(Y,3,X))),X,'/bootstrap':number,_)).
 '/bootstrap':unitTest(\+solve(conj(pred(builtin:plus(1,2,X)),pred(builtin:plus(2,3,X))),X,'/bootstrap':number,_)).
 '/bootstrap':signature(conj(IP1,IP2)::impred,[IP1::impred,IP2::impred]).
