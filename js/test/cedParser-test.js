@@ -4,6 +4,8 @@ var assert = require("assert");
 var cedParser = require("../cedParser.js");
 
 describe('CedParser', function(){
+    var cedalionCode = "[:-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#signature'(::('/Functional#binOp'(A),'/bootstrap#type'),'.'(::(A,'/bootstrap#type'),[])),'.'('builtin#varName'(::(A,B),!('T')),[])),'builtin#true'), '/bootstrap#signature'(::('/Functional#binOp'(A),'/bootstrap#type'),'.'(::(A,'/bootstrap#type'),[])), :-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#defAtom'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number'))),[]),'builtin#true'), '/bootstrap#defAtom'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number'))), :-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#projection'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number')),'/bootstrap#label'(!(+))),[]),'builtin#true'), '/bootstrap#projection'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number')),'/bootstrap#label'(!(+))), :-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#signature'(::('/Functional#applyBinOp'(A,B,C),'/Functional#expr'(D)),'.'(::(A,'/Functional#expr'(D)),'.'(::(B,'/Functional#binOp'(D)),'.'(::(C,'/Functional#expr'(D)),[])))),'.'('builtin#varName'(::(A,E),!('Arg1')),'.'('builtin#varName'(::(B,F),!('Op')),'.'('builtin#varName'(::(C,G),!('Arg2')),'.'('builtin#varName'(::(D,H),!('T')),[]))))),'builtin#true'), :-('builtin#loadedStatement'(!('/home/boaz/cedalion/bootstrap/typesystem.ced'),'/bootstrap#projection'(::('/bootstrap#true'(A),'/bootstrap#pred'),'/bootstrap#horiz'('.'('/bootstrap#vis'(::(A,'/bootstrap#pred')),'.'('/bootstrap#label'(!(!)),[])))),'.'('builtin#varName'(::(A,B),!('Goal')),[])),'builtin#true')]";
+
     var parser;
     beforeEach(function() {
 	parser = new cedParser.CedParser();
@@ -68,7 +70,7 @@ describe('CedParser', function(){
 	    parser.parse('~>(S, :-(Head, Body))');
 	});
 	it('should parse cedalion code', function(){
-	    parser.parse("[:-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#signature'(::('/Functional#binOp'(A),'/bootstrap#type'),'.'(::(A,'/bootstrap#type'),[])),'.'('builtin#varName'(::(A,B),!('T')),[])),'builtin#true'), '/bootstrap#signature'(::('/Functional#binOp'(A),'/bootstrap#type'),'.'(::(A,'/bootstrap#type'),[])), :-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#defAtom'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number'))),[]),'builtin#true'), '/bootstrap#defAtom'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number'))), :-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#projection'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number')),'/bootstrap#label'(!(+))),[]),'builtin#true'), '/bootstrap#projection'(::('/Functional#numPlus','/Functional#binOp'('/bootstrap#number')),'/bootstrap#label'(!(+))), :-('builtin#loadedStatement'(!('/home/boaz/cedalion/Functional/binop.ced'),'/bootstrap#signature'(::('/Functional#applyBinOp'(A,B,C),'/Functional#expr'(D)),'.'(::(A,'/Functional#expr'(D)),'.'(::(B,'/Functional#binOp'(D)),'.'(::(C,'/Functional#expr'(D)),[])))),'.'('builtin#varName'(::(A,E),!('Arg1')),'.'('builtin#varName'(::(B,F),!('Op')),'.'('builtin#varName'(::(C,G),!('Arg2')),'.'('builtin#varName'(::(D,H),!('T')),[]))))),'builtin#true'), :-('builtin#loadedStatement'(!('/home/boaz/cedalion/bootstrap/typesystem.ced'),'/bootstrap#projection'(::('/bootstrap#true'(A),'/bootstrap#pred'),'/bootstrap#horiz'('.'('/bootstrap#vis'(::(A,'/bootstrap#pred')),'.'('/bootstrap#label'(!(!)),[])))),'.'('builtin#varName'(::(A,B),!('Goal')),[])),'builtin#true')]");
+	    parser.parse(cedalionCode);
 	});
     });
     describe('.register(concept, ctor)', function(){
@@ -78,5 +80,44 @@ describe('CedParser', function(){
 	    assert.equal(parser.parse('+(1, *(2, 3))'), 7);
 	});
     });
+    describe('.generate(term)', function(){
+	it('should convert a string to a string term', function(){
+	    assert.equal(parser.generate('hello'), "!('hello')");
+	});
 
+	it('should escape special characters', function(){
+	    assert.equal(parser.generate("'\n\r\t\\"), "!('\\'\\n\\r\\t\\\\')");
+	});
+
+	it('should handle atomic term objects', function(){
+	    assert.equal(parser.generate({name: 'foo', args: []}), "'foo'");
+	});
+
+	it('should handle atomic term objects with special characters', function(){
+	    assert.equal(parser.generate({name: 'foo\nbar', args: []}), "'foo\\nbar'");
+	});
+
+	it('should handle compound terms', function(){
+	    assert.equal(parser.generate({name: 'foo', args: ['a', 'b']}), "'foo'(!('a'),!('b'))");
+	});
+
+	it('should handle variables', function(){
+	    assert.equal(parser.generate({var: 'Foo'}), "Foo");
+	});
+	
+	it('should handle lists', function(){
+	    assert.equal(parser.generate(['a', 'b', 'c']), "[!('a'),!('b'),!('c')]");
+	});
+
+	it('should handle numbers', function(){
+	    assert.equal(parser.generate(3.14), "3.14");
+	});
+
+	it('should handle anything parsed by .parse(), and then again', function(){
+	    var parsed = parser.parse(cedalionCode);
+	    var generated = parser.generate(parsed);
+	    var parsed2 = parser.parse(generated);
+	    assert.deepEqual(parsed, parsed2);
+	});
+    });
 });
