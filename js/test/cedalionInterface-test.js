@@ -8,9 +8,9 @@ var EventEmitter = require('events').EventEmitter;
 describe('CedalionInterface', function(){
     var ced = new CedalionInterface('/tmp/ced.log');
     var impred = new Namespace('/impred');
-    impred._define(['greet', 'pred', 'userInput']);
+    impred._define(['greet', 'pred', 'userInput', 'someException']);
     var builtin = new Namespace('builtin');
-    builtin._define(['succ']);
+    builtin._define(['succ', 'throw']);
     describe('.eval(res, impred)', function(){
 	it('should return an event emitter', function(done){
 	    var X = {var:'X'};
@@ -75,6 +75,14 @@ describe('CedalionInterface', function(){
 	    }
 	    em1.on('done', onDone);
 	    em2.on('done', onDone);
+	});
+	it('should handle exceptions', function(done){
+	    var X = {var:'X'};
+	    var em = ced.eval(X, impred.pred(builtin.throw(impred.someException())));
+	    em.on('error', function(err) {
+		assert.equal(err.message, "'/impred#someException'");
+		done(); 
+	    });
 	});
 
     });

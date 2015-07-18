@@ -36,6 +36,8 @@ module.exports = function(logfile) {
 	    self.em.emit('continuation', self.parser.parse(m[2]), function(resp) {
 		return self.request('cont(' + m[1] + ',' + self.parser.generate(resp) + ')');
 	    });
+	} else if(data.substr(0, 2) === '! ') {
+	    self.em.emit('error', Error(data.substr(2)));
 	}
     });
     this.parser = new CedParser();
@@ -64,5 +66,8 @@ clazz.request = function(req) {
 };
 
 clazz.send = function(req) {
+    if(this._log) {
+	this._log.write('> ' + req + '.\n');
+    }
     this.prolog.stdin.write(req + '.\n');
 };

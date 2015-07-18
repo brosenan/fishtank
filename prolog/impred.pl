@@ -11,7 +11,7 @@ handleCmd(eval(Res, Impred), yes) :- !, evalImpred(Res, Impred).
 handleCmd(cont(ID, RetVal), yes) :- !, continue(ID, RetVal).
 handleCmd(Cmd, _) :- throw(bad_command(Cmd)).
 
-handleError(Error) :- write('! '), writeTerm(Error), nl.
+handleError(Error) :- write('! '), writeTerm(Error), nl, write('.'), nl.
 
 evalImpred(Res, Impred) :-
     forall('/impred#solve'(Impred,Res,_,Resp), writeResponse(Resp)),
@@ -21,6 +21,7 @@ writeResponse('/impred#solution'(Value)) :- write(': '), writeTerm(Value), nl.
 writeResponse('/impred#continuation'(Task,RetVal,RetType,Continuation,Res)) :- 
     storeTerm(cont(RetVal, Continuation, Res), ID),
     write('? '), write(ID), write(' '), writeTerm(Task), nl.
+writeResponse('/impred#throws'(Value)) :- write('! '), writeTerm(Value), nl.
 
 runTests :-
     forall('/bootstrap#testHasFailed'(Test, _, File, Result), (write(File), write(': '), write(Test), write(' --> '), write(Result), nl)).
