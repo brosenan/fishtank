@@ -50,7 +50,7 @@ module.exports = function(logfile) {
 		self.em.emit('error', Error(data.substr(2)));
 	    }
 	} catch(e) {
-	    console.error(e);
+	    console.error(e.stack);
 	}
     });
     this.parser = new CedParser();

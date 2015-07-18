@@ -11,7 +11,7 @@ describe('Nodalion', function(){
     var nodalion, impred, builtin, bootstrap;
     beforeEach(function() {
 	nodalion = new Nodalion(cedalionInterface);
-	impred = nodalion.namespace('/impred', ['pred', 'someException']);
+	impred = nodalion.namespace('/impred', ['pred', 'someException', 'greet']);
 	builtin = nodalion.namespace('builtin', ['succ', 'throw']);
 	bootstrap = nodalion.namespace('/bootstrap', ['listMember']);
     });
@@ -46,6 +46,17 @@ describe('Nodalion', function(){
 		assert.equal(e.message, impred.someException().toString());
 	    }
 	}));
+	it('should follow continuations', $T(function*(){
+	    impred._register('userInput', function() {
+		return function(cb) {
+		    return cb(undefined, 'nodalion');
+		};
+	    });
+	    var X = {var:'X'};
+	    var res = yield nodalion.findAll(X, impred.greet(X), $R());
+	    assert.deepEqual(res, ["Hello, nodalion"]);
+	}));
+
     });
 });
 
