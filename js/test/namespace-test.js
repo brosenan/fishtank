@@ -14,4 +14,13 @@ describe('namespace', function(){
 	    assert.deepEqual(foo.bar(1, 2), {name: '/foo#bar', args: [1, 2]});
 	});
     });
+    describe('.<concept>(args...)', function(){
+	it('should return an object that has a .toString() method', function(){
+	    var foo = new Namespace('/foo');
+	    foo._define(['bar', 'baz']);
+	    assert.equal(foo.bar().toString(), "'/foo#bar'");
+	});
+
+    });
+
 });
