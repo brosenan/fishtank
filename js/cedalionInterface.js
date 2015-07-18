@@ -4,8 +4,12 @@ var spawn = require('child_process').spawn;
 var byline = require('byline');
 var CedParser = require('./cedParser.js').CedParser;
 var fs = require('fs');
+var Namespace = require('./namespace.js');
 
 var matchContinuation = /([0-9]+)[ \t]+(.*)/
+
+var js = new Namespace('js');
+js._define(['exception']);
 
 module.exports = function(logfile) {
     var self = this;
@@ -33,8 +37,12 @@ module.exports = function(logfile) {
 	    if(m === null) {
 		throw Error("Bad response: " + data);
 	    }
-	    self.em.emit('continuation', self.parser.parse(m[2]), function(resp) {
-		return self.request('cont(' + m[1] + ',' + self.parser.generate(resp) + ')');
+	    self.em.emit('continuation', self.parser.parse(m[2]), function(err, resp) {
+		if(err) {
+		    return self.request('throwInto(' + m[1] + ',' + js.exception(err.message).toString() + ')');
+		} else {
+		    return self.request('cont(' + m[1] + ',' + self.parser.generate(resp) + ')');
+		}
 	    });
 	} else if(data.substr(0, 2) === '! ') {
 	    self.em.emit('error', Error(data.substr(2)));

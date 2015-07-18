@@ -9,6 +9,7 @@ go :- read(Cmd),
 handleCmd(end_of_file, no) :- !.
 handleCmd(eval(Res, Impred), yes) :- !, evalImpred(Res, Impred).
 handleCmd(cont(ID, RetVal), yes) :- !, continue(ID, RetVal).
+handleCmd(throwInto(ID, Exception), yes) :- !, throwInto(ID, Exception).
 handleCmd(Cmd, _) :- throw(bad_command(Cmd)).
 
 handleError(Error) :- write('! '), writeTerm(Error), nl, write('.'), nl.
@@ -38,6 +39,11 @@ chooseID(ID) :- chooseID(ID).
 continue(ID, RetVal) :-
     retract(storedTerm(ID, cont(RetVal, Continuation, Res))),
     evalImpred(Res, Continuation).
+
+throwInto(ID, Exception) :-
+    retract(storedTerm(ID, cont(RetVal, Continuation, Res))),
+    forall('/impred#throwInto'(Continuation, Exception, Resp, RetVal, _), writeResponse(Resp)),
+    write('.'), nl.
 
 mustSucceed(Goal) :-
     Goal, !.

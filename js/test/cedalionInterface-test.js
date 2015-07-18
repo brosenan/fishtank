@@ -5,12 +5,15 @@ var CedalionInterface = require("../cedalionInterface.js");
 var Namespace = require("../namespace.js");
 var EventEmitter = require('events').EventEmitter;
 
+var impred = new Namespace('/impred');
+impred._define(['greet', 'pred', 'userInput', 'someException']);
+var builtin = new Namespace('builtin');
+builtin._define(['succ', 'throw']);
+var js = new Namespace('js');
+js._define(['exception']);
+
 describe('CedalionInterface', function(){
     var ced = new CedalionInterface('/tmp/ced.log');
-    var impred = new Namespace('/impred');
-    impred._define(['greet', 'pred', 'userInput', 'someException']);
-    var builtin = new Namespace('builtin');
-    builtin._define(['succ', 'throw']);
     describe('.eval(res, impred)', function(){
 	it('should return an event emitter', function(done){
 	    var X = {var:'X'};
@@ -49,13 +52,25 @@ describe('CedalionInterface', function(){
 	    var em = ced.eval(X, impred.greet(X));
 	    em.on('continuation', function(task, cont) {
 		assert.deepEqual(task, impred.userInput());
-		var em2 = cont("world");
+		var em2 = cont(undefined, "world");
 		em2.on('solution', function(sol) {
 		    assert.equal(sol, 'Hello, world');
 		    done();
 		});
 	    });
 	});
+	it('should respect exceptions thrown into continuations', function(done){
+	    var X = {var:'X'};
+	    var em = ced.eval(X, impred.greet(X));
+	    em.on('continuation', function(task, cont) {
+		var em2 = cont(Error('foo bar'));
+		em2.on('error', function(err) {
+		    assert.equal(err.message, js.exception('foo bar').toString());
+		    done();
+		});
+	    });
+	});
+
 	it('should not mix events between different requests', function(done){
 	    var X = {var:'X'};
 	    var em1 = ced.eval(X, impred.pred(builtin.succ(1, X)));
@@ -84,6 +99,5 @@ describe('CedalionInterface', function(){
 		done(); 
 	    });
 	});
-
     });
 });

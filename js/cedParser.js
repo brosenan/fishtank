@@ -55,6 +55,9 @@ var generators = {
     'number': function(term) {
 	return '' + term;
     },
+    'undefined': function() {
+	throw Error('Attempting to generate undefined as term');
+    },
 };
 
 clazz.generate = function(term) {
