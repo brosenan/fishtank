@@ -2,8 +2,9 @@
 
 var CedParser = require('./cedParser.js').CedParser;
 
-module.exports = function(ns) {
+module.exports = function(ns, parser) {
     this.ns = ns;
+    this.parser = parser;
 };
 
 var clazz = module.exports.prototype;
@@ -24,4 +25,9 @@ clazz._define = function(names) {
 	    return new Term(self.ns + "#" + name, Array.prototype.slice.call(arguments));
 	};
     });
+};
+
+clazz._register = function(name, ctor) {
+    this._define([name]);
+    this.parser.register(this.ns + '#' + name + '/' + ctor.length, ctor);
 };
