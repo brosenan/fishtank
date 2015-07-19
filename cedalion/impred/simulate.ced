@@ -1,5 +1,6 @@
 '/bootstrap':signature(simulate(Impred,List,Next)::'/bootstrap':pred,[Impred::impred,List::'/bootstrap':list(impred),Next::impred]).
 '/bootstrap':projection(simulate(Impred,List,Next)::'/bootstrap':pred,'/bootstrap':vert(['/bootstrap':horiz(['/bootstrap':label(!simulate),'/bootstrap':vis(Impred::impred)]),'/bootstrap':horiz(['/bootstrap':label(!'    '),'/bootstrap':vert(['/bootstrap':horiz(['/bootstrap':label(!'having:'),cpi:vis(List::'/bootstrap':list(impred),'/bootstrap':vert)]),'/bootstrap':horiz(['/bootstrap':label(!'next:'),'/bootstrap':vis(Next::impred)])])])])).
+'/bootstrap':default(simulate(true,[],true)::'/bootstrap':pred).
 '/bootstrap':unitTest(simulate(pred(builtin:plus(1,2,3)),[],true)).
 '/bootstrap':unitTest(\+simulate(pred(builtin:plus(1,2,4)),[],true)).
 '/bootstrap':unitTest(\+simulate(task(userInput,X,'/bootstrap':string),[],true)).
