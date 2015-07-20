@@ -1,7 +1,6 @@
 "use strict";
 
 var assert = require("assert");
-var CedalionInterface = require("../cedalionInterface.js");
 var Nodalion = require("../nodalion.js");
 
 var $S = require('suspend'), $R = $S.resume, $T = function(gen) { return function(done) { $S.run(gen, done); } };
@@ -11,10 +10,9 @@ var builtin = Nodalion.namespace('builtin', ['succ', 'throw']);
 var bootstrap = Nodalion.namespace('/bootstrap', ['listMember']);
 
 describe('Nodalion', function(){
-    var cedalionInterface = new CedalionInterface('/tmp/ced.log');
     var nodalion;
     beforeEach(function() {
-	nodalion = new Nodalion(cedalionInterface);
+	nodalion = new Nodalion('/tmp/ced.log');
     });
 
     describe('.namespace(name, concepts)', function(){

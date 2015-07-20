@@ -1,8 +1,9 @@
 "use strict";
 var Namespace = require('./namespace.js');
+var CedalionInterface = require("./cedalionInterface.js");
 
-module.exports = function(ced) {
-    this.ced = ced;
+module.exports = function(logFile) {
+    this.ced = new CedalionInterface(logFile);
 };
 
 var clazz = module.exports.prototype;
