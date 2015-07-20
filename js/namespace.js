@@ -1,10 +1,9 @@
 "use strict";
 
-var CedParser = require('./cedParser.js').CedParser;
+var cedParser = require('./cedParser.js');
 
-module.exports = function(ns, parser) {
+module.exports = function(ns) {
     this.ns = ns;
-    this.parser = parser;
 };
 
 var clazz = module.exports.prototype;
@@ -15,7 +14,7 @@ function Term(name, args) {
 };
 
 Term.prototype.toString = function() {
-    return CedParser.prototype.generate(this);
+    return cedParser.generate(this);
 };
 
 clazz._define = function(names) {
@@ -29,5 +28,5 @@ clazz._define = function(names) {
 
 clazz._register = function(name, ctor) {
     this._define([name]);
-    this.parser.register(this.ns + '#' + name + '/' + ctor.length, ctor);
+    cedParser.register(this.ns + '#' + name + '/' + ctor.length, ctor);
 };

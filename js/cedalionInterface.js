@@ -2,7 +2,7 @@
 var EventEmitter = require('events').EventEmitter;
 var spawn = require('child_process').spawn;
 var byline = require('byline');
-var CedParser = require('./cedParser.js').CedParser;
+var cedParser = require('./cedParser.js');
 var fs = require('fs');
 var Namespace = require('./namespace.js');
 
@@ -43,7 +43,7 @@ module.exports = function(logfile) {
 		    if(err) {
 			return self.request('throwInto(' + m[1] + ',' + js.exception(err.message).toString() + ')');
 		    } else {
-			return self.request('cont(' + m[1] + ',' + self.parser.generate(resp) + ')');
+			return self.request('cont(' + m[1] + ',' + cedParser.generate(resp) + ')');
 		    }
 		});
 	    } else if(data.substr(0, 2) === '! ') {
@@ -53,7 +53,7 @@ module.exports = function(logfile) {
 	    console.error(e.stack);
 	}
     });
-    this.parser = new CedParser();
+    this.parser = new cedParser.CedParser();
     this.queue = [];
     this.em = null;
 };
@@ -61,7 +61,7 @@ module.exports = function(logfile) {
 var clazz = module.exports.prototype;
 
 clazz.eval = function(res, impred) {
-    var req = 'eval(' + this.parser.generate(res) + ',' + this.parser.generate(impred) + ')';
+    var req = 'eval(' + cedParser.generate(res) + ',' + cedParser.generate(impred) + ')';
     return this.request(req);
 };
 

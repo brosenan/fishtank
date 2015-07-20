@@ -75,47 +75,47 @@ describe('CedParser', function(){
     });
     describe('.register(concept, ctor)', function(){
 	it('should register a constructor for evaluating compound terms', function(){
-	    parser.register('+/2', function(a, b) { return a+b; });
-	    parser.register('*/2', function(a, b) { return a*b; });
+	    cedParser.register('+/2', function(a, b) { return a+b; });
+	    cedParser.register('*/2', function(a, b) { return a*b; });
 	    assert.equal(parser.parse('+(1, *(2, 3))'), 7);
 	});
     });
     describe('.generate(term)', function(){
 	it('should convert a string to a string term', function(){
-	    assert.equal(parser.generate('hello'), "!('hello')");
+	    assert.equal(cedParser.generate('hello'), "!('hello')");
 	});
 
 	it('should escape special characters', function(){
-	    assert.equal(parser.generate("'\n\r\t\\"), "!('\\'\\n\\r\\t\\\\')");
+	    assert.equal(cedParser.generate("'\n\r\t\\"), "!('\\'\\n\\r\\t\\\\')");
 	});
 
 	it('should handle atomic term objects', function(){
-	    assert.equal(parser.generate({name: 'foo', args: []}), "'foo'");
+	    assert.equal(cedParser.generate({name: 'foo', args: []}), "'foo'");
 	});
 
 	it('should handle atomic term objects with special characters', function(){
-	    assert.equal(parser.generate({name: 'foo\nbar', args: []}), "'foo\\nbar'");
+	    assert.equal(cedParser.generate({name: 'foo\nbar', args: []}), "'foo\\nbar'");
 	});
 
 	it('should handle compound terms', function(){
-	    assert.equal(parser.generate({name: 'foo', args: ['a', 'b']}), "'foo'(!('a'),!('b'))");
+	    assert.equal(cedParser.generate({name: 'foo', args: ['a', 'b']}), "'foo'(!('a'),!('b'))");
 	});
 
 	it('should handle variables', function(){
-	    assert.equal(parser.generate({var: 'Foo'}), "Foo");
+	    assert.equal(cedParser.generate({var: 'Foo'}), "Foo");
 	});
 	
 	it('should handle lists', function(){
-	    assert.equal(parser.generate(['a', 'b', 'c']), "[!('a'),!('b'),!('c')]");
+	    assert.equal(cedParser.generate(['a', 'b', 'c']), "[!('a'),!('b'),!('c')]");
 	});
 
 	it('should handle numbers', function(){
-	    assert.equal(parser.generate(3.14), "3.14");
+	    assert.equal(cedParser.generate(3.14), "3.14");
 	});
 
 	it('should handle anything parsed by .parse(), and then again', function(){
 	    var parsed = parser.parse(cedalionCode);
-	    var generated = parser.generate(parsed);
+	    var generated = cedParser.generate(parsed);
 	    var parsed2 = parser.parse(generated);
 	    assert.deepEqual(parsed, parsed2);
 	});

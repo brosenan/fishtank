@@ -4,7 +4,7 @@
 '/bootstrap':unitTest(solve(pred(builtin:plus(1,2,3)),3,'/bootstrap':number,solution(3))).
 '/bootstrap':unitTest(\+solve(pred(builtin:fail),_,_,_)).
 '/bootstrap':signature(pred(Pred)::impred,[Pred::'/bootstrap':pred]).
-'/bootstrap':projection(pred(Pred)::impred,'/bootstrap':horiz(['/bootstrap':symbol(8810),'/bootstrap':vis(Pred::'/bootstrap':pred),'/bootstrap':symbol(8811)])).
+'/bootstrap':projection(pred(Pred)::impred,'/bootstrap':horiz(['/bootstrap':brackets('/bootstrap':vis(Pred::'/bootstrap':pred),8810,8811)])).
 '/bootstrap':adapter(Pred::'/bootstrap':pred,pred(Pred)::impred).
 '/bootstrap':signature(solve(Impred,Res,T,Resp)::'/bootstrap':pred,[Impred::impred,Res::T,T::'/bootstrap':type,Resp::response(T)]).
 annotation:shrink('/bootstrap':projection(solve(Impred,Res,T,Resp)::'/bootstrap':pred,'/bootstrap':horiz(['/bootstrap':label(!find),'/bootstrap':vis(Res::T),'/bootstrap':label(! (::)),'/bootstrap':vis(T::'/bootstrap':type),'/bootstrap':label(!for),'/bootstrap':vis(Impred::impred),'/bootstrap':label(!into),'/bootstrap':vis(Resp::response(T))]))).

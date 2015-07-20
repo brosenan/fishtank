@@ -1,8 +1,14 @@
 "use strict";
 var cedGrammar = require('./cedGrammar.js');
 
+
+var registered = {
+    // String handling
+    '!/1': function(str) { return str.name; },
+};
+
 exports.CedParser = function() {
-    this.registered = {'!/1': function(str) { return str.name; }};
+    this.registered = registered;
 };
 
 var clazz = exports.CedParser.prototype;
@@ -11,8 +17,8 @@ clazz.parse = function(str) {
     return cedGrammar.parse(str);
 };
 
-clazz.register = function(concept, ctor) {
-    this.registered[concept] = ctor;
+exports.register = function(concept, ctor) {
+    registered[concept] = ctor;
 };
 
 var escapeChar = {
@@ -41,14 +47,14 @@ var generators = {
     },
     'object': function(term) {
 	if(Array.isArray(term)) {
-	    return '[' + term.map(clazz.generate).join(',') + ']';
+	    return '[' + term.map(exports.generate).join(',') + ']';
 	}
 	
 	if(term.var) return term.var;
 
 	var s = "'" + escape(term.name) + "'";
 	if(term.args.length > 0) {
-	    s += '(' + term.args.map(clazz.generate).join(',') + ')';
+	    s += '(' + term.args.map(exports.generate).join(',') + ')';
 	}
 	return s;
     },
@@ -60,6 +66,6 @@ var generators = {
     },
 };
 
-clazz.generate = function(term) {
+exports.generate = function(term) {
     return generators[typeof term](term);
 };

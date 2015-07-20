@@ -10,4 +10,5 @@
 '/bootstrap':defAtom(noSource::contentSource).
 '/bootstrap':signature(stringContent(Type,Content)::contentSink,[Type::'/bootstrap':string,Content::'/bootstrap':string]).
 '/bootstrap':projection(stringContent(Type,Content)::contentSink,'/bootstrap':horiz(['/bootstrap':label(!'text/'),'/bootstrap':vis(Type::'/bootstrap':string),'/bootstrap':label(! (:)),'/bootstrap':vis(Content::'/bootstrap':string)])).
-'/bootstrap':unitTest('/impred':simulate(serveHttp(test,get,url(!http,Domain,[!hello],[queryPair(!foo,!bar),queryPair(!poo,!car)]),Req,noSource,stringContent(!plain,!'Hello, World')),[],'/impred':true)).
+'/bootstrap':unitTest('/impred':simulate(serveHttp(test,get,url(!http,!'my.domain.com',[!hello],[queryPair(!foo,!bar),queryPair(!who,!'World')]),Req,noSource,stringContent(!plain,!'Hello, World')),[],'/impred':true)).
+annotation:shrink('/impred':clause(serveHttp(test,get,url(!http,Domain,[!hello],Q),Req,noSource,stringContent(!plain,Text)),'/impred':pred(('/bootstrap':listMember(queryPair(!who,Who),queryPair,Q),'/Functional':eval('/Functional':applyBinOp('/Functional':const(!'Hello, '),'/Functional':concat,'/Functional':const(Who)),'/bootstrap':string,Text))))).
