@@ -22,6 +22,7 @@
   "dependencies": {
     "byline": "^4.2.1",
     "jison": "^0.4.15",
+    "request": "^2.59.0",
     "suspend": "^0.6.1"
   }
 }
