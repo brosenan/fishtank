@@ -6,19 +6,20 @@ var Nodalion = require("../nodalion.js");
 
 var $S = require('suspend'), $R = $S.resume, $T = function(gen) { return function(done) { $S.run(gen, done); } };
 
+var impred = Nodalion.namespace('/impred', ['pred', 'someException', 'greet']);
+var builtin = Nodalion.namespace('builtin', ['succ', 'throw']);
+var bootstrap = Nodalion.namespace('/bootstrap', ['listMember']);
+
 describe('Nodalion', function(){
     var cedalionInterface = new CedalionInterface('/tmp/ced.log');
-    var nodalion, impred, builtin, bootstrap;
+    var nodalion;
     beforeEach(function() {
 	nodalion = new Nodalion(cedalionInterface);
-	impred = nodalion.namespace('/impred', ['pred', 'someException', 'greet']);
-	builtin = nodalion.namespace('builtin', ['succ', 'throw']);
-	bootstrap = nodalion.namespace('/bootstrap', ['listMember']);
     });
 
     describe('.namespace(name, concepts)', function(){
 	it('should create a namespace object with the given name and concepts', function(){
-	    var foo = nodalion.namespace('foo', ['bar']);
+	    var foo = Nodalion.namespace('foo', ['bar']);
 	    assert.equal(foo.bar(1, 2, 3).toString(), "'foo#bar'(1,2,3)");
 	});
     });

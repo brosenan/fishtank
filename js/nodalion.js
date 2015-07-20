@@ -7,8 +7,8 @@ module.exports = function(ced) {
 
 var clazz = module.exports.prototype;
 
-clazz.namespace = function(name, concepts) {
-    var ns = new Namespace(name, this.ced.parser);
+module.exports.namespace = function(name, concepts) {
+    var ns = new Namespace(name);
     ns._define(concepts);
     return ns;
 };
