@@ -7,10 +7,11 @@ var Nodalion = require('./nodalion.js');
 var ns = Nodalion.namespace('/nodalion', ['serveHttp', 'get', 'url', 'queryPair']);
 
 ns._register('stringContent', function(type, content) {
-    return function(res) {
-	res.writeHead(200, {'content-type': 'text/' + type});
+    var func = function(res) {
 	res.end(content);
     };
+    func.contentType = 'text/' + type;
+    return func;
 });
 
 function urlTerm(req) {
@@ -39,6 +40,7 @@ exports.server = function(nodalion, name, port, addr) {
 		    res.end('Not Found');
 		    return;
 		}
+		res.writeHead(200, {'content-type': sources[0].contentType});
 		sources[0](res);
 	    } catch(e) {
 		res.writeHead(500, {'Content-Type': 'text/plain'});
