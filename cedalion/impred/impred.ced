@@ -17,6 +17,7 @@ solve(pred(Pred),Res,T,Solution):-builtin:catch((Pred,Solution::response(T)=solu
 solve(conj(IP1,IP2),Res,T,Sol):-solve(IP1,IP2,impred,solution(IP2)),solve(IP2,Res,T,Sol).
 '/bootstrap':defAtom(true::impred).
 '/bootstrap':projection(true::impred,'/bootstrap':symbol(8868)).
+'/bootstrap':default(true::impred).
 '/bootstrap':alias(true::impred,!'T').
 '/bootstrap':unitTest(solve(true,2,'/bootstrap':number,solution(2))).
 '/bootstrap':unitTest(\+solve(true,2,'/bootstrap':number,solution(3))).
