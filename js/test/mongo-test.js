@@ -5,11 +5,16 @@ var $S = require('suspend'), $R = $S.resume, $T = function(gen) { return functio
 var MongoClient = require('mongodb').MongoClient;
 
 var nodalion = require('../nodalion.js');
-var ns = nodalion.namespace('/nodalion', ['trans', 'set', 'append']);
+var ns = nodalion.namespace('/nodalion', ['trans', 'set', 'append', 'get']);
 var nodalionMongo = require('../nodalionMongo.js');
 var cedParser = require('../cedParser.js');
 
 var parser = new cedParser.CedParser();
+
+var doTask = function(term, cb) {
+    var task = parser.parse(term.toString());
+    task(cb);
+};
 
 
 describe('mongodb', function(){
@@ -43,8 +48,7 @@ describe('nodalionMongo', function(){
     describe('/nodalion:trans(coll, row, ops) => fields', function(){
 	describe('op /nodalion:set(key, value)', function(){
 	    it('should assign value to key', $T(function*(){
-		var task = parser.parse(ns.trans('test2', 'foo', [ns.set('bar', 'baz')]).toString());
-		var result = yield task($R());
+		var result = yield doTask(ns.trans('test2', 'foo', [ns.set('bar', 'baz')]), $R());
 		assert.deepEqual(result, {});
 		
 		var docs = yield coll.find({_id: 'foo'}).toArray($R());
@@ -54,22 +58,27 @@ describe('nodalionMongo', function(){
 	});
 	describe('op /nodalion:append(key, value)', function(){
 	    it('should create a list of size 1 for an item that does not exist', $T(function*(){
-		var task = parser.parse(ns.trans('test2', 'foo', [ns.append('bar', 'baz')]).toString());
-		var result = yield task($R());
+		var result = yield doTask(ns.trans('test2', 'foo', [ns.append('bar', 'baz')]), $R());
 		
 		var docs = yield coll.find({_id: 'foo'}).toArray($R());
 		assert.equal(docs.length, 1);
 		assert.deepEqual(docs[0], {_id: 'foo', bar:['baz']});
 	    }));
 	    it('should append an element to the list if already exists', $T(function*(){
-		var task = parser.parse(ns.trans('test2', 'foo', [ns.append('bar', 'baz')]).toString());
-		yield task($R());
-		yield task($R());
-		yield task($R());
+		yield doTask(ns.trans('test2', 'foo', [ns.append('bar', 'baz1')]), $R());
+		yield doTask(ns.trans('test2', 'foo', [ns.append('bar', 'baz2')]), $R());
+		yield doTask(ns.trans('test2', 'foo', [ns.append('bar', 'baz3')]), $R());
 		
 		var docs = yield coll.find({_id: 'foo'}).toArray($R());
 		assert.equal(docs.length, 1);
-		assert.deepEqual(docs[0], {_id: 'foo', bar:['baz', 'baz', 'baz']});
+		assert.deepEqual(docs[0], {_id: 'foo', bar:['baz1', 'baz2', 'baz3']});
+	    }));
+	});
+	describe('op /nodalion:get(key)', function(){
+	    it('should return the requested key', $T(function*(){
+		yield doTask(ns.trans('test2', 'foo', [ns.set('bar', 'a'), ns.set('baz', 'b')]), $R());
+		var result = yield doTask(ns.trans('test2', 'foo', [ns.get('bar'), ns.set('z', 't')]), $R());
+		assert.deepEqual(result, {'bar': ['a']});
 	    }));
 
 	});

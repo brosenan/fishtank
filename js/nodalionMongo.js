@@ -29,11 +29,16 @@ ns._register('trans', function(coll, row, ops) {
     return $S.async(function*() {
 	var db = yield getDB($R());
 	var update = {};
+	var fields = {};
 	ops.forEach(function(op) {
-	    op(update);
+	    op(update, fields);
 	});
-	yield db.collection(coll).update({_id: row}, update, {upsert: true}, $R());
-	return {};
+	var result = yield db.collection(coll).findOneAndUpdate({_id: row}, 
+								update, 
+								{upsert: true, 
+								 projection: fields}, $R());
+	if(result.value) delete result.value._id;
+	return result.value || {};
     });
 });
 
@@ -52,5 +57,11 @@ ns._register('append', function(key, value) {
 	    update.$push = {};
 	}
 	update.$push[key] = value;
+    };
+});
+
+ns._register('get', function(key) {
+    return function(update, fields) {
+	fields[key] = 1;
     };
 });
