@@ -32,11 +32,16 @@ ns._register('trans', function(coll, row, ops) {
 	var fields = {};
 	ops.forEach(function(op) {
 	    op(update, fields);
-	});
-	var result = yield db.collection(coll).findOneAndUpdate({_id: row}, 
-								update, 
-								{upsert: true, 
-								 projection: fields}, $R());
+	});	
+	var result;
+	if(Object.keys(update).length > 0) {
+	    result = yield db.collection(coll).findOneAndUpdate({_id: row}, 
+								    update, 
+								    {upsert: true, 
+								     projection: fields}, $R());
+	} else {
+	    result = yield db.collection(coll).findOne({_id: row}, {fields: fields}, $R());
+	}
 	if(result.value) delete result.value._id;
 	return result.value || {};
     });

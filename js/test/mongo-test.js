@@ -80,6 +80,10 @@ describe('nodalionMongo', function(){
 		var result = yield doTask(ns.trans('test2', 'foo', [ns.get('bar'), ns.set('z', 't')]), $R());
 		assert.deepEqual(result, {'bar': ['a']});
 	    }));
+	    it('should stand on its own without need for modification operations', $T(function*(){
+		yield doTask(ns.trans('test2', 'foo', [ns.set('bar', 'a'), ns.set('baz', 'b')]), $R());
+		var result = yield doTask(ns.trans('test2', 'foo', [ns.get('bar')]), $R());
+	    }));
 
 	});
 
