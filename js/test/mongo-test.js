@@ -5,7 +5,7 @@ var $S = require('suspend'), $R = $S.resume, $T = function(gen) { return functio
 var MongoClient = require('mongodb').MongoClient;
 
 var nodalion = require('../nodalion.js');
-var ns = nodalion.namespace('/nodalion', ['trans', 'set']);
+var ns = nodalion.namespace('/nodalion', ['trans', 'set', 'append']);
 var nodalionMongo = require('../nodalionMongo.js');
 var cedParser = require('../cedParser.js');
 
@@ -52,5 +52,27 @@ describe('nodalionMongo', function(){
 		assert.deepEqual(docs[0], {_id: 'foo', bar:['baz']});
 	    }));
 	});
+	describe('op /nodalion:append(key, value)', function(){
+	    it('should create a list of size 1 for an item that does not exist', $T(function*(){
+		var task = parser.parse(ns.trans('test2', 'foo', [ns.append('bar', 'baz')]).toString());
+		var result = yield task($R());
+		
+		var docs = yield coll.find({_id: 'foo'}).toArray($R());
+		assert.equal(docs.length, 1);
+		assert.deepEqual(docs[0], {_id: 'foo', bar:['baz']});
+	    }));
+	    it('should append an element to the list if already exists', $T(function*(){
+		var task = parser.parse(ns.trans('test2', 'foo', [ns.append('bar', 'baz')]).toString());
+		yield task($R());
+		yield task($R());
+		yield task($R());
+		
+		var docs = yield coll.find({_id: 'foo'}).toArray($R());
+		assert.equal(docs.length, 1);
+		assert.deepEqual(docs[0], {_id: 'foo', bar:['baz', 'baz', 'baz']});
+	    }));
+
+	});
+
     });
 });

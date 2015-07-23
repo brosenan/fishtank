@@ -45,3 +45,12 @@ ns._register('set', function(key, value) {
 	update.$set[key] = [value];
     };
 });
+
+ns._register('append', function(key, value) {
+    return function(update) {
+	if(!update.$push) {
+	    update.$push = {};
+	}
+	update.$push[key] = value;
+    };
+});
