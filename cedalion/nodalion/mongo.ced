@@ -1,6 +1,5 @@
 '/bootstrap':defAtom(testName::'/bootstrap':type).
-'/bootstrap':signature(mongoTest(TestName,Result)::'/impred':impred,[TestName::testName,Result::'/bootstrap':string]).
-'/bootstrap':defAtom('mongo1'::testName).
+'/bootstrap':signature(mongoTest(TestNumber,Result)::'/impred':impred,[TestNumber::'/bootstrap':number,Result::'/bootstrap':string]).
 '/bootstrap':defAtom(databaseValue::'/bootstrap':type).
 '/bootstrap':defAtom(databaseOp::'/bootstrap':type).
 '/bootstrap':signature(trans(Table,Row,Ops)::'/impred':task('/bootstrap':list(databaseValue)),[Table::'/bootstrap':string,Row::'/bootstrap':string,Ops::'/bootstrap':list(databaseOp)]).
@@ -12,4 +11,12 @@
 '/bootstrap':projection(get(Key)::databaseOp,'/bootstrap':horiz(['/bootstrap':label(! (?)),'/bootstrap':vis(Key::'/bootstrap':string)])).
 '/bootstrap':signature(value(Key,Values)::databaseValue,[Key::'/bootstrap':string,Values::'/bootstrap':list('/bootstrap':string)]).
 '/bootstrap':projection(value(Key,Values)::databaseValue,'/bootstrap':horiz(['/bootstrap':vis(Key::'/bootstrap':string),'/bootstrap':label(! (=)),'/bootstrap':vis(Values::'/bootstrap':list('/bootstrap':string))])).
-'/impred':clause(mongoTest('mongo1',Value),'/impred':conj('/impred':task(trans(!'test3',!abcd,[set(!foo,!bar),set(!moo,!mar)]),[],'/bootstrap':list(databaseValue)),'/impred':task(trans(!'test3',!abcd,[get(!foo)]),[value(!foo,[Value])],'/bootstrap':list(databaseValue)))).
+'/impred':clause(mongoTest(1,Value),'/impred':conj('/impred':task(trans(!'test3',!abcd,[set(!foo,!bar),set(!moo,!mar)]),[],'/bootstrap':list(databaseValue)),'/impred':task(trans(!'test3',!abcd,[get(!foo)]),[value(!foo,[Value])],'/bootstrap':list(databaseValue)))).
+'/bootstrap':defAtom(getAll::databaseOp).
+'/bootstrap':projection(getAll::databaseOp,'/bootstrap':label(!'?*')).
+'/bootstrap':defAtom(populateARow::'/impred':impred).
+'/impred':clause(populateARow,'/impred':task(trans(!'test3',!xyz,[set(!a,!'1'),set(!b,!'2'),set(!c,!'3')]),[],'/bootstrap':list(databaseValue))).
+'/impred':clause(mongoTest(2,Value),'/impred':conj(populateARow,'/impred':task(trans(!'test3',!xyz,[getAll]),[value(!a,[!'1']),value(!b,[!'2']),value(!c,[Value])],'/bootstrap':list(databaseValue)))).
+'/bootstrap':signature(append(Key,Value)::databaseOp,[Key::'/bootstrap':string,Value::'/bootstrap':string]).
+'/bootstrap':projection(append(Key,Value)::databaseOp,'/bootstrap':horiz(['/bootstrap':vis(Key::'/bootstrap':string),'/bootstrap':label(!'+='),'/bootstrap':vis(Value::'/bootstrap':string)])).
+'/impred':clause(mongoTest(3,Value),'/impred':conj(populateARow,'/impred':conj('/impred':task(trans(!'test3',!xyz,[append(!a,!'1.1')]),[],'/bootstrap':list(databaseValue)),'/impred':task(trans(!'test3',!xyz,[get(!a)]),[value(!a,[!'1',Value])],'/bootstrap':list(databaseValue))))).

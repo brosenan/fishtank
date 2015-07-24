@@ -16,6 +16,8 @@ var doTask = function(term, cb) {
     task(cb);
 };
 
+var n = new nodalion('/tmp/mongo-ced.log');
+
 
 describe('mongodb', function(){
 
@@ -106,11 +108,22 @@ describe('nodalionMongo', function(){
 	    }));
 
 	});
-	it('should integrate with Cedalion', $T(function*(){
-	    var n = new nodalion('/tmp/mongo-ced.log');
+	it('should integrate with Cedalion - 1', $T(function*(){
 	    var X = {var:'X'};
-	    var result = yield n.findAll(X, ns.mongoTest(ns.mongo1(), X), $R());
+	    var result = yield n.findAll(X, ns.mongoTest(1, X), $R());
 	    assert.equal(result, 'bar');
+	}));
+
+	it('should integrate with Cedalion - 2', $T(function*(){
+	    var X = {var:'X'};
+	    var result = yield n.findAll(X, ns.mongoTest(2, X), $R());
+	    assert.equal(result, '3');
+	}));
+
+	it('should integrate with Cedalion - 3', $T(function*(){
+	    var X = {var:'X'};
+	    var result = yield n.findAll(X, ns.mongoTest(3, X), $R());
+	    assert.equal(result, '1.1');
 	}));
 
     });
