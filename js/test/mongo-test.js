@@ -5,7 +5,7 @@ var $S = require('suspend'), $R = $S.resume, $T = function(gen) { return functio
 var MongoClient = require('mongodb').MongoClient;
 
 var nodalion = require('../nodalion.js');
-var ns = nodalion.namespace('/nodalion', ['trans', 'set', 'append', 'get', 'value', 'check']);
+var ns = nodalion.namespace('/nodalion', ['trans', 'set', 'append', 'get', 'value', 'check', 'getAll']);
 var nodalionMongo = require('../nodalionMongo.js');
 var cedParser = require('../cedParser.js');
 
@@ -46,6 +46,11 @@ describe('nodalionMongo', function(){
 	});
     });
     describe('/nodalion:trans(coll, row, ops) => fields', function(){
+	it('should not return any results unless asked for explicitly', $T(function*(){
+	    yield doTask(ns.trans('test2', 'foo', [ns.set('a', '1'), ns.set('b', '2')]), $R());
+	    assert.deepEqual(yield doTask(ns.trans('test2', 'foo', []), $R()), []);
+	}));
+
 	describe('op /nodalion:set(key, value)', function(){
 	    it('should assign value to key', $T(function*(){
 		var result = yield doTask(ns.trans('test2', 'foo', [ns.set('bar', 'baz')]), $R());
@@ -91,6 +96,13 @@ describe('nodalionMongo', function(){
 		// The following transaction will not occur because the pre-condition does not hold.
 		yield doTask(ns.trans('test2', 'foo', [ns.set('x', '1'), ns.check('a', '7')]), $R());
 		assert.deepEqual(yield doTask(ns.trans('test2', 'foo', [ns.get('x')]), $R()), []);
+	    }));
+	});
+	describe('op /nodalion:getAll', function(){
+	    it('should return all keys for the given row', $T(function*(){
+		yield doTask(ns.trans('test2', 'foo', [ns.set('bar', 'a'), ns.set('baz', 'b')]), $R());
+		var result = yield doTask(ns.trans('test2', 'foo', [ns.getAll()]), $R());
+		assert.equal(result.length, 2);
 	    }));
 
 	});

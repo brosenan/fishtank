@@ -29,7 +29,7 @@ ns._register('trans', function(coll, row, ops) {
     return $S.async(function*() {
 	var db = yield getDB($R());
 	var update = {};
-	var fields = {};
+	var fields = {_id:1};
 	var query = {};
 	var options = {upsert: true, 
 		       projection: fields};
@@ -81,5 +81,13 @@ ns._register('check', function(key, value) {
     return function(update, fields, query, options) {
 	query[key] = [value];
 	options.upsert = false;
+    };
+});
+
+ns._register('getAll', function() {
+    return function(upsert, fields) {
+	Object.keys(fields).forEach(function(key) {
+	    delete fields[key];
+	});
     };
 });
