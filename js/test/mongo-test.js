@@ -5,7 +5,7 @@ var $S = require('suspend'), $R = $S.resume, $T = function(gen) { return functio
 var MongoClient = require('mongodb').MongoClient;
 
 var nodalion = require('../nodalion.js');
-var ns = nodalion.namespace('/nodalion', ['trans', 'set', 'append', 'get', 'value', 'check', 'getAll']);
+var ns = nodalion.namespace('/nodalion', ['trans', 'set', 'append', 'get', 'value', 'check', 'getAll', 'mongoTest', 'mongo1']);
 var nodalionMongo = require('../nodalionMongo.js');
 var cedParser = require('../cedParser.js');
 
@@ -106,6 +106,12 @@ describe('nodalionMongo', function(){
 	    }));
 
 	});
+	it('should integrate with Cedalion', $T(function*(){
+	    var n = new nodalion('/tmp/mongo-ced.log');
+	    var X = {var:'X'};
+	    var result = yield n.findAll(X, ns.mongoTest(ns.mongo1(), X), $R());
+	    assert.equal(result, 'bar');
+	}));
 
     });
 });

@@ -36,7 +36,10 @@ clazz.findAll = function(res, impred, cb) {
 	});
 	em.on('continuation', function(task, cont) {
 	    frames += 1;
-	    handleEvents(task(cont));
+	    function contAndHandle(err, value) {
+		handleEvents(cont(err, value));
+	    }
+	    task(contAndHandle)
 	});
     }
 

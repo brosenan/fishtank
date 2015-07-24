@@ -5,6 +5,7 @@ var cedGrammar = require('./cedGrammar.js');
 var registered = {
     // String handling
     '!/1': function(str) { return str.name; },
+    './2': function(first, next) { return [first].concat(next); },
 };
 
 exports.CedParser = function() {
