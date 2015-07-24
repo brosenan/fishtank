@@ -5,7 +5,7 @@ var $S = require('suspend'), $R = $S.resume, $T = function(gen) { return functio
 var MongoClient = require('mongodb').MongoClient;
 
 var nodalion = require('../nodalion.js');
-var ns = nodalion.namespace('/nodalion', ['trans', 'set', 'append', 'get']);
+var ns = nodalion.namespace('/nodalion', ['trans', 'set', 'append', 'get', 'value']);
 var nodalionMongo = require('../nodalionMongo.js');
 var cedParser = require('../cedParser.js');
 
@@ -49,7 +49,7 @@ describe('nodalionMongo', function(){
 	describe('op /nodalion:set(key, value)', function(){
 	    it('should assign value to key', $T(function*(){
 		var result = yield doTask(ns.trans('test2', 'foo', [ns.set('bar', 'baz')]), $R());
-		assert.deepEqual(result, {});
+		assert.deepEqual(result, []);
 		
 		var docs = yield coll.find({_id: 'foo'}).toArray($R());
 		assert.equal(docs.length, 1);
@@ -58,7 +58,7 @@ describe('nodalionMongo', function(){
 	});
 	describe('op /nodalion:append(key, value)', function(){
 	    it('should create a list of size 1 for an item that does not exist', $T(function*(){
-		var result = yield doTask(ns.trans('test2', 'foo', [ns.append('bar', 'baz')]), $R());
+		yield doTask(ns.trans('test2', 'foo', [ns.append('bar', 'baz')]), $R());
 		
 		var docs = yield coll.find({_id: 'foo'}).toArray($R());
 		assert.equal(docs.length, 1);
@@ -78,11 +78,11 @@ describe('nodalionMongo', function(){
 	    it('should return the requested key', $T(function*(){
 		yield doTask(ns.trans('test2', 'foo', [ns.set('bar', 'a'), ns.set('baz', 'b')]), $R());
 		var result = yield doTask(ns.trans('test2', 'foo', [ns.get('bar'), ns.set('z', 't')]), $R());
-		assert.deepEqual(result, {'bar': ['a']});
+		assert.deepEqual(result, [ns.value('bar', ['a'])]);
 	    }));
 	    it('should stand on its own without need for modification operations', $T(function*(){
 		yield doTask(ns.trans('test2', 'foo', [ns.set('bar', 'a'), ns.set('baz', 'b')]), $R());
-		var result = yield doTask(ns.trans('test2', 'foo', [ns.get('bar')]), $R());
+		yield doTask(ns.trans('test2', 'foo', [ns.get('bar')]), $R());
 	    }));
 
 	});

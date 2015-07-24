@@ -4,7 +4,7 @@ var MongoClient = require('mongodb').MongoClient;
 
 var nodalion = require('./nodalion.js');
 
-var ns = nodalion.namespace('/nodalion', []);
+var ns = nodalion.namespace('/nodalion', ['value']);
 
 
 var _db;
@@ -43,7 +43,9 @@ ns._register('trans', function(coll, row, ops) {
 	    result = yield db.collection(coll).findOne({_id: row}, {fields: fields}, $R());
 	}
 	if(result.value) delete result.value._id;
-	return result.value || {};
+	return Object.keys(result.value || {}).map(function(key) {
+	    return ns.value(key, result.value[key]);
+	});
     });
 });
 
