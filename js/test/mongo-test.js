@@ -5,7 +5,7 @@ var $S = require('suspend'), $R = $S.resume, $T = function(gen) { return functio
 var MongoClient = require('mongodb').MongoClient;
 
 var nodalion = require('../nodalion.js');
-var ns = nodalion.namespace('/nodalion', ['trans', 'set', 'append', 'get', 'value']);
+var ns = nodalion.namespace('/nodalion', ['trans', 'set', 'append', 'get', 'value', 'check']);
 var nodalionMongo = require('../nodalionMongo.js');
 var cedParser = require('../cedParser.js');
 
@@ -82,7 +82,15 @@ describe('nodalionMongo', function(){
 	    }));
 	    it('should stand on its own without need for modification operations', $T(function*(){
 		yield doTask(ns.trans('test2', 'foo', [ns.set('bar', 'a'), ns.set('baz', 'b')]), $R());
-		yield doTask(ns.trans('test2', 'foo', [ns.get('bar')]), $R());
+		var result = yield doTask(ns.trans('test2', 'foo', [ns.get('bar')]), $R());
+		assert.deepEqual(result, [ns.value('bar', ['a'])]);
+	    }));
+	});
+	describe('op /nodalion:check(key, value)', function(){
+	    it('should perform the transaction only if key maps to a single value - value', $T(function*(){
+		// The following transaction will not occur because the pre-condition does not hold.
+		yield doTask(ns.trans('test2', 'foo', [ns.set('x', '1'), ns.check('a', '7')]), $R());
+		assert.deepEqual(yield doTask(ns.trans('test2', 'foo', [ns.get('x')]), $R()), []);
 	    }));
 
 	});

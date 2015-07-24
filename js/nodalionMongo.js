@@ -30,21 +30,25 @@ ns._register('trans', function(coll, row, ops) {
 	var db = yield getDB($R());
 	var update = {};
 	var fields = {};
+	var query = {};
+	var options = {upsert: true, 
+		       projection: fields};
 	ops.forEach(function(op) {
-	    op(update, fields);
-	});	
+	    op(update, fields, query, options);
+	});
+	query._id = row;
 	var result;
 	if(Object.keys(update).length > 0) {
-	    result = yield db.collection(coll).findOneAndUpdate({_id: row}, 
-								    update, 
-								    {upsert: true, 
-								     projection: fields}, $R());
+	    result = yield db.collection(coll).findOneAndUpdate(query, 
+								update, 
+								options, $R());
+	    result = result.value;
 	} else {
 	    result = yield db.collection(coll).findOne({_id: row}, {fields: fields}, $R());
 	}
-	if(result.value) delete result.value._id;
-	return Object.keys(result.value || {}).map(function(key) {
-	    return ns.value(key, result.value[key]);
+	if(result) delete result._id;
+	return Object.keys(result || {}).map(function(key) {
+	    return ns.value(key, result[key]);
 	});
     });
 });
@@ -70,5 +74,12 @@ ns._register('append', function(key, value) {
 ns._register('get', function(key) {
     return function(update, fields) {
 	fields[key] = 1;
+    };
+});
+
+ns._register('check', function(key, value) {
+    return function(update, fields, query, options) {
+	query[key] = [value];
+	options.upsert = false;
     };
 });
