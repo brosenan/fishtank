@@ -1,0 +1,4 @@
+'/bootstrap':signature(testLocalStore(X)::impred,[X::'/bootstrap':string]).
+'/bootstrap':signature(localSet(Key,Value)::task('/bootstrap':string),[Key::'/bootstrap':string,Value::'/bootstrap':string]).
+'/bootstrap':signature(localGet(Key)::task('/bootstrap':string),[Key::'/bootstrap':string]).
+clause(testLocalStore(X),conj(task(localSet(!foo,!bar),_,'/bootstrap':string),task(localGet(!foo),X,'/bootstrap':string))).
