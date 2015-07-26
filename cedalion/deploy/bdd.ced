@@ -1,5 +1,5 @@
 '/bootstrap':signature(behavior(Concept,Desc,Test)::'/bootstrap':statement,[Concept::'/bootstrap':typedTerm,Desc::'/bootstrap':string,Test::'/bootstrap':pred]).
-'/bootstrap':projection(behavior(Concept,Desc,Test)::'/bootstrap':statement,'/bootstrap':vert(['/bootstrap':horiz(['/bootstrap':vis(Concept::'/bootstrap':typedTerm),'/bootstrap':vis(Desc::'/bootstrap':string)]),'/bootstrap':horiz(['/bootstrap':label(!'    '),'/bootstrap':vis(Test::'/bootstrap':pred)])])).
+'/bootstrap':projection(behavior(Concept,Desc,Test)::'/bootstrap':statement,'/bootstrap':lowered('/bootstrap':background('/bootstrap':vert(['/bootstrap':horiz(['/bootstrap':vis(Concept::'/bootstrap':typedTerm),'/bootstrap':vis(Desc::'/bootstrap':string)]),'/bootstrap':horiz(['/bootstrap':label(!'    '),'/bootstrap':raised('/bootstrap':background('/bootstrap':vis(Test::'/bootstrap':pred),cpi:rgb(255,255,255))),'/bootstrap':label(!'  ')])]),cpi:rgb(255,255,64)))).
 behavior(behavior(Concept,Desc,Test)::'/bootstrap':statement,!'should show if failed',builtin:true).
 '/bootstrap':defAtom(none::noneType).
 '/bootstrap':defAtom(noneType::'/bootstrap':type).
@@ -8,3 +8,6 @@ annotation:shrink(('/bootstrap':check(Path,behavior(TTerm,ShouldString,Goal)::'/
 annotation:shrink(('/bootstrap':testHasFailed('/bootstrap':vert(['/bootstrap':italic('/bootstrap':label(FileName)),'/bootstrap':horiz(['/bootstrap':vis(cpi:immediateDescriptor(TTerm,VNs)::'/bootstrap':typedTerm),'/bootstrap':label(Desc),'/bootstrap':label(! (:)),'/bootstrap':vis(cpi:immediateDescriptor(Error,VNs)::'/bootstrap':error)])])):-builtin:loadedStatement(FileName,behavior(TTerm,Desc,Test),VNs),'/bootstrap':check('/bootstrap':noPath,behavior(TTerm,Desc,Test)::'/bootstrap':statement,[],'/bootstrap':marker('/bootstrap':noPath,'/bootstrap':error(Error,[]))))).
 '/bootstrap':contextMenuEntry(behavior(Concept,Desc,Test)::'/bootstrap':statement,VNs,Path,!'Show failed tests','/bootstrap':showFailedTests).
 '/bootstrap':testHasFailed('/bootstrap':horiz(['/bootstrap':label(!'Ran'),'/bootstrap':vis(cpi:immediateDescriptor(N,[])::'/bootstrap':number),'/bootstrap':label(!'Behaviors')])):-builtin:findall(1,'/bootstrap':number,builtin:loadedStatement(_,behavior(_::_,_,_),_),L),builtin:length(L,'/bootstrap':number,N).
+'/bootstrap':defAtom(spec::'/bootstrap':definitionType).
+'/bootstrap':projection(spec::'/bootstrap':definitionType,'/bootstrap':label(!'Specification')).
+'/bootstrap':defines(behavior(TTerm,_,_),TTerm,spec).

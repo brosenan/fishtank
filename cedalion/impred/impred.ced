@@ -22,3 +22,4 @@ solve(conj(IP1,IP2),Res,T,Sol):-solve(IP1,IP2,impred,solution(IP2)),solve(IP2,Re
 '/bootstrap':unitTest(solve(true,2,'/bootstrap':number,solution(2))).
 '/bootstrap':unitTest(\+solve(true,2,'/bootstrap':number,solution(3))).
 solve(true,Res,T,solution(Res)):-builtin:true.
+'/bootstrap':defines((solve(Impred,_,_,_):-_),Impred::impred,'/bootstrap':semanticDefinition).

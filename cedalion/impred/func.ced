@@ -31,3 +31,4 @@ defFunc(Def,T,Expr)~>clause(eval(Def,T,V),eval(Expr,T,V)).
 '/deploy':behavior(funcIf(Cond,Then,Else)::expr(T),!'should evaluate to Then if Cond holds',simulate(eval(funcIf(true,pureExpr('/Functional':const(2)),pureExpr('/Functional':const(3))),'/bootstrap':number,2),[],true)).
 clause(eval(annotation:parentheses(funcIf(Cond,Then,Else)),T,Value),if(Cond,eval(Then,T,Value),eval(Else,T,Value))).
 '/deploy':behavior(funcIf(Cond,Then,Else)::expr(T),!'should evaluate to Else if Cond does not hold', (simulate(eval(funcIf(pred(builtin:fail),pureExpr('/Functional':const(2)),pureExpr('/Functional':const(3))),'/bootstrap':number,X),[],true),builtin:equals(X::'/bootstrap':number,3::'/bootstrap':number))).
+'/bootstrap':defines(clause(eval(F,T,_),_),F::expr(T),'/bootstrap':semanticDefinition).
