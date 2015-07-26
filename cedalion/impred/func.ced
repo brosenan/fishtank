@@ -26,3 +26,6 @@ defFunc(greeting,'/bootstrap':string,binop(pureExpr('/Functional':const(!'hello,
 '/bootstrap':unitTest(simulate(eval(greeting,'/bootstrap':string,!'hello, impred'),[task(userInput,!impred,'/bootstrap':string)],true)).
 '/bootstrap':unitTest(\+simulate(eval(greeting,'/bootstrap':string,!'foo bar'),[],true)).
 defFunc(Def,T,Expr)~>clause(eval(Def,T,V),eval(Expr,T,V)).
+'/bootstrap':signature(if(Cond,Then,Else)::expr(T),[Cond::impred,Then::expr(T),Else::expr(T)]).
+'/bootstrap':projection(if(Cond,Then,Else)::expr(T),'/bootstrap':vert(['/bootstrap':horiz(['/bootstrap':label(!if),'/bootstrap':vis(Cond::impred),'/bootstrap':label(! (:))]),'/bootstrap':horiz(['/bootstrap':label(!'    '),'/bootstrap':vis(Then::expr(T))]),'/bootstrap':label(!'else:'),'/bootstrap':horiz(['/bootstrap':label(!'    '),'/bootstrap':vis(Else::expr(T))])])).
+'/deploy':behavior(if(Cond,Then,Else)::expr(T),!'should evaluate to Then if Cond holds',_).
