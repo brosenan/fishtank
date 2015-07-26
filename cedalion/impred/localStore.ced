@@ -4,5 +4,5 @@
 clause(testLocalStore(X),conj(task(localSet(!foo,!bar),_,'/bootstrap':string),task(localGet(!foo),X,'/bootstrap':string))).
 '/bootstrap':signature(localGet(Key,Default)::expr('/bootstrap':string),[Key::'/bootstrap':string,Default::'/bootstrap':string]).
 '/deploy':behavior(localGet(!x,!foo)::expr('/bootstrap':string),!'should provide the default value if the key is not in the local storage',simulate(eval(localGet(!x,!foo),'/bootstrap':string,!foo),[],_)).
-defFunc(localGet(Key,Default),'/bootstrap':string,pureExpr('/Functional':const(Default))).
+defFunc(localGet(Key,Default),'/bootstrap':string,funcIf(conj(task(localGet(Key),Value,'/bootstrap':string),pred(\+builtin:var(Value::'/bootstrap':string))),pureExpr('/Functional':const(Value)),pureExpr('/Functional':const(Default)))).
 '/deploy':behavior(localGet(Key,Default)::expr('/bootstrap':string),!'should return the value associated with the key if one exists',simulate(eval(localGet(!x,!foo),'/bootstrap':string,!bar),[task(localGet(!x),!bar,'/bootstrap':string)],true)).
