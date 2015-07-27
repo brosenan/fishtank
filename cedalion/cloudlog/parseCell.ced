@@ -1,0 +1,13 @@
+'/bootstrap':defAtom(parsedCell::'/bootstrap':type).
+'/bootstrap':signature(parseRowResult(RowResult,Parsed)::'/bootstrap':pred,[RowResult::'/bootstrap':list('/nodalion':databaseValue),Parsed::'/bootstrap':list(parsedCell)]).
+'/deploy':behavior(parseRowResult(RowResult,Parsed)::'/bootstrap':pred,!'should convert an empty list to an empty list',parseRowResult([],[])).
+parseRowResult([],[]):-builtin:true.
+'/bootstrap':signature(parsedCell(Column,Value)::parsedCell,[Column::'/bootstrap':string,Value::'/bootstrap':list(counterValue)]).
+'/bootstrap':projection(parsedCell(Column,Value)::parsedCell,'/bootstrap':horiz(['/bootstrap':vis(Column::'/bootstrap':string),'/bootstrap':label(! (=)),'/bootstrap':vis(Value::'/bootstrap':list(counterValue))])).
+'/deploy':behavior(parseRowResult(RowResult,Parsed)::'/bootstrap':pred,!'should convert a list of cells into parsed cells', (parseRowResult(annotation:changeMode(['/nodalion':value(!x,[!'\'/cloudlog#baseVal\'(2)']),'/nodalion':value(!y,[!'\'/cloudlog#baseVal\'(3)',!'\'/cloudlog#inc\'(2,!foo,[],1001)'])],'/bootstrap':vert),Result),builtin:equals(Result::'/bootstrap':list(parsedCell),annotation:changeMode([parsedCell(!x,[baseVal(2)]),parsedCell(!y,[baseVal(3),inc(2,!foo,[],1001)])],'/bootstrap':vert)::'/bootstrap':list(parsedCell)))).
+parseRowResult(['/nodalion':value(Column,Strings)|Values],[parsedCell(Column,Counters)|Parsed]):-parseCell(Strings,Counters),parseRowResult(Values,Parsed).
+'/bootstrap':signature(parseCell(Cell,Parsed)::'/bootstrap':pred,[Cell::'/bootstrap':list('/bootstrap':string),Parsed::'/bootstrap':list(counterValue)]).
+'/deploy':behavior(parseCell(Cell,Parsed)::'/bootstrap':pred,!'should convert an empty list to an empty list',parseCell([],[])).
+parseCell([],[]):-builtin:true.
+'/deploy':behavior(parseCell(Cell,Parsed)::'/bootstrap':pred,!'should convert term strings into terms',parseCell([!'\'/cloudlog#baseVal\'(4)',!'\'/cloudlog#inc\'(1,!sessionY,[],1000)'],[baseVal(4),inc(1,!sessionY,[],1000)])).
+parseCell([Str|Strs],[Term|Terms]):-builtin:rawTermToString(Term::counterValue,Str),parseCell(Strs,Terms).
