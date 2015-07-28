@@ -60,9 +60,9 @@ mustSucceed(Goal) :-
 writeTerm(Term) :-
     write_term(Term, [quoted(true), ignore_ops(true)]).
 
-handleTask('/impred#localGet'(!Key), !Value) :-
+handleTask('/impred#localGet'(!Key), Value) :-
     ignore(localStore(Key, Value)).
-handleTask('/impred#localSet'(!Key, !Value), OldValue) :-
+handleTask('/impred#localSet'(!Key, Value), OldValue) :-
     ignore(retract(localStore(Key, OldValue))),
     assert(localStore(Key, Value)).
 
