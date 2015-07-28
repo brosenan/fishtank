@@ -1,3 +1,6 @@
 '/bootstrap':defAtom(now::task('/bootstrap':number)).
 '/bootstrap':signature(testNow(L)::impred,[L::'/bootstrap':list('/bootstrap':number)]).
 clause(testNow([X,Y,Z]),conj(task(now,X,'/bootstrap':number),conj(task(now,Y,'/bootstrap':number),task(now,Z,'/bootstrap':number)))).
+'/bootstrap':defAtom(uuid::task('/bootstrap':string)).
+'/bootstrap':signature(testUUID(L)::impred,[L::'/bootstrap':list('/bootstrap':string)]).
+clause(testUUID([U1,U2,U3]),conj(task(uuid,U1,'/bootstrap':string),conj(task(uuid,U2,'/bootstrap':string),task(uuid,U3,'/bootstrap':string)))).

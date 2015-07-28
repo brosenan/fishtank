@@ -1,4 +1,4 @@
-:- [service, cedalion].
+:- [service, cedalion, uuid].
 :- dynamic storedTerm/2, localStore/2.
 
 go :- read(Cmd),
@@ -68,3 +68,6 @@ handleTask('/impred#localSet'(!Key, Value), OldValue) :-
 
 handleTask('/impred#now', Timestamp) :-
     get_time(Timestamp).
+
+handleTask('/impred#uuid', !UUID) :-
+    uuid(UUID).
