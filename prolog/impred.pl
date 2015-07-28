@@ -66,4 +66,5 @@ handleTask('/impred#localSet'(!Key, Value), OldValue) :-
     ignore(retract(localStore(Key, OldValue))),
     assert(localStore(Key, Value)).
 
-handleTask(Task, _) :- fail.
+handleTask('/impred#now', Timestamp) :-
+    get_time(Timestamp).

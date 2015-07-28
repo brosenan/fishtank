@@ -1,0 +1,3 @@
+'/bootstrap':defAtom(now::task('/bootstrap':number)).
+'/bootstrap':signature(testNow(L)::impred,[L::'/bootstrap':list('/bootstrap':number)]).
+clause(testNow([X,Y,Z]),conj(task(now,X,'/bootstrap':number),conj(task(now,Y,'/bootstrap':number),task(now,Z,'/bootstrap':number)))).
