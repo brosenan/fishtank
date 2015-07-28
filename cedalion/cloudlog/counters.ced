@@ -12,8 +12,5 @@ annotation:shrink('/impred':defFunc(counterValue(Table,Row,Column,Session),'/boo
 '/impred':defFunc(counterValue([],_),'/bootstrap':number,'/impred':pureExpr('/Functional':const(0))).
 '/impred':defFunc(counterValue([baseVal(X)|Rest],Session),'/bootstrap':number,'/impred':binop('/impred':pureExpr('/Functional':const(X)),'/Functional':numPlus,counterValue(Rest,Session))).
 '/deploy':behavior(counterValue(Ops,Session)::'/impred':expr('/bootstrap':number),!'should return the base value if only it exists', ('/impred':simulate('/impred':eval(counterValue([baseVal(15),inc(-7,!foo,[],1111)],!foo),'/bootstrap':number,X),[],'/impred':true),builtin:equals(X::'/bootstrap':number,8::'/bootstrap':number))).
-'/bootstrap':signature(taken(Inc,Session)::'/impred':impred,[Inc::counterValue,Session::'/bootstrap':string]).
 annotation:shrink('/impred':defFunc(counterValue([inc(Inc,Session,VC,Timestamp)|Rest],SessionPrime),'/bootstrap':number,'/impred':funcIf(taken(inc(Inc,Session,VC,Timestamp),SessionPrime),'/impred':binop('/impred':pureExpr('/Functional':const(Inc)),'/Functional':numPlus,counterValue(Rest,Session)),counterValue(Rest,Session)))).
 '/bootstrap':sandbox('/impred':simulate(taken(inc(2,!'session1',[],1234),!'session1'),[],'/impred':true)::'/bootstrap':pred).
-'/deploy':behavior(taken(Inc,Session)::'/impred':impred,!'should succeed when Session matches the one one in Inc','/impred':simulate(taken(inc(2,!'session1',[],1234),!'session1'),[],'/impred':true)).
-'/impred':clause(taken(inc(_,Session,_,_),Session),'/impred':true).
