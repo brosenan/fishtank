@@ -53,12 +53,12 @@ ns._register('trans', function(coll, row, ops) {
     });
 });
 
-ns._register('set', function(key, value) {
+ns._register('set', function(key, values) {
     return function(update) {
 	if(!update.$set) {
 	    update.$set = {};
 	}
-	update.$set[key] = [value];
+	update.$set[key] = values;
     };
 });
 
