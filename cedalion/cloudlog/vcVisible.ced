@@ -1,0 +1,14 @@
+'/bootstrap':defAtom(vcElem::'/bootstrap':type).
+'/bootstrap':signature(vcVisible(VC)::'/impred':impred,[VC::'/bootstrap':list(vcElem)]).
+'/deploy':behavior(vcVisible(VC)::'/impred':impred,!'should succeed for an empty VC','/impred':simulate(vcVisible([]),[],'/impred':true)).
+'/impred':clause(vcVisible([]),'/impred':true).
+'/bootstrap':signature(vcEntry(ID,Value)::vcElem,[ID::'/bootstrap':string,Value::'/bootstrap':number]).
+'/bootstrap':projection(vcEntry(ID,Value)::vcElem,'/bootstrap':horiz(['/bootstrap':vis(ID::'/bootstrap':string),'/bootstrap':symbol(8594),'/bootstrap':vis(Value::'/bootstrap':number)])).
+'/bootstrap':alias(vcEntry(ID,Value)::vcElem,! (->)).
+'/bootstrap':signature(localNum(Num)::'/impred':localStoreVal,[Num::'/bootstrap':number]).
+'/bootstrap':projection(localNum(Num)::'/impred':localStoreVal,'/bootstrap':horiz(['/bootstrap':label(!'#'),'/bootstrap':vis(Num::'/bootstrap':number)])).
+'/bootstrap':adapter(Num::'/bootstrap':number,localNum(Num)::'/impred':localStoreVal).
+'/deploy':behavior(vcVisible(VC)::'/impred':impred,!'should succeed if all entries have lower or same values than the stored ones','/impred':simulate(vcVisible([vcEntry(!foo,2),vcEntry(!bar,3)]),['/impred':task('/impred':localGet(!foo),localNum(4),'/impred':localStoreVal),'/impred':task('/impred':localGet(!bar),localNum(3),'/impred':localStoreVal)],'/impred':true)).
+'/impred':clause(vcVisible([vcEntry(ID,Value)|Rest]),'/impred':conj('/impred':eval('/impred':localGet(ID,localNum(0)),'/impred':localStoreVal,localNum(StoredVal)),'/impred':conj('/impred':pred('/Functional':ge('/Functional':const(StoredVal),'/Functional':const(Value),'/bootstrap':number)),vcVisible(Rest)))).
+'/deploy':behavior(vcVisible(VC)::'/impred':impred,!'should fail if at least one entry has a higher value than the stored one','/impred':simulate('/impred':not(vcVisible([vcEntry(!foo,2),vcEntry(!bar,3)])),['/impred':task('/impred':localGet(!foo),localNum(3),'/impred':localStoreVal),'/impred':task('/impred':localGet(!bar),localNum(2),'/impred':localStoreVal)],'/impred':true)).
+'/deploy':behavior(vcVisible(VC)::'/impred':impred,!'should fail if at least one entry does not have a value in localStorage','/impred':simulate('/impred':not(vcVisible([vcEntry(!foo,2),vcEntry(!bar,3)])),['/impred':task('/impred':localGet(!foo),localNum(3),'/impred':localStoreVal),'/impred':task('/impred':localGet(!bar),localNum(_),'/impred':localStoreVal)],'/impred':true)).

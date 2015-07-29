@@ -5,3 +5,8 @@ solve(if(Cond,Then,Else),R,T,RespPrime):-builtin:if(solve(Cond,Then,impred,Resp)
 '/deploy':behavior(if(Cond,Then,Else)::impred,!'should succeed if Cond fails and Else succeed',solve(if(pred(builtin:fail),pred(builtin:fail),true),2,'/bootstrap':number,solution(2))).
 '/deploy':behavior(if(Cond,Then,Else)::impred,!'should handle impure conditions', (solve(if(greet(!'Hello, yes'),pred(X::'/bootstrap':number=1::'/bootstrap':number),pred(X::'/bootstrap':number=2::'/bootstrap':number)),X,'/bootstrap':number,continuation(Task,Answer,'/bootstrap':string,Cont,_)),builtin:equals(Task::task('/bootstrap':string),userInput::task('/bootstrap':string)),builtin:equals(Cont::impred,if(conj(true,pred(builtin:strcat(!'Hello, ',Answer,!'Hello, yes'))),pred(X::'/bootstrap':number=1::'/bootstrap':number),pred(X::'/bootstrap':number=2::'/bootstrap':number))::impred))).
 '/deploy':behavior(if(Cond,Then,Else)::impred,!'should throw exceptions thrown by the condition',solve(if(pred(builtin:throw(someException)),true,true),R,T,throws(someException))).
+'/bootstrap':signature(not(Impred)::impred,[Impred::impred]).
+'/bootstrap':projection(not(Impred)::impred,'/bootstrap':horiz(['/bootstrap':symbol(172),'/bootstrap':vis(Impred::impred)])).
+'/deploy':behavior(not(Goal)::impred,!'should fail if Goal succeeds',\+simulate(not(true),[],true)).
+'/deploy':behavior(not(Goal)::impred,!'should succeed if Goal fails',simulate(not(pred(builtin:fail)),[],true)).
+clause(not(Goal),if(Goal,pred(builtin:fail),true)).
