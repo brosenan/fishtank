@@ -3,4 +3,5 @@
 '/impred':clause(taken(inc(_,Session,_,_),Session),'/impred':true).
 '/deploy':behavior(taken(Inc,Session)::'/impred':impred,!'should succeed if the timestamp in Inc is smaller than the current time','/impred':simulate(taken(inc(2,!'session1',[],1000),!'session2'),['/impred':task('/impred':now,2000,'/bootstrap':number)],'/impred':true)).
 '/impred':clause(taken(inc(_,_,_,IncTime),_),'/impred':conj('/impred':task('/impred':now,Now,'/bootstrap':number),'/impred':pred(Now>IncTime))).
-'/bootstrap':sandbox('/impred':simulate(taken(inc(2,!'session1',[],1000),!'session2'),['/impred':task('/impred':now,2000,'/bootstrap':number)],'/impred':true)::'/bootstrap':pred).
+'/deploy':behavior(taken(Inc,Session)::'/impred':impred,!'should succeed if the vector clock is visible by the current state','/impred':simulate(taken(inc(2,!'session1',[vcEntry(!foo,2)],1000),!'session2'),['/impred':task('/impred':localGet(!foo),localNum(5),'/impred':localStoreVal)],'/impred':true)).
+'/impred':clause(taken(inc(_,_,VC,_),_),vcVisible(VC)).
