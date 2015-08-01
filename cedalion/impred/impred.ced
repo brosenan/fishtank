@@ -15,6 +15,8 @@ solve(pred(Pred),Res,T,Solution):-builtin:catch((Pred,Solution::response(T)=solu
 '/bootstrap':projection(conj(IP1,IP2)::impred,'/bootstrap':vert(['/bootstrap':horiz(['/bootstrap':vis(IP1::impred),'/bootstrap':label(! (,))]),'/bootstrap':vis(IP2::impred)])).
 '/bootstrap':alias(conj(IP1,IP2)::impred,! (,)).
 solve(conj(IP1,IP2),Res,T,Sol):-solve(IP1,IP2,impred,solution(IP2)),solve(IP2,Res,T,Sol).
+'/bootstrap':unitTest(solve(conj(pred(builtin:throw(someException)),true),_,_,throws(someException))).
+solve(conj(IP1,IP2),Res,T,throws(Exception)):-solve(IP1,IP2,impred,throws(Exception)).
 '/bootstrap':defAtom(true::impred).
 '/bootstrap':projection(true::impred,'/bootstrap':symbol(8868)).
 '/bootstrap':default(true::impred).
