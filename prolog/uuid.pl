@@ -1,5 +1,5 @@
 uuid(UUID) :-
-    random(0, 100000000000000000000000000000000000000000, Rand),
+    random(0, 10000000000000000000000000000000000000000000, Rand),
     uuid_codes(Rand, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/', Chars),
     atom_chars(UUID, Chars).
 

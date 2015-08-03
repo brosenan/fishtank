@@ -47,47 +47,47 @@ ns._register('trans', function(coll, row, ops) {
 	    result = yield db.collection(coll).findOne({_id: row}, {fields: fields}, $R());
 	}
 	if(result) delete result._id;
-	return Object.keys(result || {}).map(function(key) {
-	    return ns.value(key, result[key]);
-	});
+	return [].concat.apply([], Object.keys(result || {}).map(function(family) {
+	    return Object.keys(result[family]).map(function(key) {
+		return ns.value(family, key, result[family][key]);
+	    });
+	}));
     });
 });
 
-ns._register('set', function(key, values) {
+ns._register('set', function(family, key, values) {
     return function(update) {
 	if(!update.$set) {
 	    update.$set = {};
 	}
-	update.$set[key] = values;
+	update.$set[family + '.' + key] = values;
     };
 });
 
-ns._register('append', function(key, value) {
+ns._register('append', function(family, key, value) {
     return function(update) {
 	if(!update.$push) {
 	    update.$push = {};
 	}
-	update.$push[key] = value;
+	update.$push[family + '.' + key] = value;
     };
 });
 
-ns._register('get', function(key) {
+ns._register('get', function(family, key) {
     return function(update, fields) {
-	fields[key] = 1;
+	fields[family + '.' + key] = 1;
     };
 });
 
-ns._register('check', function(key, value) {
+ns._register('check', function(family, key, value) {
     return function(update, fields, query, options) {
-	query[key] = [value];
+	query[family + '.' + key] = [value];
 	options.upsert = false;
     };
 });
 
-ns._register('getAll', function() {
+ns._register('getAll', function(family) {
     return function(upsert, fields) {
-	Object.keys(fields).forEach(function(key) {
-	    delete fields[key];
-	});
+	fields[family] = 1;
     };
 });

@@ -49,61 +49,61 @@ describe('nodalionMongo', function(){
     });
     describe('/nodalion:trans(coll, row, ops) => fields', function(){
 	it('should not return any results unless asked for explicitly', $T(function*(){
-	    yield doTask(ns.trans('test2', 'foo', [ns.set('a', ['1']), ns.set('b', ['2'])]), $R());
+	    yield doTask(ns.trans('test2', 'foo', [ns.set('fam', 'a', ['1']), ns.set('fam', 'b', ['2'])]), $R());
 	    assert.deepEqual(yield doTask(ns.trans('test2', 'foo', []), $R()), []);
 	}));
 
-	describe('op /nodalion:set(key, values)', function(){
+	describe('op /nodalion:set(family, key, values)', function(){
 	    it('should assign values to key', $T(function*(){
-		var result = yield doTask(ns.trans('test2', 'foo', [ns.set('bar', ['baz'])]), $R());
+		var result = yield doTask(ns.trans('test2', 'foo', [ns.set('fam', 'bar', ['baz'])]), $R());
 		assert.deepEqual(result, []);
 		
 		var docs = yield coll.find({_id: 'foo'}).toArray($R());
 		assert.equal(docs.length, 1);
-		assert.deepEqual(docs[0], {_id: 'foo', bar:['baz']});
+		assert.deepEqual(docs[0], {_id: 'foo', fam: {bar:['baz']}});
 	    }));
 	});
-	describe('op /nodalion:append(key, value)', function(){
+	describe('op /nodalion:append(family, key, value)', function(){
 	    it('should create a list of size 1 for an item that does not exist', $T(function*(){
-		yield doTask(ns.trans('test2', 'foo', [ns.append('bar', 'baz')]), $R());
+		yield doTask(ns.trans('test2', 'foo', [ns.append('fam', 'bar', 'baz')]), $R());
 		
 		var docs = yield coll.find({_id: 'foo'}).toArray($R());
 		assert.equal(docs.length, 1);
-		assert.deepEqual(docs[0], {_id: 'foo', bar:['baz']});
+		assert.deepEqual(docs[0], {_id: 'foo', fam: {bar:['baz']}});
 	    }));
 	    it('should append an element to the list if already exists', $T(function*(){
-		yield doTask(ns.trans('test2', 'foo', [ns.append('bar', 'baz1')]), $R());
-		yield doTask(ns.trans('test2', 'foo', [ns.append('bar', 'baz2')]), $R());
-		yield doTask(ns.trans('test2', 'foo', [ns.append('bar', 'baz3')]), $R());
+		yield doTask(ns.trans('test2', 'foo', [ns.append('fam', 'bar', 'baz1')]), $R());
+		yield doTask(ns.trans('test2', 'foo', [ns.append('fam', 'bar', 'baz2')]), $R());
+		yield doTask(ns.trans('test2', 'foo', [ns.append('fam', 'bar', 'baz3')]), $R());
 		
 		var docs = yield coll.find({_id: 'foo'}).toArray($R());
 		assert.equal(docs.length, 1);
-		assert.deepEqual(docs[0], {_id: 'foo', bar:['baz1', 'baz2', 'baz3']});
+		assert.deepEqual(docs[0], {_id: 'foo', fam: {bar:['baz1', 'baz2', 'baz3']}});
 	    }));
 	});
-	describe('op /nodalion:get(key)', function(){
+	describe('op /nodalion:get(family, key)', function(){
 	    it('should return the requested key', $T(function*(){
-		yield doTask(ns.trans('test2', 'foo', [ns.set('bar', ['a']), ns.set('baz', ['b'])]), $R());
-		var result = yield doTask(ns.trans('test2', 'foo', [ns.get('bar'), ns.set('z', ['t'])]), $R());
-		assert.deepEqual(result, [ns.value('bar', ['a'])]);
+		yield doTask(ns.trans('test2', 'foo', [ns.set('fam', 'bar', ['a']), ns.set('fam', 'baz', ['b'])]), $R());
+		var result = yield doTask(ns.trans('test2', 'foo', [ns.get('fam', 'bar'), ns.set('fam', 'z', ['t'])]), $R());
+		assert.deepEqual(result, [ns.value('fam', 'bar', ['a'])]);
 	    }));
 	    it('should stand on its own without need for modification operations', $T(function*(){
-		yield doTask(ns.trans('test2', 'foo', [ns.set('bar', ['a']), ns.set('baz', ['b'])]), $R());
-		var result = yield doTask(ns.trans('test2', 'foo', [ns.get('bar')]), $R());
-		assert.deepEqual(result, [ns.value('bar', ['a'])]);
+		yield doTask(ns.trans('test2', 'foo', [ns.set('fam', 'bar', ['a']), ns.set('fam', 'baz', ['b'])]), $R());
+		var result = yield doTask(ns.trans('test2', 'foo', [ns.get('fam', 'bar')]), $R());
+		assert.deepEqual(result, [ns.value('fam', 'bar', ['a'])]);
 	    }));
 	});
-	describe('op /nodalion:check(key, value)', function(){
+	describe('op /nodalion:check(family, key, value)', function(){
 	    it('should perform the transaction only if key maps to a single value - value', $T(function*(){
 		// The following transaction will not occur because the pre-condition does not hold.
-		yield doTask(ns.trans('test2', 'foo', [ns.set('x', ['1']), ns.check('a', ['7'])]), $R());
-		assert.deepEqual(yield doTask(ns.trans('test2', 'foo', [ns.get('x')]), $R()), []);
+		yield doTask(ns.trans('test2', 'foo', [ns.set('fam', 'x', ['1']), ns.check('fam', 'a', ['7'])]), $R());
+		assert.deepEqual(yield doTask(ns.trans('test2', 'foo', [ns.get('fam', 'x')]), $R()), []);
 	    }));
 	});
-	describe('op /nodalion:getAll', function(){
+	describe('op /nodalion:getAll(family)', function(){
 	    it('should return all keys for the given row', $T(function*(){
-		yield doTask(ns.trans('test2', 'foo', [ns.set('bar', ['a']), ns.set('baz', ['b'])]), $R());
-		var result = yield doTask(ns.trans('test2', 'foo', [ns.getAll()]), $R());
+		yield doTask(ns.trans('test2', 'foo', [ns.set('fam', 'bar', ['a']), ns.set('fam', 'baz', ['b'])]), $R());
+		var result = yield doTask(ns.trans('test2', 'foo', [ns.getAll('fam')]), $R());
 		assert.equal(result.length, 2);
 	    }));
 
