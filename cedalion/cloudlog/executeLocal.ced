@@ -1,3 +1,3 @@
 '/bootstrap':signature(executeLocal(Goal)::'/bootstrap':pred,[Goal::'/bootstrap':pred]).
 executeLocal(Goal):-builtin:catch((builtin:timeout(builtin:findall(Goal,'/bootstrap':pred,Goal,Goals),90),'/bootstrap':listMember(Goal,'/bootstrap':pred,Goals)),builtin:timeout,builtin:throw(localPredicateTimedOut(QPrime))).
-'/deploy':behavior(executeLocal(Goal)::'/bootstrap':pred,!'should succeed for each success of Goal',builtin:findall(X,'/bootstrap':number,executeLocal('/bootstrap':listMember(X,'/bootstrap':number,[1,2,3])),[1,2,3])).
+'/util':behavior(executeLocal(Goal)::'/bootstrap':pred,!'should succeed for each success of Goal',builtin:findall(X,'/bootstrap':number,executeLocal('/bootstrap':listMember(X,'/bootstrap':number,[1,2,3])),[1,2,3])).

@@ -7,6 +7,6 @@ clause(testLocalStore(X),conj(task(localSet(!foo,localStr(!bar)),_,localStoreVal
 '/bootstrap':signature(localStr(Str)::localStoreVal,[Str::'/bootstrap':string]).
 '/bootstrap':projection(localStr(Str)::localStoreVal,'/bootstrap':horiz(['/bootstrap':label(!'"'),'/bootstrap':vis(Str::'/bootstrap':string),'/bootstrap':label(!'"')])).
 '/bootstrap':adapter(Str::'/bootstrap':string,localStr(Str)::localStoreVal).
-'/deploy':behavior(localGet(!x,localStr(!foo))::expr(localStoreVal),!'should provide the default value if the key is not in the local storage',simulate(eval(localGet(!x,localStr(!foo)),localStoreVal,localStr(!foo)),[],_)).
+'/util':behavior(localGet(!x,localStr(!foo))::expr(localStoreVal),!'should provide the default value if the key is not in the local storage',simulate(eval(localGet(!x,localStr(!foo)),localStoreVal,localStr(!foo)),[],_)).
 defFunc(localGet(Key,Default),localStoreVal,funcIf(conj(task(localGet(Key),Value,localStoreVal),pred(\+builtin:var(Value::localStoreVal))),pureExpr('/Functional':const(Value)),pureExpr('/Functional':const(Default)))).
-'/deploy':behavior(localGet(Key,Default)::expr(localStoreVal),!'should return the value associated with the key if one exists',simulate(eval(localGet(!x,localStr(!foo)),localStoreVal,localStr(!bar)),[task(localGet(!x),localStr(!bar),localStoreVal)],true)).
+'/util':behavior(localGet(Key,Default)::expr(localStoreVal),!'should return the value associated with the key if one exists',simulate(eval(localGet(!x,localStr(!foo)),localStoreVal,localStr(!bar)),[task(localGet(!x),localStr(!bar),localStoreVal)],true)).
