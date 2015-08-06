@@ -24,5 +24,25 @@ describe('DictEncoder', function(){
 	    assert.equal(enc.indexOf('$'), -1);
 	    assert.equal(encoder.decode(enc), testString);
 	});
+	it('should also encode the escape character', function(){
+	    var testString = '.%a';
+	    var encoder = new DictEncoder({
+		forbiddenChars: '.',
+	    });
+	    assert.equal(encoder.decode(encoder.encode(testString)), testString);
+	});
     });
+    describe('commonStrings', function(){
+	it('should replace common strings with escape sequences that are shorter than the string', function(){
+	    var encoder = new DictEncoder({
+		commonStrings: ['hello', 'world'],
+	    });
+	    var testString = "hello, world";
+	    var enc = encoder.encode(testString);
+	    assert.equal(enc.length, 6);
+	    assert.equal(encoder.decode(enc), testString);
+	});
+
+    });
+
 });
