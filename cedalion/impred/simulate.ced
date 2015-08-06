@@ -5,10 +5,9 @@
 '/bootstrap':unitTest(\+simulate(task(userInput,X,'/bootstrap':string),[],true)).
 '/bootstrap':signature(simulateResp(Resp,Having,Next)::'/bootstrap':pred,[Resp::response(_),Having::'/bootstrap':list(impred),Next::impred]).
 simulate(Impred,Having,Next):-solve(Impred,_,_,Resp),simulateResp(Resp,Having,Next).
-simulateResp(solution(_),_,_):-builtin:true.
+simulateResp(solution(_),[],true):-builtin:true.
 simulateResp(throws(Ex),_,_):-builtin:throw(Ex).
-simulateResp(continuation(Task,RetVal,T,Cont,_),[],task(Task,RetVal,T)):-builtin:true.
-annotation:shrink((simulateResp(continuation(Task,RetVal,T,Cont,_),[task(Task,RetVal,T)|Rest],Next):-simulate(Cont,Rest,Next))).
+annotation:shrink((simulateResp(continuation(Task,RetVal,T,Cont,_),Having,Next):-builtin:if(Having::'/bootstrap':list(impred)=[task(Task,RetVal,T)|Rest]::'/bootstrap':list(impred),simulate(Cont,Rest,Next),Next::impred=task(Task,RetVal,T)::impred))).
 '/bootstrap':unitTest(simulate(conj(task(userInput,X,'/bootstrap':string),pred(builtin:strcat(X,!', world',!'hello, world'))),[],task(userInput,X,'/bootstrap':string))).
 '/bootstrap':unitTest(simulate(annotation:parentheses(conj(task(userInput,!hello,'/bootstrap':string),pred(builtin:strcat(!hello,!', world',!'hello, world')))),[task(userInput,!hello,'/bootstrap':string)],true)).
 '/bootstrap':unitTest(\+simulate(annotation:parentheses(conj(task(userInput,Greet,'/bootstrap':string),pred(builtin:strcat(Greet,!', world',!'goodbye, world')))),[task(userInput,!hello,'/bootstrap':string)],true)).
@@ -16,3 +15,4 @@ annotation:shrink((simulateResp(continuation(Task,RetVal,T,Cont,_),[task(Task,Re
 '/bootstrap':signature(appendNext(Simulate,Path,VNs)::'/bootstrap':procedure,[Simulate::'/bootstrap':pred,Path::cpi:path,VNs::'/bootstrap':list('/bootstrap':varName)]).
 cpi:procedureCommand(appendNext(simulate(Impred,Having,Next),Path,VNs),'/bootstrap':doProc(cpi:edit(Path,simulate(Impred,HavingPrime,Next)::'/bootstrap':pred,VNs))):-builtin:catch(simulate(Impred,Having,N),Exception,N::impred=greet(Exception)::impred),'/bootstrap':append(Having,[N],HavingPrime,impred).
 '/bootstrap':contextMenuEntry(simulate(Impred,Having,Next)::'/bootstrap':pred,VNs,Path,!'Append Next',appendNext(simulate(Impred,Having,Next),Path,VNs)).
+'/bootstrap':unitTest(\+simulate(true,[task(userInput,_,'/bootstrap':string)],true)).
