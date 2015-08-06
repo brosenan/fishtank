@@ -42,7 +42,5 @@ describe('DictEncoder', function(){
 	    assert.equal(enc.length, 13);
 	    assert.equal(encoder.decode(enc), testString);
 	});
-
     });
-
 });
