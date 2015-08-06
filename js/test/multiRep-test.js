@@ -13,5 +13,10 @@ describe('MultiRep', function(){
 	var rep = multiRep({'f$o.o': 'F{O}O', 'b[a]r': 'B(A)R'});
 	assert.equal(rep('the f$o.o and b[a]r went to f$o.ob[a]r'), 'the F{O}O and B(A)R went to F{O}OB(A)R');
     });
+    it('should support an empty dict', function(){
+	var rep = multiRep(Object.create(null));
+	assert.equal(rep('the foo and bar went to foobar'), 'the foo and bar went to foobar');
+	
+    });
 
 });

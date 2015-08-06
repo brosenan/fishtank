@@ -5,7 +5,11 @@ function escapeRegExp(str) {
 }
 
 module.exports = function(dict) {
-    var re = RegExp(Object.keys(dict).map(escapeRegExp).join('|'), 'g');
+    var keys = Object.keys(dict);
+    if(keys.length == 0) {
+	return function(str) { return str; };
+    }
+    var re = RegExp(keys.map(escapeRegExp).join('|'), 'g');
     return function(str) {
 	return str.replace(re, function(substr) {
 	    return dict[substr];

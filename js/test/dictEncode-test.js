@@ -22,8 +22,7 @@ describe('DictEncoder', function(){
 	    var enc = encoder.encode(testString);
 	    assert.equal(enc.indexOf('.'), -1);
 	    assert.equal(enc.indexOf('$'), -1);
+	    assert.equal(encoder.decode(enc), testString);
 	});
-
     });
-
 });
