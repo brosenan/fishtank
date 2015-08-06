@@ -35,11 +35,11 @@ describe('DictEncoder', function(){
     describe('commonStrings', function(){
 	it('should replace common strings with escape sequences that are shorter than the string', function(){
 	    var encoder = new DictEncoder({
-		commonStrings: ['hello', 'world'],
+		commonStrings: ['hello', 'world', 'goodbye'],
 	    });
-	    var testString = "hello, world";
+	    var testString = "hello &a goodbye, world";
 	    var enc = encoder.encode(testString);
-	    assert.equal(enc.length, 6);
+	    assert.equal(enc.length, 13);
 	    assert.equal(encoder.decode(enc), testString);
 	});
 

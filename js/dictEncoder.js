@@ -24,6 +24,9 @@ module.exports = function(args) {
     if(forbiddenChars !== '') {
 	forbiddenChars += forbiddenEsc;
     }
+    if(commonStrings.length > 0) {
+	forbiddenChars += commonEsc;
+    }
     for(let i = 0; i < forbiddenChars.length; i++) {
 	var c = forbiddenChars.charAt(i);
 	encodingDict[c] = forbiddenEsc + encodeNum(i, lowChars, highChars);
