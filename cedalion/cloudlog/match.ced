@@ -1,0 +1,7 @@
+'/bootstrap':signature(match(Axiom,Match,MatchFamily)::'/bootstrap':pred,[Axiom::axiom,Match::axiom,MatchFamily::'/bootstrap':string]).
+'/util':behavior(match(Axiom,Match,MatchFamily)::'/bootstrap':pred,!'should match a fact to a rule', (match(example:someFact(X,3),Match,Family),builtin:structurallyEqual(Match::axiom,rule(example:someFact(X,3),_,_)::axiom),builtin:equals(Family::'/bootstrap':string,!rules::'/bootstrap':string))).
+'/util':behavior(match(Axiom,Match,MatchFamily)::'/bootstrap':pred,!'should match a rule to a fact',match(rule(example:someFact(X,3),builtin:true,example:someFact(2,X)),Match,MatchFamily)).
+match(Axiom,Match,Family):-axiomFamily(Axiom,MyFamily,Key::axiom),matchFamily(MyFamily,Key,Match),axiomFamily(Match,Family,_::_).
+'/bootstrap':signature(matchFamily(MyFamily,Key,Match)::'/bootstrap':pred,[MyFamily::'/bootstrap':string,Key::axiom,Match::axiom]).
+matchFamily(!facts,Fact,rule(Fact,_,_)):-builtin:true.
+matchFamily(!rules,Fact,Fact):-builtin:true.
