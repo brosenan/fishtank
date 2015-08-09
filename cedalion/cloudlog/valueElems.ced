@@ -7,8 +7,12 @@
 '/util':behavior(addValues(A,B,C)::'/bootstrap':pred,!'should treat [] as the neutral element',addValues([],[baseVal(3),inc(2,!foo,[vcEntry(!bar,4)],12345)],[baseVal(3),inc(2,!foo,[vcEntry(!bar,4)],12345)])).
 addValues([],X,X):-builtin:true.
 '/util':behavior(addValues(A,B,C)::'/bootstrap':pred,!'should sum base values',addValues([baseVal(2)],[baseVal(3)],[baseVal(5)])).
-addValues([baseVal(A)|APrime],BPrimePrime,[baseVal(C)|CPrime]):-builtin:if(BPrimePrime::'/bootstrap':list(counterValue)=[baseVal(B)|BPrime]::'/bootstrap':list(counterValue), (builtin:plus(A,B,C),addValues(APrime,BPrime,CPrime)),addValues(APrime,BPrimePrime,CPrime)).
+'/bootstrap':signature(baseVal(BPrime,B,BPrimePrime)::'/bootstrap':pred,[BPrime::'/bootstrap':list(counterValue),B::'/bootstrap':number,BPrimePrime::'/bootstrap':list(counterValue)]).
+baseVal([],0,[]):-builtin:true.
+annotation:shrink((baseVal([First|Rest],B,RestPrime):-builtin:if(First::counterValue=baseVal(B)::counterValue,RestPrime::'/bootstrap':list(counterValue)=Rest::'/bootstrap':list(counterValue), (baseVal(Rest,B,RestPrimePrime),RestPrime::'/bootstrap':list(counterValue)=[First|RestPrimePrime]::'/bootstrap':list(counterValue))))).
+annotation:shrink((addValues([baseVal(A)|APrime],BPrime,[baseVal(C)|CPrime]):-baseVal(BPrime,B,BPrimePrime),builtin:plus(A,B,C),addValues(APrime,BPrimePrime,CPrime))).
 '/util':behavior(addValues(A,B,C)::'/bootstrap':pred,!'should append inc entries',annotation:shrink(addValues([inc(2,!foo,[vcEntry(!'foo1',2)],12345)],[inc(3,!bar,[vcEntry(!'bar2',4)],12346)],[inc(2,!foo,[vcEntry(!'foo1',2)],12345),inc(3,!bar,[vcEntry(!'bar2',4)],12346)]))).
 addValues([inc(Val,Sess,VC,TS)|APrime],BPrime,[inc(Val,Sess,VC,TS)|CPrime]):-addValues(APrime,BPrime,CPrime).
 '/bootstrap':unitTest(addValues([baseVal(2),inc(4,!t,[],55)],[baseVal(3),inc(5,!s,[],44)],[baseVal(5),inc(4,!t,[],55),inc(5,!s,[],44)])).
-'/util':behavior(addValues(A,B,C)::'/bootstrap':pred,!'should treat B that does not start with a baseVal as baseVal=0',addValues([baseVal(2),inc(4,!t,[],55)],[inc(5,!s,[],44)],[baseVal(2),inc(4,!t,[],55),inc(5,!s,[],44)])).
+'/util':behavior(addValues(A,B,C)::'/bootstrap':pred,!'should treat B that does not start with a baseVal as baseVal=0', (addValues([baseVal(2),inc(4,!t,[],55)],[inc(5,!s,[],44)],Res),builtin:equals(Res::'/bootstrap':list(counterValue),[baseVal(2),inc(4,!t,[],55),inc(5,!s,[],44)]::'/bootstrap':list(counterValue)))).
+'/util':behavior(addValues(A,B,C)::'/bootstrap':pred,!'should handle baseValues anywhere in the list', (addValues([inc(2,!foo,[],123),baseVal(1)],[inc(3,!bar,[],234),baseVal(2)],Res),builtin:equals(Res::'/bootstrap':list(counterValue),[inc(2,!foo,[],123),baseVal(3),inc(3,!bar,[],234)]::'/bootstrap':list(counterValue)))).
