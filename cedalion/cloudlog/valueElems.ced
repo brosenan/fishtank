@@ -1,0 +1,14 @@
+'/bootstrap':signature(baseVal(X)::counterValue,[X::'/bootstrap':number]).
+'/bootstrap':projection(baseVal(X)::counterValue,'/bootstrap':horiz(['/bootstrap':label(!base),'/bootstrap':vis(X::'/bootstrap':number)])).
+'/bootstrap':signature(inc(Increment,Session,VC,Timestamp)::counterValue,[Increment::'/bootstrap':number,Session::'/bootstrap':string,VC::'/bootstrap':list(vcElem),Timestamp::'/bootstrap':number]).
+'/bootstrap':signature(addValues(A,B,C)::'/bootstrap':pred,[A::'/bootstrap':list(counterValue),B::'/bootstrap':list(counterValue),C::'/bootstrap':list(counterValue)]).
+'/bootstrap':projection(addValues(A,B,C)::'/bootstrap':pred,'/bootstrap':horiz(['/bootstrap':vis(C::'/bootstrap':list(counterValue)),'/bootstrap':label(! (=)),'/bootstrap':vis(A::'/bootstrap':list(counterValue)),'/bootstrap':label(! (+)),'/bootstrap':vis(B::'/bootstrap':list(counterValue))])).
+'/bootstrap':alias(addValues(A,B,C)::'/bootstrap':pred,!'= +').
+'/util':behavior(addValues(A,B,C)::'/bootstrap':pred,!'should treat [] as the neutral element',addValues([],[baseVal(3),inc(2,!foo,[vcEntry(!bar,4)],12345)],[baseVal(3),inc(2,!foo,[vcEntry(!bar,4)],12345)])).
+addValues([],X,X):-builtin:true.
+'/util':behavior(addValues(A,B,C)::'/bootstrap':pred,!'should sum base values',addValues([baseVal(2)],[baseVal(3)],[baseVal(5)])).
+addValues([baseVal(A)|APrime],BPrimePrime,[baseVal(C)|CPrime]):-builtin:if(BPrimePrime::'/bootstrap':list(counterValue)=[baseVal(B)|BPrime]::'/bootstrap':list(counterValue), (builtin:plus(A,B,C),addValues(APrime,BPrime,CPrime)),addValues(APrime,BPrimePrime,CPrime)).
+'/util':behavior(addValues(A,B,C)::'/bootstrap':pred,!'should append inc entries',annotation:shrink(addValues([inc(2,!foo,[vcEntry(!'foo1',2)],12345)],[inc(3,!bar,[vcEntry(!'bar2',4)],12346)],[inc(2,!foo,[vcEntry(!'foo1',2)],12345),inc(3,!bar,[vcEntry(!'bar2',4)],12346)]))).
+addValues([inc(Val,Sess,VC,TS)|APrime],BPrime,[inc(Val,Sess,VC,TS)|CPrime]):-addValues(APrime,BPrime,CPrime).
+'/bootstrap':unitTest(addValues([baseVal(2),inc(4,!t,[],55)],[baseVal(3),inc(5,!s,[],44)],[baseVal(5),inc(4,!t,[],55),inc(5,!s,[],44)])).
+'/util':behavior(addValues(A,B,C)::'/bootstrap':pred,!'should treat B that does not start with a baseVal as baseVal=0',addValues([baseVal(2),inc(4,!t,[],55)],[inc(5,!s,[],44)],[baseVal(2),inc(4,!t,[],55),inc(5,!s,[],44)])).
