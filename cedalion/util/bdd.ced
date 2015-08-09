@@ -11,3 +11,6 @@ annotation:shrink(('/bootstrap':testHasFailed('/bootstrap':horiz(['/bootstrap':l
 '/bootstrap':defAtom(spec::'/bootstrap':definitionType).
 '/bootstrap':projection(spec::'/bootstrap':definitionType,'/bootstrap':label(!'Specification')).
 '/bootstrap':defines(behavior(TTerm,_,_),TTerm,spec).
+'/bootstrap':signature(findVariableAssigment(Test,Statement,VNs,Path)::'/bootstrap':procedure,[Test::'/bootstrap':pred,Statement::'/bootstrap':statement,VNs::'/bootstrap':list('/bootstrap':varName),Path::cpi:path]).
+cpi:procedureCommand(findVariableAssigment(Test,Statement,VNs,Path),'/bootstrap':doProc(cpi:edit(Path,Statement::'/bootstrap':statement,VNs))):-builtin:if(builtin:timeout(Test,100),builtin:true,builtin:fail).
+'/bootstrap':contextMenuEntry(behavior(TTerm,Should,Test)::'/bootstrap':statement,VNs,Path,!'Find Variable Assignment',findVariableAssigment(Test,behavior(TTerm,Should,Test),VNs,Path)).

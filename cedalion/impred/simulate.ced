@@ -7,7 +7,7 @@
 simulate(Impred,Having,Next):-solve(Impred,_,_,Resp),simulateResp(Resp,Having,Next).
 simulateResp(solution(_),[],true):-builtin:true.
 simulateResp(throws(Ex),_,_):-builtin:throw(Ex).
-annotation:shrink((simulateResp(continuation(Task,RetVal,T,Cont,_),Having,Next):-builtin:if(Having::'/bootstrap':list(impred)=[task(Task,RetVal,T)|Rest]::'/bootstrap':list(impred),simulate(Cont,Rest,Next),Next::impred=task(Task,RetVal,T)::impred))).
+annotation:shrink((simulateResp(continuation(Task,RetVal,T,Cont,_),Having,Next):-builtin:if(Having::'/bootstrap':list(impred)=[task(TaskPrime,RetValPrime,TPrime)|Rest]::'/bootstrap':list(impred), (task(TaskPrime,RetValPrime,TPrime)::impred=task(Task,RetVal,T)::impred,simulate(Cont,Rest,Next)),Next::impred=task(Task,RetVal,T)::impred))).
 '/bootstrap':unitTest(simulate(conj(task(userInput,X,'/bootstrap':string),pred(builtin:strcat(X,!', world',!'hello, world'))),[],task(userInput,X,'/bootstrap':string))).
 '/bootstrap':unitTest(simulate(annotation:parentheses(conj(task(userInput,!hello,'/bootstrap':string),pred(builtin:strcat(!hello,!', world',!'hello, world')))),[task(userInput,!hello,'/bootstrap':string)],true)).
 '/bootstrap':unitTest(\+simulate(annotation:parentheses(conj(task(userInput,Greet,'/bootstrap':string),pred(builtin:strcat(Greet,!', world',!'goodbye, world')))),[task(userInput,!hello,'/bootstrap':string)],true)).

@@ -1,0 +1,5 @@
+'/bootstrap':signature(applyMatch(Axiom,Match,Child)::'/bootstrap':pred,[Axiom::axiom,Match::axiom,Child::axiom]).
+'/util':behavior(applyMatch(Axiom,Match,Child)::'/bootstrap':pred,!'should match a rule and a fact', (applyMatch(rule(example:someFact(1,X),builtin:true,example:someFact(X,3)),example:someFact(1,2),F),builtin:equals(F::axiom,example:someFact(2,3)::axiom))).
+applyMatch(rule(F,G,A),F,A):-builtin:true.
+'/util':behavior(applyMatch(Axiom,Match,Child)::'/bootstrap':pred,!'should match a fact and a rule', (applyMatch(example:someFact(1,2),rule(example:someFact(1,X),builtin:true,example:someFact(X,3)),F),builtin:equals(F::axiom,example:someFact(2,3)::axiom))).
+applyMatch(F,rule(FPrime,G,A),A):-F::axiom=FPrime::axiom.
