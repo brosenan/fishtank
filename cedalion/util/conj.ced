@@ -6,3 +6,7 @@ cpi:procedureCommand(swapConj(A, (B,C),Path,VNs),'/bootstrap':doProc(cpi:edit(Pa
 '/bootstrap':tip(((A,B),C)::'/bootstrap':pred,Path,VNs,cpi:edit(Path, (A,B,C)::'/bootstrap':pred,VNs)).
 '/bootstrap':contextMenuEntry(P::'/bootstrap':pred,VNs,Path,!'Insert',cpi:edit(Path, (_,P)::'/bootstrap':pred,VNs)).
 '/bootstrap':contextMenuEntry((A,B)::'/bootstrap':pred,VNs,Path,!'Delete',cpi:edit(Path,B::'/bootstrap':pred,VNs)).
+'/bootstrap':signature(skip(Pred)::'/bootstrap':pred,[Pred::'/bootstrap':pred]).
+'/bootstrap':projection(skip(Pred)::'/bootstrap':pred,'/bootstrap':horiz(['/bootstrap':label(! (//)),'/bootstrap':background('/bootstrap':vis(Pred::'/bootstrap':pred),cpi:rgb(192,192,192))])).
+skip(Pred):-builtin:true.
+'/bootstrap':contextMenuEntry(skip(Pred)::'/bootstrap':pred,VNs,Path,!'Un-skip',cpi:edit(Path,Pred::'/bootstrap':pred,VNs)).

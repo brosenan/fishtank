@@ -1,0 +1,13 @@
+'/bootstrap':signature(multValues(A,B,C)::'/bootstrap':pred,[A::'/bootstrap':list(counterValue),B::'/bootstrap':list(counterValue),C::'/bootstrap':list(counterValue)]).
+'/bootstrap':projection(multValues(A,B,C)::'/bootstrap':pred,'/bootstrap':horiz(['/bootstrap':vis(C::'/bootstrap':list(counterValue)),'/bootstrap':label(! (=)),'/bootstrap':vis(A::'/bootstrap':list(counterValue)),'/bootstrap':label(! (*)),'/bootstrap':vis(B::'/bootstrap':list(counterValue))])).
+'/bootstrap':alias(multValues(A,B,C)::'/bootstrap':pred,!'= *').
+'/util':behavior(multValues(A,B,C)::'/bootstrap':pred,!'should assign C=[] if A=[]', (multValues([],[baseVal(3)],Res),builtin:equals(Res::'/bootstrap':list(counterValue),[]::'/bootstrap':list(counterValue)))).
+multValues([],_,[]):-builtin:true.
+'/util':behavior(multValues(A,B,C)::'/bootstrap':pred,!'should assign C=[] if B=[]', (multValues([baseVal(3)],[],Res),builtin:equals(Res::'/bootstrap':list(counterValue),[]::'/bootstrap':list(counterValue)))).
+multValues(_,[],[]):-builtin:true.
+'/util':behavior(multValues(A,B,C)::'/bootstrap':pred,!'should multiply base values', (multValues([baseVal(3)],[baseVal(4)],Res),builtin:equals(Res::'/bootstrap':list(counterValue),[baseVal(12)]::'/bootstrap':list(counterValue)))).
+multValues([baseVal(A)],[baseVal(B)],[baseVal(C)]):-builtin:mult(A,B,C).
+'/util':behavior(multValues(A,B,C)::'/bootstrap':pred,!'should multiply base with inc', (multValues([baseVal(3)],[inc(2,!sess,[vcEntry(!foo,3)],1234)],Res),builtin:equals(Res::'/bootstrap':list(counterValue),[inc(6,!sess,[vcEntry(!foo,3)],1234)]::'/bootstrap':list(counterValue)))).
+multValues([baseVal(A)],[inc(B,S,VC,TS)],[inc(C,S,VC,TS)]):-builtin:mult(A,B,C).
+'/util':behavior(multValues(A,B,C)::'/bootstrap':pred,!'should multiply increments', (multValues([inc(2,!sess,[vcEntry(!foo,3)],1234)],[inc(3,!'sess2',[vcEntry(!bar,4)],1235)],Res),builtin:equals(Res::'/bootstrap':list(counterValue),[inc(6,!'',[vcEntry(!foo,3),vcEntry(!bar,4)],1235)]::'/bootstrap':list(counterValue)))).
+annotation:shrink((multValues([inc(A,S1,VC1,TS1)],[inc(B,S2,VC2,TS2)],[inc(C,!'',VC,TS)]):-builtin:mult(A,B,C),'/bootstrap':append(VC1,VC2,VC,vcElem),'/Functional':eval('/Functional':max('/Functional':const(TS1),'/Functional':const(TS2)),'/bootstrap':number,TS))).
