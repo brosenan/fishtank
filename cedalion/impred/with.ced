@@ -1,0 +1,5 @@
+'/bootstrap':signature(with(Task,Value,T,Impred)::impred,[Task::task(T),Value::T,T::'/bootstrap':type,Impred::impred]).
+'/bootstrap':projection(with(Task,Value,T,Impred)::impred,'/bootstrap':vert(['/bootstrap':horiz(['/bootstrap':label(!with),'/bootstrap':vis(Task::task(T)),'/bootstrap':symbol(8680),'/bootstrap':vis(Value::T),'/bootstrap':label(! (::)),'/bootstrap':vis(T::'/bootstrap':type)]),'/bootstrap':horiz(['/bootstrap':label(!'    '),'/bootstrap':vis(Impred::impred)])])).
+'/util':behavior(with(Task,Value,T,Impred)::impred,!'should evaluate Impred', (simulate(with(_,_,_,pred(X::'/bootstrap':number=2::'/bootstrap':number)),[],true),builtin:equals(X::'/bootstrap':number,2::'/bootstrap':number))).
+annotation:shrink((solve(with(Task,Value,T,Impred),X,T,S):-solve(Impred,X,T,SPrime),builtin:if(SPrime::response(T)=continuation(Task,Value,T,Cont,X)::response(T),solve(Cont,X,T,S),S::response(T)=SPrime::response(T)))).
+'/util':behavior(with(Task,Value,T,Impred)::impred,!'should answer Task with Value', (simulate(with(userInput,!me,'/bootstrap':string,greet(X)),[],true),builtin:equals(X::'/bootstrap':string,!'Hello, me'::'/bootstrap':string))).
