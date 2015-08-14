@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "byline": "^4.2.1",
+    "ioredis": "^1.7.4",
     "jison": "^0.4.15",
     "mongodb": "^2.0.39",
     "request": "^2.59.0",
