@@ -1,0 +1,12 @@
+'/bootstrap':signature(kvsGet(Key,Default)::'/impred':expr('/bootstrap':string),[Key::'/impred':expr('/bootstrap':string),Default::'/impred':expr('/bootstrap':string)]).
+'/util':behavior(kvsGet(Key,Default)::'/impred':expr('/bootstrap':string),!'should evaluate to the value underlying Key if one exists', ('/impred':simulate('/impred':eval(kvsGet('/impred':pureExpr('/Functional':const(!myKey)),'/impred':pureExpr('/Functional':const(!someDefault))),'/bootstrap':string,Val),['/impred':task(kvsGet(!myKey),!foo,'/bootstrap':string)],'/impred':true),builtin:equals(Val::'/bootstrap':string,!foo::'/bootstrap':string))).
+'/bootstrap':signature(kvsGet(Key)::'/impred':task('/bootstrap':string),[Key::'/bootstrap':string]).
+'/impred':defFunc(kvsGet(Key,Default),'/bootstrap':string,'/impred':where('/impred':funcIf('/impred':pred(Value::'/bootstrap':string=!''::'/bootstrap':string),Default,'/impred':pureExpr('/Functional':const(Value))),'/impred':conj('/impred':eval(Key,'/bootstrap':string,KeyPrime),'/impred':task(kvsGet(KeyPrime),Value,'/bootstrap':string)))).
+'/util':behavior(kvsGet(Key,Default)::'/impred':expr('/bootstrap':string),!'should evaluate to Default if Key is not defined in the KVS', ('/impred':simulate('/impred':eval(kvsGet('/impred':pureExpr('/Functional':const(!myKey)),'/impred':pureExpr('/Functional':const(!someDefault))),'/bootstrap':string,Val),['/impred':task(kvsGet(!myKey),!'','/bootstrap':string)],'/impred':true),builtin:equals(Val::'/bootstrap':string,!someDefault::'/bootstrap':string))).
+'/bootstrap':defAtom(voidType::'/bootstrap':type).
+'/bootstrap':signature(kvsSet(Key,Value)::'/impred':task(voidType),[Key::'/bootstrap':string,Value::'/bootstrap':string]).
+'/bootstrap':signature('testKVS1'(Value)::'/impred':impred,[Value::'/bootstrap':string]).
+'/impred':clause('testKVS1'(Value),'/impred':conj('/impred':task(kvsSet(!a,!'1'),_,voidType),'/impred':eval(kvsGet('/impred':pureExpr('/Functional':const(!a)),'/impred':pureExpr('/Functional':const(!'0'))),'/bootstrap':string,Value))).
+'/bootstrap':signature('testKVS2'(Value)::'/impred':impred,[Value::'/bootstrap':string]).
+'/bootstrap':signature(kvsSetWithTTL(Key,Value,TTL)::'/impred':task(voidType),[Key::'/bootstrap':string,Value::'/bootstrap':string,TTL::'/bootstrap':number]).
+'/impred':clause('testKVS2'(Value),'/impred':conj('/impred':task(kvsSetWithTTL(!'G',!'7',2),_,voidType),'/impred':eval('/impred':call(kvsGet(!'G')),'/bootstrap':string,Value))).

@@ -5,7 +5,7 @@ var $S = require('suspend'), $R = $S.resume, $T = function(gen) { return functio
 var Redis = require('ioredis');
 var nodalionRedis = require('../redis.js');
 var nodalion = require('../nodalion.js');
-var ns = nodalion.namespace('/nodalion', ['kvsGet', 'kvsSet', 'kvsSetWithTTL']);
+var ns = nodalion.namespace('/nodalion', ['kvsGet', 'kvsSet', 'kvsSetWithTTL', 'testKVS1', 'testKVS2']);
 
 var cedParser = require('../cedParser.js');
 
@@ -15,6 +15,9 @@ var doTask = function(term, cb) {
     var task = parser.parse(term.toString());
     task(cb);
 };
+
+var n = new nodalion('/tmp/mongo-ced.log');
+nodalionRedis.db({showFriendlyErrorStack: true});
 
 describe('ioredis', function(){
     it('should set and then get a value', $T(function*(){
@@ -55,7 +58,6 @@ describe('nodalionRedis', function(){
 	it('should return an empty string if the key does not exist', $T(function*(){
 	    assert.equal(yield doTask(ns.kvsGet('a-key-that-does-not-exist'), $R()), '');
 	}));
-
     });
 
     describe('/nodalion:kvsSetWithTTL(key, value, ttl) => void', function(){
@@ -72,4 +74,15 @@ describe('nodalionRedis', function(){
 	}));
     });
 
+    it('should integrate with Cedalion - 1', $T(function*(){
+	var X = {var: 'X'};
+	var result = yield n.findAll(X, ns.testKVS1(X), $R());
+	assert.deepEqual(result, ["1"]);
+    }));
+
+    it('should integrate with Cedalion - 2', $T(function*(){
+	var X = {var: 'X'};
+	var result = yield n.findAll(X, ns.testKVS2(X), $R());
+	assert.deepEqual(result, ["7"]);
+    }));
 });
