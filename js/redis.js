@@ -12,15 +12,30 @@ exports.db = function(options) {
     redis = new Redis(options);
 };
 
-ns._register('set', function(key, value) {
+ns._register('kvsSet', function(key, value) {
     return $S.async(function*() {
 	redis.set(key, value);
 	return ns.void();
     });
 });
 
-ns._register('get', function(key) {
+ns._register('kvsSetWithTTL', function(key, value, ttl) {
+    function trans(cb) {
+	redis.multi()
+	    .set(key, value)
+	    .expire(key, ttl)
+	    .exec(function(err) {
+		cb(err);
+	    });
+    }
     return $S.async(function*() {
-	return yield redis.get(key);
+	yield trans($R());
+	return ns.void();
+    });
+});
+
+ns._register('kvsGet', function(key) {
+    return $S.async(function*() {
+	return (yield redis.get(key)) || '';
     });
 });
