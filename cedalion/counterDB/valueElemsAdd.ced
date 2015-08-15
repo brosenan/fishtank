@@ -1,3 +1,4 @@
+'/bootstrap':defAtom(counterValue::'/bootstrap':type).
 '/bootstrap':signature(baseVal(X)::counterValue,[X::'/bootstrap':number]).
 '/bootstrap':projection(baseVal(X)::counterValue,'/bootstrap':horiz(['/bootstrap':label(!base),'/bootstrap':vis(X::'/bootstrap':number)])).
 '/bootstrap':signature(inc(Increment,Session,VC,Timestamp)::counterValue,[Increment::'/bootstrap':number,Session::'/bootstrap':string,VC::'/bootstrap':list(vcElem),Timestamp::'/bootstrap':number]).

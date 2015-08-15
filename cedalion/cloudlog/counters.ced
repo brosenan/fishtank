@@ -1,7 +1,0 @@
-'/bootstrap':defAtom(counterValue::'/bootstrap':type).
-'/bootstrap':signature(counterValue(Ops,Session)::'/impred':expr('/bootstrap':number),[Ops::'/bootstrap':list(counterValue),Session::'/bootstrap':string]).
-'/util':behavior(counterValue(Ops,Session)::'/impred':expr('/bootstrap':number),!'should return the base value if only it exists','/impred':simulate('/impred':eval(counterValue([baseVal(15)],!foo),'/bootstrap':number,X),[],'/impred':true)).
-'/impred':defFunc(counterValue([],_),'/bootstrap':number,'/impred':pureExpr('/Functional':const(0))).
-'/impred':defFunc(counterValue([baseVal(X)|Rest],Session),'/bootstrap':number,'/impred':binop('/impred':pureExpr('/Functional':const(X)),'/Functional':numPlus,counterValue(Rest,Session))).
-'/util':behavior(counterValue(Ops,Session)::'/impred':expr('/bootstrap':number),!'should add inc to the base value if taken', ('/impred':simulate('/impred':eval(counterValue([baseVal(15),inc(-7,!foo,[],1111)],!foo),'/bootstrap':number,X),[],'/impred':true),builtin:equals(X::'/bootstrap':number,8::'/bootstrap':number))).
-annotation:shrink('/impred':defFunc(counterValue([inc(Inc,Session,VC,Timestamp)|Rest],SessionPrime),'/bootstrap':number,'/impred':funcIf(taken(inc(Inc,Session,VC,Timestamp),SessionPrime),'/impred':binop('/impred':pureExpr('/Functional':const(Inc)),'/Functional':numPlus,counterValue(Rest,Session)),counterValue(Rest,Session)))).
