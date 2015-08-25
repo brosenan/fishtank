@@ -1,0 +1,4 @@
+'/bootstrap':signature(counterPlus(A,B)::counterExpr,[A::counterExpr,B::counterExpr]).
+'/bootstrap':projection(counterPlus(A,B)::counterExpr,'/bootstrap':horiz(['/bootstrap':vis(A::counterExpr),'/bootstrap':label(! (+)),'/bootstrap':vis(B::counterExpr)])).
+'/util':behavior(counterPlus(A,B)::counterExpr,!'should evaluate to the sum of A and B', ('/impred':simulate(evalCounter(counterPlus(counterValue(2),counterValue(4)),V),[],'/impred':true),builtin:equals(V::'/bootstrap':number,6::'/bootstrap':number))).
+'/impred':clause(evalCounter(counterPlus(A,B),V),'/impred':conj(evalCounter(A,APrime),'/impred':conj(evalCounter(B,BPrime),'/impred':pred(builtin:plus(APrime,BPrime,V))))).
