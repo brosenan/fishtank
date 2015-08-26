@@ -1,0 +1,5 @@
+'/bootstrap':signature(possibleConflict(Expr,Conditions)::'/bootstrap':pred,[Expr::counterExpr,Conditions::'/bootstrap':list('/impred':impred)]).
+'/util':behavior(possibleConflict(Expr,Conditions)::'/bootstrap':pred,!'should succeed if Expr may evaluate to a negative number',possibleConflict(counterIf(counterValue(-3),!thr,3,100),_)).
+possibleConflict(Expr,Cond):-possibleTransCombination(Expr,[],Cond),possibleValue(Expr,Cond,V),0>V.
+'/util':behavior(possibleConflict(Expr,Conditions)::'/bootstrap':pred,!'should fail if Expr may not evaluate to a negative number',\+possibleConflict(counterPlus(annotation:parentheses(counterIf(counterValue(3),!thr,3,100)),annotation:parentheses(counterIf(counterValue(-3),!thr,6,100))),_)).
+'/util':behavior(possibleConflict(Expr,Conditions)::'/bootstrap':pred,!'should unify Conditions with the conditions under which a conflict is possible', (possibleConflict(counterPlus(annotation:parentheses(counterIf(counterValue(3),!thr,3,100)),annotation:parentheses(counterIf(counterValue(-4),!thr,6,100))),Cond),builtin:equals(Cond::'/bootstrap':list('/impred':impred),[seen(!thr,6),seen(!thr,3)]::'/bootstrap':list('/impred':impred)))).
