@@ -1,0 +1,4 @@
+'/bootstrap':signature(conceptNameArity(Name,Arity)::'/bootstrap':pred,[Name::'/bootstrap':string,Arity::'/bootstrap':number]).
+behavior(conceptNameArity(Name,Arity)::'/bootstrap':pred,!'should succeed for each name/arity pair that is defined',conceptNameArity(!'/util#conceptNameArity',2)).
+behavior(conceptNameArity(Name,Arity)::'/bootstrap':pred,!'should fail for name/arity pairs that do not exist',\+conceptNameArity(!'/util#conceptNameArity',3)).
+'/bootstrap':signature(TTerm,Args)~>conceptNameArity(Name,Arity):-builtin:parseTerm(TTerm,Name,Args),builtin:length(Args,'/bootstrap':typedTerm,Arity).
