@@ -11,6 +11,10 @@ proto.writeInt = function(num, width) {
     this.writePtr = this.buff.writeIntBE(num, this.writePtr, width);
 }
 
+proto.writeUInt = function(num, width) {
+    this.writePtr = this.buff.writeUIntBE(num, this.writePtr, width);
+}
+
 proto.writeInt32 = function(num) {
     this.writeInt(num, 4);
 };
@@ -23,6 +27,13 @@ proto.readInt = function(width) {
     this.readPtr += width;
     return ret;
 };
+
+proto.readUInt = function(width) {
+    var ret = this.buff.readUIntBE(this.readPtr, width);
+    this.readPtr += width;
+    return ret;
+};
+
 proto.readInt32 = function() {
     return this.readInt(4);
 };
@@ -40,4 +51,15 @@ proto.readString = function() {
     var len = this.readInt(2);
     this.readPtr += len;
     return this.buff.toString('utf8', this.readPtr - len, this.readPtr);
+};
+
+proto.writeByte = function(num) {
+    this.writeUInt(num, 1);
+};
+proto.readByte = function() {
+    return this.readUInt(1);
+};
+
+proto.base64 = function() {
+    return this.buff.toString('base64', 0, this.writePtr);
 };

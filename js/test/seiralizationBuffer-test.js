@@ -53,6 +53,28 @@ describe('SerializationBuffer', function(){
 	    assert.equal(buff.readString(), 'hello');
 	    assert.equal(buff.readString(), 'world');
 	});
+    });
+    describe('.writeByte(num)', function(){
+	it('should serialize one byte', function(){
+	    var buff = new SerializationBuffer(new Buffer(100));
+	    buff.writeByte(3);
+	    buff.writeByte(200);
+	    assert.equal(buff.readByte(), 3);
+	    assert.equal(buff.readByte(), 200);
+	});
+    });
+    describe('.base64()', function(){
+	it('should return a base64 string representing the serialized data', function(){
+	    var buff = new SerializationBuffer(new Buffer(100));
+	    buff.writeString('hello');
+	    buff.writeByte(3);
+	    buff.writeInt24(-10);
+	    var b64 = buff.base64();
+	    var buff2 = new SerializationBuffer(new Buffer(b64, 'base64'));
+	    assert.equal(buff2.readString(), 'hello');
+	    assert.equal(buff2.readByte(), 3);
+	    assert.equal(buff2.readInt24(), -10);
+	});
 
     });
 
