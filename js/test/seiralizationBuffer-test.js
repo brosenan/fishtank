@@ -45,6 +45,26 @@ describe('SerializationBuffer', function(){
 	    assert.equal(buff.readInt24(), 1000000);
 	});
     });
+    describe('.writeInt16(num)', function(){
+	it('should serialize a number as a 32 bit integer', function(){
+	    var buff = new SerializationBuffer(new Buffer(100));
+	    buff.writeInt16(100);
+	    buff.writeInt16(10000);
+	    buff.writeInt16(-1234);
+	    assert.equal(buff.readInt16(), 100);
+	});
+    });
+    describe('.readInt16()', function(){
+	it('should de-serialize int32 values', function(){
+	    var buff = new SerializationBuffer(new Buffer(100));
+	    buff.writeInt16(100);
+	    buff.writeInt16(10000);
+	    buff.writeInt16(-1234);
+	    assert.equal(buff.readInt16(), 100);
+	    assert.equal(buff.readInt16(), 10000);
+	    assert.equal(buff.readInt16(), -1234);
+	});
+    });
     describe('.writeString(str)', function(){
 	it('should serialize a string', function(){
 	    var buff = new SerializationBuffer(new Buffer(100));
@@ -63,6 +83,15 @@ describe('SerializationBuffer', function(){
 	    assert.equal(buff.readByte(), 200);
 	});
     });
+    describe('.writeNumber(num)', function(){
+	it('should serialize double-precesion number', function(){
+	    var buff = new SerializationBuffer(new Buffer(100));
+	    buff.writeNumber(3.2e+200);
+	    buff.writeNumber(3.14);
+	    assert.equal(buff.readNumber(), 3.2e+200);
+	    assert.equal(buff.readNumber(), 3.14);
+	});
+    });
     describe('.base64()', function(){
 	it('should return a base64 string representing the serialized data', function(){
 	    var buff = new SerializationBuffer(new Buffer(100));
@@ -75,7 +104,5 @@ describe('SerializationBuffer', function(){
 	    assert.equal(buff2.readByte(), 3);
 	    assert.equal(buff2.readInt24(), -10);
 	});
-
     });
-
 });

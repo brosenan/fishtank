@@ -21,6 +21,9 @@ proto.writeInt32 = function(num) {
 proto.writeInt24 = function(num) {
     this.writeInt(num, 3);
 };
+proto.writeInt16 = function(num) {
+    this.writeInt(num, 2);
+};
 
 proto.readInt = function(width) {
     var ret = this.buff.readIntBE(this.readPtr, width);
@@ -40,6 +43,9 @@ proto.readInt32 = function() {
 proto.readInt24 = function() {
     return this.readInt(3);
 };
+proto.readInt16 = function() {
+    return this.readInt(2);
+};
 
 proto.writeString = function(str) {
     var len = this.buff.write(str, this.writePtr + 2, 'utf8');
@@ -58,6 +64,13 @@ proto.writeByte = function(num) {
 };
 proto.readByte = function() {
     return this.readUInt(1);
+};
+proto.writeNumber = function(num) {
+    this.writePtr = this.buff.writeDoubleBE(num, this.writePtr);
+};
+proto.readNumber = function(num) {
+    this.readPtr += 8;
+    return this.buff.readDoubleBE(this.readPtr - 8);
 };
 
 proto.base64 = function() {
