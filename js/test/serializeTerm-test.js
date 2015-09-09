@@ -40,4 +40,16 @@ describe('serializeTerm(term, buff, nameDict, [, varMap])', function(){
 	// The term identifier is augmented with the number of arguments * 8
 	assert.equal(buff.readByte(), serializeTerm.TERM + 2*8);
     });
+
+    it('should serialize variables by giving numbering them', function(){
+	var buff = new SerializationBuffer(new Buffer(100));
+	serializeTerm.serializeTerm({name: 'foo', args: [{var: 'X'}, {var: 'Y'}, {var: 'X'}]}, buff, {});
+	assert.equal(buff.readByte(), serializeTerm.VAR);
+	assert.equal(buff.readByte(), 0); // X
+	assert.equal(buff.readByte(), serializeTerm.VAR);
+	assert.equal(buff.readByte(), 1); // Y
+	assert.equal(buff.readByte(), serializeTerm.VAR);
+	assert.equal(buff.readByte(), 0); // X
+    });
+
 });
