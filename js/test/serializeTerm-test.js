@@ -3,6 +3,9 @@ var assert = require('assert');
 
 var serializeTerm = require('../serializeTerm.js');
 var SerializationBuffer = require('../serializationBuffer.js');
+var Nodalion = require("../nodalion.js");
+
+var $S = require('suspend'), $R = $S.resume, $T = function(gen) { return function(done) { $S.run(gen, done); } };
 
 describe('serializeTerm', function(){
     describe('serializeTerm(term, buff, nameDict, [, varMap])', function(){
@@ -101,6 +104,25 @@ describe('serializeTerm', function(){
 	    var decoded = serializeTerm.decodeTerm(encoded, ['foo', 'bar', 'baz']); // #2 is 'baz'
 	    assert.deepEqual(decoded, {name: 'baz', args: [{var: '_0'}, "hello", {var: '_0'}]});
 	});
+    });
+    describe('.updateNameDict(nodalion, nameDict, nameArr, cb(err))', function(){
+	var nodalion;
+	nodalion = new Nodalion('/tmp/updateNameDict.log');
+	
+	it('should add to nameDict and nameArr corresponding name-number mappings', $T(function*(){
+	    var nameDict = {};
+	    var nameArr = [];
+	    yield serializeTerm.updateNameDict(nodalion, nameDict, nameArr, $R());
+	    var index = nameDict['/impred#pred'];
+	    assert.equal(nameArr[index], '/impred#pred');
+	}));
+	it('should not modify existing names', $T(function*(){
+	    var nameDict = {'/impred#pred':0};
+	    var nameArr = ['/impred#pred'];
+	    yield serializeTerm.updateNameDict(nodalion, nameDict, nameArr, $R());
+	    assert.equal(nameDict['/impred#pred'], 0);
+	    assert.equal(nameArr[0], '/impred#pred');
+	}));
     });
 });
 

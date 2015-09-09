@@ -1,5 +1,7 @@
 "use strict";
 var SerializationBuffer = require('./serializationBuffer.js');
+var Nodalion = require('./nodalion.js');
+var $S = require('suspend'), $R = $S.resume;
 
 exports.STRING = 1;
 exports.NUMBER = 2;
@@ -81,3 +83,17 @@ exports.decodeTerm = function(base64, nameArr) {
     var buff = new SerializationBuffer(new Buffer(base64, 'base64'));
     return exports.deserializeTerm(buff, nameArr);
 };
+
+exports.updateNameDict = $S.async(function*(nodalion, nameDict, nameArr) {
+    var impred = Nodalion.namespace('/impred', ['pred']);
+    var util = Nodalion.namespace('/util', ['conceptNameArity']);
+    var Name = {var:'Name'};
+    var Arity = {var:'Arity'};
+    var names = yield nodalion.findAll(Name, impred.pred(util.conceptNameArity(Name, Arity)), $R());
+    names.forEach(function(name) {
+	if(name in nameDict) return;
+	var index = nameArr.length;
+	nameArr.push(name);
+	nameDict[name] = index;
+    });
+});
