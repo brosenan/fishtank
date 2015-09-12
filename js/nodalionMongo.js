@@ -44,6 +44,14 @@ var updateNameMap = $S.async(function*(db, nodalion) {
     }
 });
 
+function encode(term) {
+    return serializeTerm.encodeTerm(term, _namesMap);
+}
+
+function decode(b64) {
+    return serializeTerm.decodeTerm(b64, _namesArr);
+}
+
 exports.db = function(url) {
     MongoClient.connect(url, function(err, db) {
 	_db = db;
@@ -70,7 +78,7 @@ ns._register('trans', function(coll, row, ops) {
 	    ops.forEach(function(op) {
 		op(update, fields, query, options);
 	    });
-	    query._id = row;
+	    query._id = encode(row);
 	    var result;
 	    if(Object.keys(update).length > 0) {
 		result = yield db.collection(coll).findOneAndUpdate(query, 
@@ -78,12 +86,12 @@ ns._register('trans', function(coll, row, ops) {
 								    options, $R());
 		result = result.value;
 	    } else {
-		result = yield db.collection(coll).findOne({_id: row}, {fields: fields}, $R());
+		result = yield db.collection(coll).findOne({_id: encode(row)}, {fields: fields}, $R());
 	    }
 	    if(result) delete result._id;
 	    return [].concat.apply([], Object.keys(result || {}).map(function(family) {
 		return Object.keys(result[family]).map(function(key) {
-		    return ns.value(family, key, result[family][key]);
+		    return ns.value(family, decode(key), result[family][key].map(decode));
 		});
 	    }));
 	})(nodalion, cb);
@@ -95,7 +103,7 @@ ns._register('set', function(family, key, values) {
 	if(!update.$set) {
 	    update.$set = {};
 	}
-	update.$set[family + '.' + key] = values;
+	update.$set[family + '.' + encode(key)] = values.map(encode);
     };
 });
 
@@ -104,19 +112,19 @@ ns._register('append', function(family, key, value) {
 	if(!update.$push) {
 	    update.$push = {};
 	}
-	update.$push[family + '.' + key] = value;
+	update.$push[family + '.' + encode(key)] = encode(value);
     };
 });
 
 ns._register('get', function(family, key) {
     return function(update, fields) {
-	fields[family + '.' + key] = 1;
+	fields[family + '.' + encode(key)] = 1;
     };
 });
 
 ns._register('check', function(family, key, value) {
     return function(update, fields, query, options) {
-	query[family + '.' + key] = [value];
+	query[family + '.' + encode(key)] = value.map(encode);
 	options.upsert = false;
     };
 });
