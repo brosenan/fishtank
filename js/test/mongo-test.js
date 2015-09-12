@@ -122,19 +122,19 @@ describe('nodalionMongo', function(){
 	it('should integrate with Cedalion - 1', $T(function*(){
 	    var X = {var:'X'};
 	    var result = yield n.findAll(X, ns.mongoTest(1, X), $R());
-	    assert.equal(result, 'bar');
+	    assert.equal(result, 4);
 	}));
 
 	it('should integrate with Cedalion - 2', $T(function*(){
 	    var X = {var:'X'};
 	    var result = yield n.findAll(X, ns.mongoTest(2, X), $R());
-	    assert.equal(result, '3');
+	    assert.equal(result, 3);
 	}));
 
 	it('should integrate with Cedalion - 3', $T(function*(){
 	    var X = {var:'X'};
 	    var result = yield n.findAll(X, ns.mongoTest(3, X), $R());
-	    assert.equal(result, '1.1');
+	    assert.equal(result, 1.1);
 	}));
 
     });
