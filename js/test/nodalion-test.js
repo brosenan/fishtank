@@ -53,7 +53,16 @@ describe('Nodalion', function(){
 	    var res = yield nodalion.findAll(X, impred.greet(X), $R());
 	    assert.deepEqual(res, ["Hello, nodalion"]);
 	}));
-
+	it('should pass the ndalion instance to the task', $T(function*(){
+	    impred._register('userInput', function() {
+		return function(nod, cb) {
+		    assert(nod instanceof Nodalion, nod + " instanceof Nodalion");
+		    return cb(undefined, 'nodalion');
+		};
+	    });
+	    var X = {var:'X'};
+	    var res = yield nodalion.findAll(X, impred.greet(X), $R());
+	}));
     });
 });
 

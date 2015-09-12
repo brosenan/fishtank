@@ -15,6 +15,7 @@ module.exports.namespace = function(name, concepts) {
 };
 
 clazz.findAll = function(res, impred, cb) {
+    var self = this;
     var results = [];
     var sawError = false;
     var frames = 0;
@@ -39,7 +40,17 @@ clazz.findAll = function(res, impred, cb) {
 	    function contAndHandle(err, value) {
 		handleEvents(cont(err, value));
 	    }
-	    task(contAndHandle)
+	    try {
+		if(task.length <= 1) {
+		    task(contAndHandle);
+		} else if(task.length == 2) {
+		    task(self, contAndHandle);
+		} else {
+		    throw Error('Invalid task ' + task);
+		}
+	    } catch(e) {
+		cb(e);
+	    }
 	});
     }
 
