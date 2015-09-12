@@ -2,14 +2,15 @@
 var $S = require('suspend'), $R = $S.resume;
 var MongoClient = require('mongodb').MongoClient;
 
-var nodalion = require('./nodalion.js');
+var Nodalion = require('./nodalion.js');
 
-var ns = nodalion.namespace('/nodalion', ['value']);
+var ns = Nodalion.namespace('/nodalion', ['value']);
 
 
 var _db;
 var dbListeners = [];
-function getDB(cb) {
+function getDB(nodalion, cb) {
+    require('assert')(nodalion instanceof Nodalion);
     if(_db) {
 	return cb(undefined, _db);
     } else {
@@ -26,33 +27,35 @@ exports.db = function(url) {
 };
 
 ns._register('trans', function(coll, row, ops) {
-    return $S.async(function*() {
-	var db = yield getDB($R());
-	var update = {};
-	var fields = {_id:1};
-	var query = {};
-	var options = {upsert: true, 
-		       projection: fields};
-	ops.forEach(function(op) {
-	    op(update, fields, query, options);
-	});
-	query._id = row;
-	var result;
-	if(Object.keys(update).length > 0) {
-	    result = yield db.collection(coll).findOneAndUpdate(query, 
-								update, 
-								options, $R());
-	    result = result.value;
-	} else {
-	    result = yield db.collection(coll).findOne({_id: row}, {fields: fields}, $R());
-	}
-	if(result) delete result._id;
-	return [].concat.apply([], Object.keys(result || {}).map(function(family) {
-	    return Object.keys(result[family]).map(function(key) {
-		return ns.value(family, key, result[family][key]);
+    return function(nodalion, cb) {
+	$S.async(function*(nodalion) {
+	    var db = yield getDB(nodalion, $R());
+	    var update = {};
+	    var fields = {_id:1};
+	    var query = {};
+	    var options = {upsert: true, 
+			   projection: fields};
+	    ops.forEach(function(op) {
+		op(update, fields, query, options);
 	    });
-	}));
-    });
+	    query._id = row;
+	    var result;
+	    if(Object.keys(update).length > 0) {
+		result = yield db.collection(coll).findOneAndUpdate(query, 
+								    update, 
+								    options, $R());
+		result = result.value;
+	    } else {
+		result = yield db.collection(coll).findOne({_id: row}, {fields: fields}, $R());
+	    }
+	    if(result) delete result._id;
+	    return [].concat.apply([], Object.keys(result || {}).map(function(family) {
+		return Object.keys(result[family]).map(function(key) {
+		    return ns.value(family, key, result[family][key]);
+		});
+	    }));
+	})(nodalion, cb);
+    };
 });
 
 ns._register('set', function(family, key, values) {

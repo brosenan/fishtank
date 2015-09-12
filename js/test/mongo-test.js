@@ -10,13 +10,13 @@ var nodalionMongo = require('../nodalionMongo.js');
 var cedParser = require('../cedParser.js');
 
 var parser = new cedParser.CedParser();
+var n = new nodalion('/tmp/mongo-ced.log');
 
 var doTask = function(term, cb) {
     var task = parser.parse(term.toString());
-    task(cb);
+    task(n, cb);
 };
 
-var n = new nodalion('/tmp/mongo-ced.log');
 
 
 describe('mongodb', function(){
