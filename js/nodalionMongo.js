@@ -3,26 +3,58 @@ var $S = require('suspend'), $R = $S.resume;
 var MongoClient = require('mongodb').MongoClient;
 
 var Nodalion = require('./nodalion.js');
+var serializeTerm = require('./serializeTerm.js');
 
 var ns = Nodalion.namespace('/nodalion', ['value']);
 
 
 var _db;
 var dbListeners = [];
+var _nodalion;
+var _namesArr = [];
+var _namesMap = {};
+
 function getDB(nodalion, cb) {
-    require('assert')(nodalion instanceof Nodalion);
     if(_db) {
-	return cb(undefined, _db);
+	if(_namesArr.length == 0) {
+	    updateNameMap(_db, nodalion, function(err) {
+		cb(err, _db);
+	    });
+	} else {
+	    return cb(undefined, _db);
+	}
     } else {
+	_nodalion = nodalion;
 	dbListeners.push(cb);
     }
 }
+
+var updateNameMap = $S.async(function*(db, nodalion) {
+    var namesDoc = yield db.collection('names').findOne({_id: 'names'}, $R());
+    if(namesDoc) {
+	_namesArr = namesDoc.namesArr;
+    }
+    var oldLen = _namesArr.length;
+    _namesArr.forEach(function(name, i) {
+	_namesMap[name] = i;
+    });
+    yield serializeTerm.updateNameDict(nodalion, _namesMap, _namesArr, $R());
+    if(_namesArr.length > oldLen) {
+	yield db.collection('names').replaceOne({_id: 'names'}, {namesArr: _namesArr}, {upsert: true}, $R());
+    }
+});
+
 exports.db = function(url) {
     MongoClient.connect(url, function(err, db) {
 	_db = db;
-	dbListeners.forEach(function(listener) {
-	    listener(err, db);
-	});
+	if(_nodalion) {
+	    updateNameMap(db, _nodalion, function(err) {
+		console.log(err);
+		dbListeners.forEach(function(listener) {
+		    listener(err, db);
+		});
+	    });
+	}
     });
 };
 
