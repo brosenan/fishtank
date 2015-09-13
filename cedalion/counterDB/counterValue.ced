@@ -2,9 +2,11 @@
 '/bootstrap':signature(counterValue(V)::counterExpr,[V::'/bootstrap':number]).
 '/bootstrap':projection(counterValue(V)::counterExpr,'/bootstrap':lineBorder('/bootstrap':vis(V::'/bootstrap':number),1,cpi:rgb(192,192,192))).
 '/bootstrap':adapter(V::'/bootstrap':number,counterValue(V)::counterExpr).
-'/bootstrap':signature(evalCounter(Expr,V)::'/impred':impred,[Expr::counterExpr,V::'/bootstrap':number]).
-'/bootstrap':projection(evalCounter(Expr,V)::'/impred':impred,'/bootstrap':horiz(['/bootstrap':vis(V::'/bootstrap':number),'/bootstrap':symbol(8656),'/bootstrap':vis(Expr::counterExpr)])).
-'/bootstrap':alias(evalCounter(Expr,V)::'/impred':impred,!'<=').
-'/util':behavior(counterValue(V)::counterExpr,!'should evaluate to V', ('/impred':simulate(evalCounter(counterValue(2),V),[],'/impred':true),builtin:equals(V::'/bootstrap':number,2::'/bootstrap':number))).
-'/impred':clause(evalCounter(counterValue(V),V),'/impred':true).
-'/bootstrap':defines('/impred':clause(evalCounter(Expr,_),_),Expr::counterExpr,'/bootstrap':semanticDefinition).
+'/bootstrap':signature(evalCounter(Expr,V,Cond)::'/impred':impred,[Expr::counterExpr,V::'/bootstrap':number,Cond::'/bootstrap':list(threadCond)]).
+'/bootstrap':projection(evalCounter(Expr,V,Cond)::'/impred':impred,'/bootstrap':horiz(['/bootstrap':vis(V::'/bootstrap':number),'/bootstrap':symbol(8656),'/bootstrap':vis(Expr::counterExpr),'/bootstrap':label(!where),'/bootstrap':vis(Cond::'/bootstrap':list(threadCond))])).
+'/bootstrap':tip(evalCounter(Expr,V)::'/impred':impred,Path,VNs,cpi:edit(Path,evalCounter(Expr,V,Cond)::'/impred':impred,VNs)).
+'/bootstrap':alias(evalCounter(Expr,V,Cond)::'/impred':impred,!'<=').
+'/util':behavior(counterValue(V)::counterExpr,!'should evaluate to V', ('/impred':simulate(evalCounter(counterValue(2),V,_),[],'/impred':true),builtin:equals(V::'/bootstrap':number,2::'/bootstrap':number))).
+'/impred':clause(evalCounter(counterValue(V),V,[]),'/impred':true).
+'/bootstrap':defines('/impred':clause(evalCounter(Expr,_,_),_),Expr::counterExpr,'/bootstrap':semanticDefinition).
+'/util':behavior(counterValue(V)::counterExpr,!'should provide [] as the condition', ('/impred':simulate(evalCounter(counterValue(2),V,Cond),[],'/impred':true),builtin:equals(Cond::'/bootstrap':list(threadCond),[]::'/bootstrap':list(threadCond)))).
