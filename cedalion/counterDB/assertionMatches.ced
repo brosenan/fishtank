@@ -1,7 +1,7 @@
-'/bootstrap':signature(assertionMatches(Assertion,Assertions)::'/bootstrap':pred,[Assertion::'/impred':impred,Assertions::'/bootstrap':list('/impred':impred)]).
-assertionMatches(seen(Thr,Trans),Assertions):-'/bootstrap':forall('/bootstrap':listMember(annotation:parentheses('/impred':not(seen(Thr,TransPrime))),'/impred':impred,Assertions),TransPrime>Trans).
-assertionMatches('/impred':not(seen(Thr,Trans)),Assertions):-'/bootstrap':forall('/bootstrap':listMember(annotation:parentheses(seen(Thr,TransPrime)),'/impred':impred,Assertions),Trans>TransPrime).
-'/util':behavior(assertionMatches(Assertion,Assertions)::'/bootstrap':pred,!'should not match Thr>=Trans with Thr<Trans1, if Trans1 < Trans',\+assertionMatches(seen(!thr,3),['/impred':not(seen(!thr,2))])).
-'/util':behavior(assertionMatches(Assertion,Assertions)::'/bootstrap':pred,!'should not match Thr>=Trans with Thr<Trans1, if Trans1 = Trans',\+assertionMatches(seen(!thr,3),['/impred':not(seen(!thr,3))])).
-'/util':behavior(assertionMatches(Assertion,Assertions)::'/bootstrap':pred,!'should not match Thr<Trans with Thr>=Trans1, if Trans1 > Trans',\+assertionMatches('/impred':not(seen(!thr,2)),[seen(!thr,3)])).
-'/util':behavior(assertionMatches(Assertion,Assertions)::'/bootstrap':pred,!'should not match Thr<Trans with Thr>=Trans1, if Trans1 = Trans',\+assertionMatches('/impred':not(seen(!thr,3)),[seen(!thr,3)])).
+'/bootstrap':signature(assertionMatches(Assertion,Assertions)::'/bootstrap':pred,[Assertion::threadCond,Assertions::'/bootstrap':list(threadCond)]).
+assertionMatches(threadSeen(Thr,Trans),Assertions):-'/bootstrap':forall('/bootstrap':listMember(annotation:parentheses(threadNotSeen(Thr,TransPrime)),threadCond,Assertions),TransPrime>Trans).
+assertionMatches(threadNotSeen(Thr,Trans),Assertions):-'/bootstrap':forall('/bootstrap':listMember(annotation:parentheses(threadSeen(Thr,TransPrime)),threadCond,Assertions),Trans>TransPrime).
+'/util':behavior(assertionMatches(Assertion,Assertions)::'/bootstrap':pred,!'should not match Thr>=Trans with Thr<Trans1, if Trans1 < Trans',\+assertionMatches(threadSeen(!thr,3),[threadNotSeen(!thr,2)])).
+'/util':behavior(assertionMatches(Assertion,Assertions)::'/bootstrap':pred,!'should not match Thr>=Trans with Thr<Trans1, if Trans1 = Trans',\+assertionMatches(threadSeen(!thr,3),[threadNotSeen(!thr,3)])).
+'/util':behavior(assertionMatches(Assertion,Assertions)::'/bootstrap':pred,!'should not match Thr<Trans with Thr>=Trans1, if Trans1 > Trans',\+assertionMatches(threadNotSeen(!thr,2),[threadSeen(!thr,3)])).
+'/util':behavior(assertionMatches(Assertion,Assertions)::'/bootstrap':pred,!'should not match Thr<Trans with Thr>=Trans1, if Trans1 = Trans',\+assertionMatches(threadNotSeen(!thr,3),[threadSeen(!thr,3)])).
