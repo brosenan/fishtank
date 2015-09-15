@@ -8,6 +8,12 @@ exports.NUMBER = 2;
 exports.TERM_OOD = 3;
 exports.TERM = 4;
 exports.VAR = 5;
+exports.LIST_END = 6;
+exports.LIST_ITEM = 7;
+
+var specialTerms = {'[]/0': exports.LIST_END,
+		    './2': exports.LIST_ITEM,
+		   };
 
 var globalBuff = new Buffer(1<<20);
 
@@ -20,13 +26,18 @@ exports.serializeTerm = function(term, buff, nameDict, varMap) {
 	buff.writeByte(exports.NUMBER);
 	buff.writeNumber(term);
     } else if(term.name) {
-	var code = term.args.length << 3;
-	if(term.name in nameDict) {
-	    buff.writeByte(exports.TERM | code);
-	    buff.writeInt16(nameDict[term.name]);
+	var key = term.name + '/' + term.args.length;
+	if(key in specialTerms) {
+	    buff.writeByte(specialTerms[key]);
 	} else {
-	    buff.writeByte(exports.TERM_OOD | code);
-	    buff.writeString(term.name);
+	    var code = term.args.length << 3;
+	    if(term.name in nameDict) {
+		buff.writeByte(exports.TERM | code);
+		buff.writeInt16(nameDict[term.name]);
+	    } else {
+		buff.writeByte(exports.TERM_OOD | code);
+		buff.writeString(term.name);
+	    }
 	}
 	for(let i = 0; i < term.args.length; i++) {
 	    exports.serializeTerm(term.args[i], buff, nameDict, varMap);

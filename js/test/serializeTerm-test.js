@@ -58,6 +58,24 @@ describe('serializeTerm', function(){
 	    assert.equal(buff.readByte(), serializeTerm.VAR);
 	    assert.equal(buff.readByte(), 0); // X
 	});
+	it('should serialize an empty list as LIST_END', function(){
+	    var buff = new SerializationBuffer(new Buffer(100));
+	    serializeTerm.serializeTerm({name: '[]', args: []}, buff, {});
+	    assert.equal(buff.readByte(), serializeTerm.LIST_END);
+	});
+	it('should serialize a list item as LIST_ITEM', function(){
+	    var buff = new SerializationBuffer(new Buffer(100));
+	    serializeTerm.serializeTerm({name: '.', args: [1, {name: '.', args: [2, {name: '[]', args: []}]}]}, buff, {});
+	    assert.equal(buff.readByte(), serializeTerm.LIST_ITEM);
+	    assert.equal(buff.readByte(), serializeTerm.NUMBER);
+	    assert.equal(buff.readNumber(), 1);
+	    assert.equal(buff.readByte(), serializeTerm.LIST_ITEM);
+	    assert.equal(buff.readByte(), serializeTerm.NUMBER);
+	    assert.equal(buff.readNumber(), 2);
+	    assert.equal(buff.readByte(), serializeTerm.LIST_END);
+	});
+
+
 
     });
     describe('deserializeTerm(buff, nameArr[, stack])', function(){
