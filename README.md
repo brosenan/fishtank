@@ -32,6 +32,7 @@ Both databases are used through abstractions, so that they can be replaced with 
 cloudlog1 is a work in progress, and is not currently a working database.
 
 It is written in three languages:
+
 1. Javascript (es6) over [Node.js](https://nodejs.org/en) -- providing the runtime environment as well as drivers for external systems (such as databases and HTTP).
 2. Prolog ([swi-prolog](http://www.swi-prolog.org/)) -- providing another part of the runtime environment.
 3. [Cedalion](http://cedalion.org) -- this is how most of the database is implemented.
