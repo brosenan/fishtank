@@ -1,0 +1,12 @@
+'/bootstrap':signature(testLocalQueue(Num,X)::impred,[Num::'/bootstrap':number,X::'/bootstrap':string]).
+'/bootstrap':signature(localEnqueue(Name,Content)::task('/nodalion':voidType),[Name::'/bootstrap':string,Content::localStoreVal]).
+'/bootstrap':signature(localDequeue(Name)::task(localStoreVal),[Name::'/bootstrap':string]).
+clause(testLocalQueue(1,X),conj(task(localEnqueue(!myQueue,localStr(!hello)),_,'/nodalion':voidType),conj(task(localEnqueue(!myQueue,localStr(!world)),_,'/nodalion':voidType),conj(task(localDequeue(!myQueue),localStr(X1),localStoreVal),conj(task(localDequeue(!myQueue),localStr(X2),localStoreVal),pred('/Functional':eval('/Functional':applyBinOp('/Functional':const(X1),'/Functional':concat,'/Functional':const(X2)),'/bootstrap':string,X))))))).
+'/bootstrap':defAtom(yesno::'/bootstrap':type).
+'/bootstrap':signature(localQueueEmpty(Name)::task(yesno),[Name::'/bootstrap':string]).
+'/bootstrap':signature(yesNoStr(Y1)::'/Functional':expr('/bootstrap':string),[Y1::yesno]).
+'/bootstrap':defAtom(yes::yesno).
+'/Functional':def(yesNoStr(yes),'/bootstrap':string,'/Functional':const(!'Y')).
+'/bootstrap':defAtom(no::yesno).
+'/Functional':def(yesNoStr(no),'/bootstrap':string,'/Functional':const(!'N')).
+clause(testLocalQueue(2,X),conj(task(localQueueEmpty(!myQueue),Y1,yesno),conj(task(localEnqueue(!myQueue,'/counterDB':localNum(2)),_,'/nodalion':voidType),conj(task(localQueueEmpty(!myQueue),N,yesno),conj(task(localDequeue(!myQueue),_,localStoreVal),conj(task(localQueueEmpty(!myQueue),Y2,yesno),pred('/Functional':eval('/Functional':applyBinOp('/Functional':applyBinOp(yesNoStr(Y1),'/Functional':concat,yesNoStr(N)),'/Functional':concat,yesNoStr(Y2)),'/bootstrap':string,X)))))))).

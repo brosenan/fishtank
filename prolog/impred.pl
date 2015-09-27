@@ -1,5 +1,5 @@
 :- [service, cedalion, uuid].
-:- dynamic storedTerm/2, localStore/2.
+:- dynamic storedTerm/2, localStore/2, localQueue/2.
 
 go :- read(Cmd),
       catch(mustSucceed(handleCmd(Cmd, Continue)), Error, handleError(Error)),
@@ -71,3 +71,12 @@ handleTask('/impred#now', Timestamp) :-
 
 handleTask('/impred#uuid', !UUID) :-
     uuid(UUID).
+
+handleTask('/impred#localEnqueue'(Name, Value), _) :-
+    assert(localQueue(Name, Value)).
+handleTask('/impred#localDequeue'(Name), Value) :-
+    retract(localQueue(Name, Value)).
+handleTask('/impred#localQueueEmpty'(Name), '/impred#no') :-
+    localQueue(Name, _), !.
+handleTask('/impred#localQueueEmpty'(Name), '/impred#yes').
+

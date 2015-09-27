@@ -3,7 +3,7 @@ var assert = require('assert');
 var $S = require('suspend'), $R = $S.resume, $T = function(gen) { return function(done) { $S.run(gen, done); } };
 
 var Nodalion = require('../nodalion.js');
-var ns = Nodalion.namespace('/impred', ['testLocalStore', 'localStr', 'testNow', 'testUUID']);
+var ns = Nodalion.namespace('/impred', ['testLocalStore', 'localStr', 'testNow', 'testUUID', 'testLocalQueue']);
 
 var nodalion = new Nodalion('/tmp/impred-ced.log');
 
@@ -14,6 +14,19 @@ describe('impred', function(){
 	    var result = yield nodalion.findAll(X, ns.testLocalStore(X), $R());
 	    assert.deepEqual(result, [ns.localStr('bar')]);
 	}));
+    });
+    describe('local queue', function(){
+	it('should allow enqueuing and dequeing data', $T(function*(){
+	    var X = {var:'X'};
+	    var result = yield nodalion.findAll(X, ns.testLocalQueue(1, X), $R());
+	    assert.deepEqual(result, ['helloworld']);
+	}));
+	it('should allow checking if the queue is empty', $T(function*(){
+	    var X = {var:'X'};
+	    var result = yield nodalion.findAll(X, ns.testLocalQueue(2, X), $R());
+	    assert.deepEqual(result, ['YNY']);
+	}));
+
     });
     describe('now', function(){
 	it('should return the current time', $T(function*(){
