@@ -9,3 +9,4 @@ solve(task(Task,Ret,RetType),Res,ResType,continuation(Task,Ret,RetType,true,Res)
 '/bootstrap':unitTest(solve(annotation:parentheses(conj(task(userInput,Str,'/bootstrap':string),pred(builtin:strcat(Str,!'X',Res)))),Res,'/bootstrap':string,continuation(userInput,Str,'/bootstrap':string,conj(true,pred(builtin:strcat(Str,!'X',Res))),Res))).
 '/bootstrap':unitTest(\+solve(conj(task(userInput,Str,'/bootstrap':string),pred(builtin:strcat(Str,!'X',Res))),Res,'/bootstrap':string,continuation(userInput,Str1,'/bootstrap':string,pred(builtin:true),_))).
 annotation:shrink((solve(annotation:parentheses(conj(A,B)),Res,ResT,continuation(Task,Ret,RetT,annotation:parentheses(conj(APrime,B)),Res)):-solve(A,Res,ResT,continuation(Task,Ret,RetT,APrime,Res)))).
+'/bootstrap':adapter(Task::task(T),task(Task,Value,T)::impred).
