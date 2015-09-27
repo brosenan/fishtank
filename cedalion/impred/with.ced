@@ -7,3 +7,4 @@ annotation:shrink((solve(with(Task,Value,TPrime,Impred),X,T,S):-solve(Impred,X,T
 '/util':behavior(with(Task,Value,T,Impred)::impred,!'should handle pure Impred', (solve(with(userInput,!foo,'/bootstrap':string,pred(Res::'/bootstrap':number=2::'/bootstrap':number)),Res,'/bootstrap':number,Sol),builtin:equals(Sol::response('/bootstrap':number),solution(2)::response('/bootstrap':number)))).
 '/util':behavior(with(Task,Value,T,Impred)::impred,!'should handle multiple tasks',simulate(with(userInput,!foo,'/bootstrap':string,with(example:someTask,123,'/bootstrap':number,greet(X))),[],true)).
 '/util':behavior(with(Task,Value,T,Impred)::impred,!'should support multiple queries of the Task',simulate(with(userInput,!foo,'/bootstrap':string,conj(greet(X),greet(Y))),[],true)).
+'/bootstrap':contextMenuEntry(simulate(Impred,[task(Task,Res,T)|Rest],Next)::'/bootstrap':pred,VNs,Path,!'Convert to With',cpi:edit(Path,simulate(with(Task,Res,T,Impred),Rest,Next)::'/bootstrap':pred,VNs)).
