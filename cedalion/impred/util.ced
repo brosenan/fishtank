@@ -1,0 +1,2 @@
+'/bootstrap':contextMenuEntry(P::impred,VNs,Path,!'Insert',cpi:edit(Path,conj(_,P)::impred,VNs)).
+'/bootstrap':contextMenuEntry(conj(A,B)::impred,VNs,Path,!'Delete',cpi:edit(Path,B::impred,VNs)).
