@@ -137,5 +137,11 @@ describe('nodalionMongo', function(){
 	    assert.equal(result, 1.1);
 	}));
 
+	it('should integrate with Cedalion - 4', $T(function*(){
+	    var X = {var:'X'};
+	    var result = yield n.findAll(X, ns.mongoTest(4, X), $R());
+	    assert.equal(result, 1);
+	}));
+
     });
 });
