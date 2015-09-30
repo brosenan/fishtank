@@ -78,6 +78,10 @@ exports.deserializeTerm = function(buff, nameArr) {
 	return {name: nameArr[buff.readInt16()], args: deserializeArgs(count, buff, nameArr)};
     case exports.VAR:
 	return {var: '_' + buff.readByte()};
+    case exports.LIST_ITEM:
+	return {name: '.', args: deserializeArgs(2, buff, nameArr)};
+    case exports.LIST_END:
+	return {name: '[]', args: []};
     default:
 	throw Error('Bad term type: ' + type);
     }

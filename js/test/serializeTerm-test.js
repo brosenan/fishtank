@@ -109,6 +109,11 @@ describe('serializeTerm', function(){
 	    serializeTerm.serializeTerm({name: 'foo', args: [{var: 'X'}, {var: 'Y'}, {var: 'X'}]}, buff, {});
 	    assert.deepEqual(serializeTerm.deserializeTerm(buff, {}), {name: 'foo', args: [{var: '_0'}, {var: '_1'}, {var: '_0'}]});
 	});
+	it('should deserialize lists', function(){
+	    var buff = new SerializationBuffer(new Buffer(100));
+	    serializeTerm.serializeTerm({name: '.', args: [1, {name: '.', args: [2, {name: '[]', args: []}]}]}, buff, {});
+	    assert.deepEqual(serializeTerm.deserializeTerm(buff, {}), {name: '.', args: [1, {name: '.', args: [2, {name: '[]', args: []}]}]});
+	});
     });
     describe('.encodeTerm(term, nameDict)', function(){
 	it('should encode a term', function(){

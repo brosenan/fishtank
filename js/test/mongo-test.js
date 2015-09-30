@@ -142,6 +142,13 @@ describe('nodalionMongo', function(){
 	    var result = yield n.findAll(X, ns.mongoTest(4, X), $R());
 	    assert.equal(result, 1);
 	}));
-
+	// This doesn't really belong here, but it's very convenient to place this test here...
+	it.skip('should work with counters', $T(function*(){
+	    var X = {var:'X'};
+	    var test = nodalion.namespace('/counterDB/test', ['testCounterDB']);
+	    var result = yield n.findAll(X, test.testCounterDB(1, X), $R());
+	    console.log(result);
+	}));
     });
+
 });
