@@ -47,9 +47,11 @@ describe('nodalionMongo', function(){
 	coll = db.collection('test2');
 	yield coll.remove({}, $R());
     }));
+    before(function() {
+	nodalionMongo.db('mongodb://127.0.0.1:27017/test');
+    });
     describe('.db(url)', function(){
 	it('should connect to a database', function(){
-	    nodalionMongo.db('mongodb://127.0.0.1:27017/test');
 	});
     });
     describe('/nodalion:trans(table, row, ops) => fields', function(){
@@ -143,7 +145,7 @@ describe('nodalionMongo', function(){
 	    assert.equal(result, 1);
 	}));
 	// This doesn't really belong here, but it's very convenient to place this test here...
-	it.skip('should work with counters', $T(function*(){
+	it.only('should work with counters', $T(function*(){
 	    var X = {var:'X'};
 	    var test = nodalion.namespace('/counterDB/test', ['testCounterDB']);
 	    var result = yield n.findAll(X, test.testCounterDB(1, X), $R());

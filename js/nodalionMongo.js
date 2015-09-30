@@ -57,7 +57,6 @@ exports.db = function(url) {
 	_db = db;
 	if(_nodalion) {
 	    updateNameMap(db, _nodalion, function(err) {
-		console.log(err);
 		dbListeners.forEach(function(listener) {
 		    listener(err, db);
 		});
