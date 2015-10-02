@@ -99,12 +99,17 @@ describe('nodalionMongo', function(){
 		var result = yield doTask(ns.trans('test2', 'foo', [ns.get('fam', 'bar')]), $R());
 		assert.deepEqual(result, [ns.value('fam', 'bar', ['a'])]);
 	    }));
+	    it('should provide an empty list if the key does not exist', $T(function*(){
+		var result = yield doTask(ns.trans('test2', 'foo', [ns.get('fam', 'bar')]), $R());
+		assert.deepEqual(result, [ns.value('fam', 'bar', [])]);
+	    }));
+
 	});
 	describe('op /nodalion:check(family, key, value)', function(){
 	    it('should perform the transaction only if key maps to a single value - value', $T(function*(){
 		// The following transaction will not occur because the pre-condition does not hold.
 		yield doTask(ns.trans('test2', 'foo', [ns.set('fam', 'x', ['1']), ns.check('fam', 'a', ['7'])]), $R());
-		assert.deepEqual(yield doTask(ns.trans('test2', 'foo', [ns.get('fam', 'x')]), $R()), []);
+		assert.deepEqual(yield doTask(ns.trans('test2', 'foo', [ns.get('fam', 'x')]), $R()), [ns.value('fam', 'x', [])]);
 	    }));
 	    it('should allow transactions if the pre-condition holds', $T(function*(){
 		yield doTask(ns.trans('test2', 'foo', [ns.set('fam', 'a', ['7'])]), $R());
@@ -144,12 +149,17 @@ describe('nodalionMongo', function(){
 	    var result = yield n.findAll(X, ns.mongoTest(4, X), $R());
 	    assert.equal(result, 1);
 	}));
+	it('should integrate with Cedalion - 4', $T(function*(){
+	    var X = {var:'X'};
+	    var result = yield n.findAll(X, ns.mongoTest(5, X), $R());
+	    assert.equal(result, 1.1);
+	}));
 	// This doesn't really belong here, but it's very convenient to place this test here...
-	it.only('should work with counters', $T(function*(){
+	it.skip('should work with counters', $T(function*(){
 	    var X = {var:'X'};
 	    var test = nodalion.namespace('/counterDB/test', ['testCounterDB']);
 	    var result = yield n.findAll(X, test.testCounterDB(1, X), $R());
-	    console.log(result);
+	    assert.equal(result[0], 20);
 	}));
     });
 

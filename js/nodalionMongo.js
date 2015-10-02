@@ -74,8 +74,9 @@ ns._register('trans', function(coll, row, ops) {
 	    var query = {};
 	    var options = {upsert: true, 
 			   projection: fields};
+	    var postProcessing = [];
 	    ops.forEach(function(op) {
-		op(update, fields, query, options);
+		op(update, fields, query, options, postProcessing);
 	    });
 	    query._id = encode(row);
 	    var result;
@@ -87,7 +88,14 @@ ns._register('trans', function(coll, row, ops) {
 	    } else {
 		result = yield db.collection(coll).findOne({_id: encode(row)}, {fields: fields}, $R());
 	    }
-	    if(result) delete result._id;
+	    if(result) {
+		delete result._id;
+	    } else {
+		result = Object.create(null);
+	    }
+	    postProcessing.forEach(function(post) {
+		post(result);
+	    });
 	    return [].concat.apply([], Object.keys(result || {}).map(function(family) {
 		return Object.keys(result[family]).map(function(key) {
 		    return ns.value(family, decode(key), result[family][key].map(decode));
@@ -116,8 +124,17 @@ ns._register('append', function(family, key, value) {
 });
 
 ns._register('get', function(family, key) {
-    return function(update, fields) {
-	fields[family + '.' + encode(key)] = 1;
+    return function(update, fields, query, options, postProcessing) {
+	key = encode(key);
+	fields[family + '.' + key] = 1;
+	postProcessing.push(function(res) {
+	    if(!(family in res)) {
+		res[family] = {};
+	    }
+	    if(!(key in res[family])) {
+		res[family][key] = [];
+	    }
+	});
     };
 });
 
