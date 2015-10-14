@@ -1,0 +1,3 @@
+'/bootstrap':signature(applyMatch(Match,Axiom,AxiomPrime)::'/bootstrap':pred,[Match::axiom,Axiom::axiom,AxiomPrime::axiom]).
+'/util':behavior(applyMatch(Match,Axiom,AxiomPrime)::'/bootstrap':pred,!'should handle the case where Axiom is a fact and Match is a rule', (applyMatch(rule(example:someFact(1,X),builtin:true,example:someFact(X,5)),example:someFact(1,4),Res),'/util':assertEqual(Res,example:someFact(4,5),axiom))).
+applyMatch(rule(Fact,_,AxiomPrime),Fact,AxiomPrime):-builtin:true.
