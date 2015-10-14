@@ -1,3 +1,13 @@
 '/bootstrap':signature(applyMatch(Match,Axiom,AxiomPrime)::'/bootstrap':pred,[Match::axiom,Axiom::axiom,AxiomPrime::axiom]).
+'/bootstrap':projection(applyMatch(Match,Axiom,AxiomPrime)::'/bootstrap':pred,'/bootstrap':horiz(['/bootstrap':vis(Match::axiom),'/bootstrap':symbol(8896),'/bootstrap':vis(Axiom::axiom),'/bootstrap':symbol(8658),'/bootstrap':vis(AxiomPrime::axiom)])).
 '/util':behavior(applyMatch(Match,Axiom,AxiomPrime)::'/bootstrap':pred,!'should handle the case where Axiom is a fact and Match is a rule', (applyMatch(rule(example:someFact(1,X),builtin:true,example:someFact(X,5)),example:someFact(1,4),Res),'/util':assertEqual(Res,example:someFact(4,5),axiom))).
-applyMatch(rule(Fact,_,AxiomPrime),Fact,AxiomPrime):-builtin:true.
+applyMatch(Axiom1,Axiom2,Axiom):-axiomFamily(Axiom1,Family,_::_),applyMatch(Family,Axiom1,Axiom2,Axiom).
+'/util':behavior(applyMatch(Match,Axiom,AxiomPrime)::'/bootstrap':pred,!'should handle the case where Axiom is a rule and Match is a fact', (applyMatch(example:someFact(1,4),rule(example:someFact(1,X),builtin:true,example:someFact(X,5)),Res),'/util':assertEqual(Res,example:someFact(4,5),axiom))).
+'/bootstrap':signature(applyMatch(Family,Axiom1,Axiom2,Axiom)::'/bootstrap':pred,[Family::'/bootstrap':string,Axiom1::axiom,Axiom2::axiom,Axiom::axiom]).
+applyMatch(!rules,Rule,Fact,Axiom):-applyRule(Rule,Fact,Axiom).
+applyMatch(!facts,Fact,Rule,Axiom):-applyRule(Rule,Fact,Axiom).
+'/util':behavior(applyMatch(Match,Axiom,AxiomPrime)::'/bootstrap':pred,!'should adhere to the guard',\+applyMatch(example:someFact(1,4),rule(example:someFact(1,X),builtin:fail,example:someFact(X,5)),Res)).
+'/bootstrap':signature(applyRule(Rule,Fact,Axiom)::'/bootstrap':pred,[Rule::axiom,Fact::axiom,Axiom::axiom]).
+'/bootstrap':projection(applyRule(Rule,Fact,Axiom)::'/bootstrap':pred,'/bootstrap':horiz(['/bootstrap':vis(Rule::axiom),'/bootstrap':symbol(8896),'/bootstrap':vis(Fact::axiom),'/bootstrap':symbol(8658),'/bootstrap':vis(Axiom::axiom)])).
+applyRule(rule(Fact,Goal,Axiom),Fact,Axiom):-executeLocal(Goal).
+'/util':behavior(applyMatch(Match,Axiom,AxiomPrime)::'/bootstrap':pred,!'should contain runaway goals',\+applyMatch(example:someFact(1,4),rule(example:someFact(1,X),'/bootstrap':aPredicateThatDoesNotTerminate,example:someFact(X,5)),Res)).
