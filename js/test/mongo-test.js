@@ -7,7 +7,18 @@ var MongoClient = require('mongodb').MongoClient;
 var nodalion = require('../nodalion.js');
 var serializeTerm = require('../serializeTerm.js');
 
-var ns = nodalion.namespace('/nodalion', ['trans', 'set', 'append', 'get', 'value', 'check', 'getAll', 'mongoTest', 'mongo1']);
+var ns = nodalion.namespace('/nodalion', ['trans',
+					  'set',
+					  'append',
+					  'get',
+					  'value',
+					  'check',
+					  'getAll',
+					  'mongoTest',
+					  'mongo1',
+					  'addToCounter',
+					  'counterValue']);
+
 var example = nodalion.namespace('example', ['foo', 'bar', 'baz', 'bat']);
 var nodalionMongo = require('../nodalionMongo.js');
 var cedParser = require('../cedParser.js');
@@ -126,6 +137,14 @@ describe('nodalionMongo', function(){
 	    }));
 
 	});
+	describe('op /nodalion:addToCounter(family, key, value)', function(){
+	    it('should return a counter value of 0 if the counter was not previously set', $T(function*(){
+		var res = yield doTask(ns.trans('test2', 'foo', [ns.addToCounter('fam', 'key', 3)]), $R());
+		assert.deepEqual(res, [ns.counterValue('fam', 'key', 0)]);
+	    }));
+
+	});
+
 	it('should integrate with Cedalion - 1', $T(function*(){
 	    var X = {var:'X'};
 	    var result = yield n.findAll(X, ns.mongoTest(1, X), $R());

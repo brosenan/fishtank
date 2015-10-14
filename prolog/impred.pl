@@ -1,4 +1,12 @@
-:- [service, cedalion, uuid].
+:- [service, uuid].
+
+% Suppress warnings from Cedalion
+:- style_check(-singleton).
+:- style_check(-discontiguous).
+:- [cedalion].
+:- style_check(+singleton).
+:- style_check(+discontiguous).
+
 :- dynamic storedTerm/2, localStore/2, localQueue/2.
 
 go :- read(Cmd),

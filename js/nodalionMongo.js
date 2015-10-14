@@ -5,7 +5,7 @@ var MongoClient = require('mongodb').MongoClient;
 var Nodalion = require('./nodalion.js');
 var serializeTerm = require('./serializeTerm.js');
 
-var ns = Nodalion.namespace('/nodalion', ['value']);
+var ns = Nodalion.namespace('/nodalion', ['value', 'counterValue']);
 
 
 var _db;
@@ -96,10 +96,17 @@ ns._register('trans', function(coll, row, ops) {
 	    postProcessing.forEach(function(post) {
 		post(result);
 	    });
-	    return [].concat.apply([], Object.keys(result || {}).map(function(family) {
-		return Object.keys(result[family]).map(function(key) {
-		    return ns.value(family, decode(key), result[family][key].map(decode));
-		});
+	    var families = Object.keys(result || {});
+	    return [].concat.apply([], families.map(function(family) {
+		if(family[0] === '#') { // counter family
+		    return Object.keys(result[family]).map(function(key) {
+			return ns.counterValue(family.substr(1), decode(key), result[family][key]);
+		    });
+		} else {
+		    return Object.keys(result[family]).map(function(key) {
+			return ns.value(family, decode(key), result[family][key].map(decode));
+		    });
+		}
 	    }));
 	})(nodalion, cb);
     };
@@ -148,5 +155,20 @@ ns._register('check', function(family, key, value) {
 ns._register('getAll', function(family) {
     return function(upsert, fields) {
 	fields[family] = 1;
+    };
+});
+
+ns._register('addToCounter', function(family, key, value) {
+    return function(update, fields, query, options, postProcessing) {
+	key = encode(key);
+	family = '#' + family;
+	postProcessing.push(function(res) {
+	    if(!(family in res)) {
+		res[family] = {};
+	    }
+	    if(!(key in res[family])) {
+		res[family][key] = 0;
+	    }
+	});
     };
 });

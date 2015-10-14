@@ -21,6 +21,7 @@ describe('CedalionInterface', function(){
 	    assert(em instanceof EventEmitter, em + ' instanceof EventEmitter');
 	    // A 'done' event should be emitted
 	    em.on('done', done);
+	    em.on('error', done);
 	});
 	it('should emit a "solution" event for each solution', function(done){
 	    var X = {var:'X'};
