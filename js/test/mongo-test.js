@@ -17,6 +17,7 @@ var ns = nodalion.namespace('/nodalion', ['trans',
 					  'mongoTest',
 					  'mongo1',
 					  'addToCounter',
+					  'getAllCounters',
 					  'counterValue']);
 
 var example = nodalion.namespace('example', ['foo', 'bar', 'baz', 'bat']);
@@ -141,6 +142,20 @@ describe('nodalionMongo', function(){
 	    it('should return a counter value of 0 if the counter was not previously set', $T(function*(){
 		var res = yield doTask(ns.trans('test2', 'foo', [ns.addToCounter('fam', 'key', 3)]), $R());
 		assert.deepEqual(res, [ns.counterValue('fam', 'key', 0)]);
+	    }));
+	    it('should add value to a counter', $T(function*(){
+		yield doTask(ns.trans('test2', 'foo', [ns.addToCounter('fam', 'key', 3)]), $R());
+		var res = yield doTask(ns.trans('test2', 'foo', [ns.addToCounter('fam', 'key', 3)]), $R());
+		assert.deepEqual(res, [ns.counterValue('fam', 'key', 3)]);
+	    }));
+	});
+	describe('op /nodalion:getAllCounters(family)', function(){
+	    it('shluld return all counters in the given family', $T(function*(){
+		yield doTask(ns.trans('test2', 'foo', [ns.addToCounter('fam', 'key1', 1)]), $R());
+		yield doTask(ns.trans('test2', 'foo', [ns.addToCounter('fam', 'key2', 2)]), $R());
+		yield doTask(ns.trans('test2', 'foo', [ns.addToCounter('fam', 'key3', 3)]), $R());
+		var res = yield doTask(ns.trans('test2', 'foo', [ns.getAllCounters('fam')]), $R());
+		assert.deepEqual(res, [ns.counterValue('fam', 'key1', 1), ns.counterValue('fam', 'key2', 2), ns.counterValue('fam', 'key3', 3)]);
 	    }));
 
 	});

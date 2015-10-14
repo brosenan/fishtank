@@ -162,6 +162,13 @@ ns._register('addToCounter', function(family, key, value) {
     return function(update, fields, query, options, postProcessing) {
 	key = encode(key);
 	family = '#' + family;
+
+	if(!update.$inc) {
+	    update.$inc = {};
+	}
+	update.$inc[family + '.' + key] = value;
+	fields[family + '.' + key] = 1;
+	
 	postProcessing.push(function(res) {
 	    if(!(family in res)) {
 		res[family] = {};
@@ -170,5 +177,11 @@ ns._register('addToCounter', function(family, key, value) {
 		res[family][key] = 0;
 	    }
 	});
+    };
+});
+ns._register('getAllCounters', function(family) {
+    return function(upsert, fields) {
+	family = '#' + family;
+	fields[family] = 1;
     };
 });
