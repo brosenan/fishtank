@@ -183,10 +183,15 @@ describe('nodalionMongo', function(){
 	    var result = yield n.findAll(X, ns.mongoTest(4, X), $R());
 	    assert.equal(result, 1);
 	}));
-	it('should integrate with Cedalion - 4', $T(function*(){
+	it('should integrate with Cedalion - 5', $T(function*(){
 	    var X = {var:'X'};
 	    var result = yield n.findAll(X, ns.mongoTest(5, X), $R());
 	    assert.equal(result, 1.1);
+	}));
+	it('should integrate with Cedalion - 6', $T(function*(){
+	    var X = {var:'X'};
+	    var result = yield n.findAll(X, ns.mongoTest(6, X), $R());
+	    assert.equal(result, 2);
 	}));
 	// This doesn't really belong here, but it's very convenient to place this test here...
 	it.skip('should work with counters', $T(function*(){
