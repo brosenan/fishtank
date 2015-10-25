@@ -1,4 +1,5 @@
 '/bootstrap':signature(axiomFamily(Axiom,Family,Key)::'/bootstrap':pred,[Axiom::axiom,Family::'/bootstrap':string,Key::'/bootstrap':typedTerm]).
+'/bootstrap':projection(axiomFamily(Axiom,Family,Key)::'/bootstrap':pred,'/bootstrap':horiz(['/bootstrap':label(!axiom),'/bootstrap':vis(Axiom::axiom),'/bootstrap':label(!'is classified as'),'/bootstrap':vis(Family::'/bootstrap':string),'/bootstrap':label(!'and is indexed by'),'/bootstrap':vis(Key::'/bootstrap':typedTerm)])).
 '/bootstrap':signature(example:someFact(X,Y)::axiom,[X::'/bootstrap':number,Y::'/bootstrap':number]).
 '/util':behavior(axiomFamily(Axiom,Family,Key)::'/bootstrap':pred,!'should default to "facts"', (axiomFamily(example:someFact(1,2),Family,Key),'/util':assertEqual(Family,!facts,'/bootstrap':string))).
 '/bootstrap':signature(illegalAxiom(Axiom)::'/bootstrap':exception,[Axiom::axiom]).
