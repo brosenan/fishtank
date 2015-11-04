@@ -33,10 +33,6 @@ describe('workQueue', function(){
 	});
     });
     describe('/nodalion:enqueue(Queue, Term, Type)', function(){
-	it.skip('should enqueue a term to the given work queue', $T(function*(){
-	    workQueue.connect(n, 'amqp://localhost', example.myQueueDomain());
-	    yield doTask(ns.enqueue("workQ", example.foo(), example.bar()), $R());
-	}));
 	it('should distribute work to queues', $T(function*(){
 	    workQueue.connect(n, 'amqp://localhost', example.myQueueDomain());
 	    stored = [];
