@@ -67,6 +67,11 @@ ns._register('enqueue', function(Queue, Term, Type) {
     return $S.async(function*(nodalion) {
 	yield waitForConnection($R());
 	topics[Queue].pusher.write(serializeTerm.encodeTerm(Term, {}));
-	return Term;
+    });
+});
+
+ns._register('forAll', function(Res, Impred) {
+    return $S.async(function*(nodalion) {
+	return yield nodalion.findAll(Res, Impred, $R());
     });
 });

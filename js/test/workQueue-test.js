@@ -9,7 +9,9 @@ var nodalion = require('../nodalion.js');
 
 var parser = new cedParser.CedParser();
 
-var ns = nodalion.namespace('/nodalion', ['enqueue']);
+var ns = nodalion.namespace('/nodalion', ['enqueue', 'forAll']);
+var bs = nodalion.namespace('/bootstrap', ['listMember']);
+var impred = nodalion.namespace('/impred', ['pred']);
 var example = nodalion.namespace('example', ['myQueueDomain', 'foo', 'bar', 'baz', 'bat']);
 var n = new nodalion('/tmp/workQ-ced.log');
 
@@ -42,4 +44,12 @@ describe('workQueue', function(){
 	    assert.deepEqual(stored, ['hello', 'world']);
 	}));
     });
+    describe('/nodalion:forAll(Res, Impred)', function(){
+	it('should provide all results for evaluating the given impred', $T(function*(){
+	    var res = yield doTask(ns.forAll({var:'X'}, impred.pred(bs.listMember({var:'X'}, {var:'T'}, [1, 2, 3]))), $R());
+	    assert.deepEqual(res, [1, 2, 3]);
+	}));
+
+    });
+
 });
