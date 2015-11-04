@@ -1,6 +1,7 @@
 "use strict";
 var Namespace = require('./namespace.js');
 var CedalionInterface = require("./cedalionInterface.js");
+var cedParser = require('./cedParser.js');
 
 module.exports = function(logFile) {
     this.ced = new CedalionInterface(logFile);
@@ -46,7 +47,7 @@ clazz.findAll = function(res, impred, cb) {
 		} else if(task.length == 2) {
 		    task(self, contAndHandle);
 		} else {
-		    throw Error('Invalid task ' + task);
+		    throw Error('Invalid task ' + cedParser.generate(task));
 		}
 	    } catch(e) {
 		cb(e);

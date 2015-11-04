@@ -65,6 +65,13 @@ var generators = {
     'undefined': function() {
 	throw Error('Attempting to generate undefined as term');
     },
+    'function': function(term) {
+	var s = "'" + escape(term._name) + "'";
+	if(term._args.length > 0) {
+	    s += '(' + term._args.map(exports.generate).join(',') + ')';
+	}
+	return s;
+    }
 };
 
 exports.generate = function(term) {

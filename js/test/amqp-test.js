@@ -12,9 +12,9 @@ function streamToList(stream, cb) {
 }
 
 describe('rabbit.js', function(){
-    it.only('should pass a message between a publisher and a subscriber', $T(function*(){
+    it('should pass a message between a publisher and a subscriber', $T(function*(){
 	var context = require('rabbit.js').createContext();
-	yield context.on('ready', $S.resumeRaw());
+	//yield context.on('ready', $S.resumeRaw());
 	var pusher = context.socket('PUSH');
 	var worker1 = context.socket('WORKER', {prefetch: 1});
 	var worker2 = context.socket('WORKER', {prefetch: 1});
@@ -24,6 +24,7 @@ describe('rabbit.js', function(){
 	yield worker1.connect(topic, $S.resumeRaw());
 	yield worker2.connect(topic, $S.resumeRaw());
 	yield pusher.connect(topic, $S.resumeRaw());
+	
 	pusher.write("hello", 'utf8');
 	pusher.write("world", 'utf8');
 	pusher.write("hola", 'utf8');

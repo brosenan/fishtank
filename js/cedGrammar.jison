@@ -45,7 +45,12 @@
     var key = name + '/' + args.length;
     var ctor = scope.registered[key];
     if(ctor) {
-      return ctor.apply(this, args);
+      var result = ctor.apply(this, args);
+      if(typeof result === 'function') {
+        result._name = name;
+        result._args = args;
+      }
+      return result;
     } else {
       return {name: name, args: args};
     }
