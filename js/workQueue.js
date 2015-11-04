@@ -6,6 +6,7 @@ var serializeTerm = require('./serializeTerm.js');
 var PREFETCH = 10;
 
 var ns = Nodalion.namespace('/nodalion', ['workQueue', 'applyWork']);
+var bs = Nodalion.namespace('/bootstrap', ['pair']);
 
 var topics = {};
 
@@ -73,5 +74,14 @@ ns._register('enqueue', function(Queue, Term, Type) {
 ns._register('forAll', function(Res, Impred) {
     return $S.async(function*(nodalion) {
 	return yield nodalion.findAll(Res, Impred, $R());
+    });
+});
+
+ns._register('par', function(Task1, Task2) {
+    return $S.async(function*(nodalion) {
+	Task1(nodalion, $S.fork());
+	Task2(nodalion, $S.fork());
+	var results = yield $S.join();
+	return bs.pair(results[0], results[1]);
     });
 });
