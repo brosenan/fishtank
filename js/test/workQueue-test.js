@@ -66,7 +66,7 @@ describe('workQueue', function(){
 	    var start = (new Date()).getTime();
 	    yield doTask(ns.par(example.sleep(3), example.sleep(3)), $R());
 	    var end = (new Date()).getTime();
-	    assert(end - start <= 4, end + ' - ' + start + ' <= 4');
+	    assert(end - start < 6, end + ' - ' + start + ' < 6');
 	}));
 
     });
