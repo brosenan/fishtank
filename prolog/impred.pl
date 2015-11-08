@@ -51,7 +51,7 @@ chooseID(ID) :-
 chooseID(ID) :- chooseID(ID).
 
 continue(ID, RetVal) :-
-    retract(storedTerm(ID, cont(RetVal, Continuation, Res))),
+    mustSucceed(retract(storedTerm(ID, cont(RetVal, Continuation, Res)))),
     evalImpred(Res, Continuation),
     write('.'), nl.
 

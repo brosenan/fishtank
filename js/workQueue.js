@@ -71,7 +71,7 @@ ns._register('enqueue', function(Queue, Term, Type) {
     });
 });
 
-ns._register('forAll', function(Res, Impred) {
+ns._register('findAll', function(Res, Impred) {
     return $S.async(function*(nodalion) {
 	return yield nodalion.findAll(Res, Impred, $R());
     });

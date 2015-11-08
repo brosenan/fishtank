@@ -45,7 +45,7 @@ describe('Nodalion', function(){
 	}));
 	it('should follow continuations', $T(function*(){
 	    impred._register('userInput', function() {
-		return function(cb) {
+		return function(nodalion, cb) {
 		    return cb(undefined, 'nodalion');
 		};
 	    });

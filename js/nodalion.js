@@ -42,13 +42,7 @@ clazz.findAll = function(res, impred, cb) {
 		handleEvents(cont(err, value));
 	    }
 	    try {
-		if(task.length <= 1) {
-		    task(contAndHandle);
-		} else if(task.length == 2) {
-		    task(self, contAndHandle);
-		} else {
-		    throw Error('Invalid task ' + cedParser.generate(task));
-		}
+		task(self, contAndHandle);
 	    } catch(e) {
 		cb(e);
 	    }

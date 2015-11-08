@@ -9,7 +9,7 @@ var nodalion = require('../nodalion.js');
 
 var parser = new cedParser.CedParser();
 
-var ns = nodalion.namespace('/nodalion', ['enqueue', 'forAll', 'par']);
+var ns = nodalion.namespace('/nodalion', ['enqueue', 'findAll', 'par', 'testParallel']);
 var bs = nodalion.namespace('/bootstrap', ['listMember', 'pair']);
 var impred = nodalion.namespace('/impred', ['pred']);
 var example = nodalion.namespace('example', ['myQueueDomain', 'foo', 'bar', 'baz', 'bat']);
@@ -49,16 +49,16 @@ describe('workQueue', function(){
 	    assert.deepEqual(stored, ['hello', 'world']);
 	}));
     });
-    describe('/nodalion:forAll(Res, Impred)', function(){
+    describe('/nodalion:findAll(Res, Impred)', function(){
 	it('should provide all results for evaluating the given impred', $T(function*(){
-	    var res = yield doTask(ns.forAll({var:'X'}, impred.pred(bs.listMember({var:'X'}, {var:'T'}, [1, 2, 3]))), $R());
+	    var res = yield doTask(ns.findAll({var:'X'}, impred.pred(bs.listMember({var:'X'}, {var:'T'}, [1, 2, 3]))), $R());
 	    assert.deepEqual(res, [1, 2, 3]);
 	}));
     });
     describe('/nodalion:par(Task1, Task2)', function(){
 	it('should evaluate both Task1 and Task2', $T(function*(){
-	    var task1 = ns.forAll({var:'X'}, impred.pred(bs.listMember({var:'X'}, {var:'T'}, [1, 2])));
-	    var task2 = ns.forAll({var:'X'}, impred.pred(bs.listMember({var:'X'}, {var:'T'}, [3, 4])));
+	    var task1 = ns.findAll({var:'X'}, impred.pred(bs.listMember({var:'X'}, {var:'T'}, [1, 2])));
+	    var task2 = ns.findAll({var:'X'}, impred.pred(bs.listMember({var:'X'}, {var:'T'}, [3, 4])));
 	    var res = yield doTask(ns.par(task1, task2), $R());
 	    assert.deepEqual(res, bs.pair([1, 2], [3, 4]));
 	}));
@@ -69,6 +69,9 @@ describe('workQueue', function(){
 	    assert(end - start < 6, end + ' - ' + start + ' < 6');
 	}));
 
-    });
+	it('should integrate with Cedalion', $T(function*(){
+	    var res = yield n.findAll({var:'X'}, ns.testParallel(1, {var:'X'}), $R());
+	}));
 
+    });
 });
