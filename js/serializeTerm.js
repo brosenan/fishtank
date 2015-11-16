@@ -51,8 +51,14 @@ exports.serializeTerm = function(term, buff, nameDict, varMap) {
 	    varMap[term.var] = varNum;
 	}
 	buff.writeByte(varNum);
+    } else if(Array.isArray(term)) {
+	for(let i = 0; i < term.length; i++) {
+	    buff.writeByte(exports.LIST_ITEM);
+	    exports.serializeTerm(term[i], buff, nameDict, varMap);
+	}
+	buff.writeByte(exports.LIST_END);
     } else {
-	throw Error('Cannot serialize ' + term);
+	throw Error('Cannot serialize ' + term + ' with keys: ' + Object.keys(term));
     }
 };
 

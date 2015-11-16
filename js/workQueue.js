@@ -67,7 +67,10 @@ exports.connect = function(nodalion, url, domain) {
 ns._register('enqueue', function(Queue, Term, Type) {
     return $S.async(function*(nodalion) {
 	yield waitForConnection($R());
-	topics[Queue].pusher.write(serializeTerm.encodeTerm(Term, {}));
+	var topic = topics[Queue];
+	if(!topic) throw Error("Bad queue: " + Queue + ' available topice: ' + Object.keys(topics).join(', '));
+	topic.pusher.write(serializeTerm.encodeTerm(Term, {}));
+	return '';
     });
 });
 
