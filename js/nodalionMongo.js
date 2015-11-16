@@ -190,8 +190,10 @@ ns._register('scan', function(table, row, goal) {
     return $S.async(function*(nodalion) {
 	var db = yield getDB(nodalion, $R());
 	var cursor = db.collection(table).find({});
-	yield cursor.forEach(function(doc) {
-	    nodalion.findAll({var:'_'}, ns.bind(decode(doc._id), row, {var:'_T'}, goal), function() {});
-	}, $R());
+	while(true) {
+	    var doc = yield cursor.next($R());
+	    if(!doc) break;
+	    yield nodalion.findAll({var:'_'}, ns.bind(decode(doc._id), row, {var:'_T'}, goal), $R());
+	}
     });
 });

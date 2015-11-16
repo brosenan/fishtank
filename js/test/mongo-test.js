@@ -211,7 +211,6 @@ describe('nodalionMongo', function(){
 	    yield doTask(ns.trans('test2', 'c', [ns.set('fam', 1, [1])]), $R());
 	    stored = [];
 	    yield doTask(ns.scan('test2', {var:'X'}, impred.task(example.store1({var:'X'}), {var:'_Res'}, {var:'_Type'})), $R());
-	    yield setTimeout($R(), 10);
 	    assert.deepEqual(stored, ['a', 'b', 'c']);
 	}));
     });
