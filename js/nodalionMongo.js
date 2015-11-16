@@ -186,7 +186,7 @@ ns._register('getAllCounters', function(family) {
     };
 });
 
-ns._register('scan', function(table, row, goal) {
+ns._register('scan', function(table, row, type, goal) {
     return $S.async(function*(nodalion) {
 	var db = yield getDB(nodalion, $R());
 	var cursor = db.collection(table).find({});
@@ -195,5 +195,6 @@ ns._register('scan', function(table, row, goal) {
 	    if(!doc) break;
 	    yield nodalion.findAll({var:'_'}, ns.bind(decode(doc._id), row, {var:'_T'}, goal), $R());
 	}
+	return '';
     });
 });

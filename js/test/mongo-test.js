@@ -204,14 +204,20 @@ describe('nodalionMongo', function(){
 	    assert.equal(result, 2);
 	}));
     });
-    describe('/nodalion#scan(Table, Row, Goal)', function(){
+    describe('/nodalion#scan(Table, Row, Type, Goal)', function(){
 	it('should evaluate Goal for each Row in Table', $T(function*(){
 	    yield doTask(ns.trans('test2', 'a', [ns.set('fam', 1, [1])]), $R());
 	    yield doTask(ns.trans('test2', 'b', [ns.set('fam', 1, [1])]), $R());
 	    yield doTask(ns.trans('test2', 'c', [ns.set('fam', 1, [1])]), $R());
 	    stored = [];
-	    yield doTask(ns.scan('test2', {var:'X'}, impred.task(example.store1({var:'X'}), {var:'_Res'}, {var:'_Type'})), $R());
+	    yield doTask(ns.scan('test2', {var:'X'}, {var:'_Type'}, impred.task(example.store1({var:'X'}), {var:'_Res'}, {var:'_Type'})), $R());
 	    assert.deepEqual(stored, ['a', 'b', 'c']);
 	}));
+	it('should integrate with Cedalion', $T(function*(){
+	    var X = {var:'X'};
+	    var result = yield n.findAll(X, ns.mongoTest(7, X), $R());
+	    assert.equal(result, 2);
+	}));
+
     });
 });
