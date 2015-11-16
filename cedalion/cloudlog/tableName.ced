@@ -1,0 +1,3 @@
+'/bootstrap':signature(tableName(Axiom,Table)::'/bootstrap':pred,[Axiom::axiom,Table::'/bootstrap':string]).
+'/util':behavior(tableName(Axiom,Name)::'/bootstrap':pred,!'should provide the triggerring fact\'s name for rules', (tableName(rule(example:someFact(1,X),builtin:true,example:someFact(3,X)),Name),'/util':assertEqual(Name,!'example#someFact','/bootstrap':string))).
+tableName(Axiom,Table):-builtin:if(Axiom::axiom=rule(Fact,_,_)::axiom,tableName(Fact,Table),builtin:parseTerm(Axiom::axiom,Table,_)).
