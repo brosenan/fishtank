@@ -1,0 +1,2 @@
+'/bootstrap':signature(bind(X,Y,T,Goal)::'/impred':impred,[X::T,Y::T,T::'/bootstrap':type,Goal::'/impred':impred]).
+'/impred':clause(bind(X,X,T,Goal),Goal).

@@ -64,9 +64,9 @@ describe('workQueue', function(){
 	}));
 	it('should run both tasks in parallel', $T(function*(){
 	    var start = (new Date()).getTime();
-	    yield doTask(ns.par(example.sleep(3), example.sleep(3)), $R());
+	    yield doTask(ns.par(example.sleep(10), example.sleep(10)), $R());
 	    var end = (new Date()).getTime();
-	    assert(end - start < 6, end + ' - ' + start + ' < 6');
+	    assert(end - start < 20, end + ' - ' + start + ' < 20');
 	}));
 
 	it('should integrate with Cedalion', $T(function*(){

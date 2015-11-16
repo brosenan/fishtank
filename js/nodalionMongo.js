@@ -5,7 +5,7 @@ var MongoClient = require('mongodb').MongoClient;
 var Nodalion = require('./nodalion.js');
 var serializeTerm = require('./serializeTerm.js');
 
-var ns = Nodalion.namespace('/nodalion', ['value', 'counterValue']);
+var ns = Nodalion.namespace('/nodalion', ['value', 'counterValue', 'bind']);
 
 
 var _db;
@@ -184,4 +184,14 @@ ns._register('getAllCounters', function(family) {
 	family = '#' + family;
 	fields[family] = 1;
     };
+});
+
+ns._register('scan', function(table, row, goal) {
+    return $S.async(function*(nodalion) {
+	var db = yield getDB(nodalion, $R());
+	var cursor = db.collection(table).find({});
+	yield cursor.forEach(function(doc) {
+	    nodalion.findAll({var:'_'}, ns.bind(decode(doc._id), row, {var:'_T'}, goal), function() {});
+	}, $R());
+    });
 });

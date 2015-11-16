@@ -18,9 +18,19 @@ var ns = nodalion.namespace('/nodalion', ['trans',
 					  'mongo1',
 					  'addToCounter',
 					  'getAllCounters',
-					  'counterValue']);
+					  'counterValue',
+					  'scan']);
 
+var impred = nodalion.namespace('/impred', ['task']);
 var example = nodalion.namespace('example', ['foo', 'bar', 'baz', 'bat']);
+var stored = [];
+example._register('store1', function(str) {
+    return function(nodalion, cb) {
+	stored.push(str);
+	cb(undefined, str);
+    };
+});
+
 var nodalionMongo = require('../nodalionMongo.js');
 var cedParser = require('../cedParser.js');
 
@@ -193,13 +203,16 @@ describe('nodalionMongo', function(){
 	    var result = yield n.findAll(X, ns.mongoTest(6, X), $R());
 	    assert.equal(result, 2);
 	}));
-	// This doesn't really belong here, but it's very convenient to place this test here...
-	it.skip('should work with counters', $T(function*(){
-	    var X = {var:'X'};
-	    var test = nodalion.namespace('/counterDB/test', ['testCounterDB']);
-	    var result = yield n.findAll(X, test.testCounterDB(1, X), $R());
-	    assert.equal(result[0], 20);
+    });
+    describe('/nodalion#scan(Table, Row, Goal)', function(){
+	it('should evaluate Goal for each Row in Table', $T(function*(){
+	    yield doTask(ns.trans('test2', 'a', [ns.set('fam', 1, [1])]), $R());
+	    yield doTask(ns.trans('test2', 'b', [ns.set('fam', 1, [1])]), $R());
+	    yield doTask(ns.trans('test2', 'c', [ns.set('fam', 1, [1])]), $R());
+	    stored = [];
+	    yield doTask(ns.scan('test2', {var:'X'}, impred.task(example.store1({var:'X'}), {var:'_Res'}, {var:'_Type'})), $R());
+	    yield setTimeout($R(), 10);
+	    assert.deepEqual(stored, ['a', 'b', 'c']);
 	}));
     });
-
 });
