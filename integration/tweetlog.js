@@ -16,8 +16,8 @@ workQueue.connect(nodalion, 'amqp://localhost', ns.defaultQueueDomain());
 var tweetlog = Nodalion.namespace('/tweetlog', ['initialize', 'scenario', 'testTweet']);
 
 $S.async(function*() {
-    yield nodalion.findAll([], tweetlog.initialize(), $R());
     yield nodalion.findAll([], tweetlog.scenario(1), $R());
+    yield nodalion.findAll([], tweetlog.initialize(), $R());
     yield setTimeout($R(), 1000);
     var result = yield nodalion.findAll({var:'X'}, tweetlog.testTweet(1, {var:'X'}), $R());
     console.log(result);

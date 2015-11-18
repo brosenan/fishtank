@@ -23,6 +23,7 @@
     "amqp": "^0.2.4",
     "byline": "^4.2.1",
     "ioredis": "^1.7.4",
+    "ipfs-client": "^0.1.2",
     "jison": "^0.4.15",
     "mongodb": "^2.0.39",
     "rabbit.js": "^0.4.4",
