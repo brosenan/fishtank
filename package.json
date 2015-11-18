@@ -4,7 +4,7 @@
   "description": "A deductive database for the 21st century",
   "main": "index.js",
   "scripts": {
-    "test": "node ./node_modules/jison/lib/cli.js js/cedGrammar.jison && mv ./cedGrammar.js js/ && ./node_modules/mocha/bin/mocha --harmony -C -R dot js/test"
+    "test": "node ./node_modules/jison/lib/cli.js js/cedGrammar.jison && mv ./cedGrammar.js js/ && ./node_modules/mocha/bin/mocha -C -R dot js/test"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
   "dependencies": {
     "amqp": "^0.2.4",
     "byline": "^4.2.1",
+    "express": "^4.13.3",
     "ioredis": "^1.7.4",
     "ipfs-client": "^0.1.2",
     "jison": "^0.4.15",
