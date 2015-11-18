@@ -1,0 +1,21 @@
+'/bootstrap':defAtom(json::'/bootstrap':type).
+'/bootstrap':defAtom(jsonField::'/bootstrap':type).
+'/bootstrap':signature(jsonObj(Fields)::json,[Fields::'/bootstrap':list(jsonField)]).
+'/bootstrap':projection(jsonObj(Fields)::json,'/bootstrap':horiz(['/bootstrap':brackets(cpi:vis(Fields::'/bootstrap':list(jsonField),'/bootstrap':horizontal(0,0,'/bootstrap':label(! (,)),'/bootstrap':label(!''))),123,125)])).
+'/bootstrap':projection(jsonObj(Fields)::json,'/bootstrap':vert,'/bootstrap':vert(['/bootstrap':label(!'{'),'/bootstrap':horiz(['/bootstrap':label(!'    '),cpi:vis(Fields::'/bootstrap':list(jsonField),'/bootstrap':vert)]),'/bootstrap':label(!'}')])).
+'/bootstrap':alias(jsonObj(Fields)::json,!'{}').
+'/bootstrap':signature(field(Name,Value)::jsonField,[Name::'/bootstrap':string,Value::json]).
+'/bootstrap':projection(field(Name,Value)::jsonField,'/bootstrap':horiz(['/bootstrap':vis(Name::'/bootstrap':string),'/bootstrap':label(! (:)),'/bootstrap':vis(Value::json)])).
+'/bootstrap':adapter(Name::'/bootstrap':string,field(Name,Value)::jsonField).
+'/bootstrap':signature(jsonStr(Str)::json,[Str::'/bootstrap':string]).
+'/bootstrap':projection(jsonStr(Str)::json,'/bootstrap':horiz(['/bootstrap':label(!'"'),'/bootstrap':vis(Str::'/bootstrap':string),'/bootstrap':label(!'"')])).
+'/bootstrap':adapter(Str::'/bootstrap':string,jsonStr(Str)::json).
+'/bootstrap':signature(jsonNum(Num)::json,[Num::'/bootstrap':number]).
+'/bootstrap':projection(jsonNum(Num)::json,'/bootstrap':horiz(['/bootstrap':lineBorder('/bootstrap':vis(Num::'/bootstrap':number),1,cpi:rgb(192,192,192))])).
+'/bootstrap':adapter(Num::'/bootstrap':number,jsonNum(Num)::json).
+'/bootstrap':signature(jsonList(List)::json,[List::'/bootstrap':list(json)]).
+'/bootstrap':projection(jsonList(List)::json,'/bootstrap':horiz(['/bootstrap':brackets(cpi:vis(List::'/bootstrap':list(json),'/bootstrap':horizontal(0,0,'/bootstrap':label(! (,)),'/bootstrap':label(!''))),91,93)])).
+'/bootstrap':adapter(List::'/bootstrap':list(json),jsonList(List)::json).
+'/bootstrap':sandbox(jsonObj([field(!foo,jsonStr(!goo)),field(!bar,jsonStr(!gar)),field(!n,jsonNum(2)),field(!list,jsonList([jsonNum(1),jsonStr(!'2'),jsonObj([])]))])::json).
+'/bootstrap':signature(outputJson(Json)::handler,[Json::json]).
+serve(example:myApp,!'/hi-json',[outputJson(jsonList([jsonStr(!str),jsonNum(2),jsonObj([field(!a,jsonNum(2))])]))]).

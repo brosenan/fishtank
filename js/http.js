@@ -31,17 +31,27 @@ ns._register('outputText', function(contentType, text) {
     };
 });
 
+ns._register('outputJson', function(json) {
+    return function(req, res) {
+	res.set('Content-Type', 'application/json');
+	res.send(JSON.stringify(json));
+    };
+});
 
+function id(x) { return x; }
 
-
-
-
-
-
-
-
-
-
-
-
-
+ns._register('jsonStr', id);
+ns._register('jsonList', id);
+ns._register('jsonNum', id);
+ns._register('jsonObj', function(fields) {
+    var obj = Object.create(null);
+    fields.forEach(function(field) {
+	field(obj);
+    });
+    return obj;
+});
+ns._register('field', function(name, value) {
+    return function(obj) {
+	obj[name] = value;
+    };
+});

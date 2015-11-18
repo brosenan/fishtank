@@ -25,4 +25,20 @@ describe('http', function(){
 	    assert.equal(resp[2], 'Hello, World');
 	}));
     });
+    describe('handlers', function(){
+	before($T(function*() {
+	    var app = express();
+	    app.use(nodalionHttp.app(nodalion, example.myApp()));
+	    app.listen(3002);
+	    yield setTimeout($R(), 10); // Give the app time to go up
+	}));
+	it('should handle JSON', $T(function*(){
+	    var resp = yield request('http://localhost:3002/hi-json', $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    assert.equal(resp[2], '["str",2,{"a":2}]');
+	}));
+
+    });
+
 });
