@@ -24,7 +24,5 @@ describe('http', function(){
 	    assert.equal(resp[1].statusCode, 200);
 	    assert.equal(resp[2], 'Hello, World');
 	}));
-
     });
-
 });

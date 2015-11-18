@@ -8,8 +8,7 @@ var ns = Nodalion.namespace('/nodalion', ['serveHandlers']);
 var setupRouter = $S.async(function*(router, nodalion, app) {
     var Path = {var:'Path'};
     var Handlers = {var:'Handlers'};
-    var Ctx = {var:'Ctx'};
-    var locations = yield nodalion.findAll([Path, Handlers, Ctx], ns.serveHandlers(app, Path, Ctx, Handlers), $R());
+    var locations = yield nodalion.findAll([Path, Handlers], ns.serveHandlers(app, Path, Handlers), $R());
     locations.forEach(function(loc) {
 	router.get(loc[0], loc[1]);
     });
@@ -31,3 +30,18 @@ ns._register('outputText', function(contentType, text) {
 	res.send(text);
     };
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

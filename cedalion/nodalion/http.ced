@@ -1,9 +1,9 @@
 '/bootstrap':defAtom(app::'/bootstrap':type).
 '/bootstrap':defAtom(example:myApp::app).
 '/bootstrap':defAtom(handler::'/bootstrap':type).
-'/bootstrap':signature(serve(App,Path,Ctx,Handlers)::'/bootstrap':statement,[App::app,Path::'/bootstrap':string,Ctx::'/bootstrap':number,Handlers::'/bootstrap':list(handler)]).
-'/bootstrap':projection(serve(App,Path,Ctx,Handlers)::'/bootstrap':statement,'/bootstrap':vert(['/bootstrap':horiz(['/bootstrap':label(!app),'/bootstrap':vis(App::app),'/bootstrap':label(!path),'/bootstrap':vis(Path::'/bootstrap':string),'/bootstrap':label(!'do:')]),'/bootstrap':horiz(['/bootstrap':label(!'    '),cpi:vis(Handlers::'/bootstrap':list(handler),'/bootstrap':vert)]),'/bootstrap':horiz(['/bootstrap':label(!'with context'),'/bootstrap':vis(Ctx::'/bootstrap':number)])])).
+'/bootstrap':signature(serve(App,Path,Handlers)::'/bootstrap':statement,[App::app,Path::'/bootstrap':string,Handlers::'/bootstrap':list(handler)]).
+'/bootstrap':projection(serve(App,Path,Handlers)::'/bootstrap':statement,'/bootstrap':vert(['/bootstrap':horiz(['/bootstrap':label(!app),'/bootstrap':vis(App::app),'/bootstrap':label(!path),'/bootstrap':vis(Path::'/bootstrap':string),'/bootstrap':label(!'do:')]),'/bootstrap':horiz(['/bootstrap':label(!'    '),cpi:vis(Handlers::'/bootstrap':list(handler),'/bootstrap':vert)])])).
 '/bootstrap':signature(outputText(ContentType,Text)::handler,[ContentType::'/bootstrap':string,Text::'/bootstrap':string]).
-serve(example:myApp,!'/hello',Ctx,[outputText(!'text/plain',!'Hello, World')]).
-'/bootstrap':signature(serveHandlers(App,Path,Ctx,Handlers)::'/impred':impred,[App::app,Path::'/bootstrap':string,Ctx::'/bootstrap':number,Handlers::'/bootstrap':list(handler)]).
-serve(App,Path,Ctx,Handlers)~>'/impred':clause(serveHandlers(App,Path,Ctx,Handlers),'/impred':true).
+serve(example:myApp,!'/hello',[outputText(!'text/plain',!'Hello, World')]).
+'/bootstrap':signature(serveHandlers(App,Path,Handlers)::'/impred':impred,[App::app,Path::'/bootstrap':string,Handlers::'/bootstrap':list(handler)]).
+serve(App,Path,Handlers)~>'/impred':clause(serveHandlers(App,Path,Handlers),'/impred':true).
