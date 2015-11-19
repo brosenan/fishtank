@@ -18,3 +18,7 @@
 '/bootstrap':adapter(List::'/bootstrap':list(json),jsonList(List)::json).
 '/bootstrap':signature(outputJson(Json)::handler,[Json::json]).
 serve(example:myApp,get,!'/hi-json',[outputJson(jsonList([jsonStr(!str),jsonNum(2),jsonObj([field(!a,jsonNum(2))])]))]).
+'/bootstrap':signature(extractField(Obj,Name,Value)::'/bootstrap':pred,[Obj::json,Name::'/bootstrap':string,Value::json]).
+'/bootstrap':projection(extractField(Obj,Name,Value)::'/bootstrap':pred,'/bootstrap':horiz(['/bootstrap':vis(Obj::json),'/bootstrap':label(!.),'/bootstrap':vis(Name::'/bootstrap':string),'/bootstrap':label(! (=)),'/bootstrap':vis(Value::json)])).
+'/util':behavior(extractField(Obj,Name,Value)::'/bootstrap':pred,!'should succeed if Name:Value is a field in Obj', (extractField(jsonObj([field(!a,jsonNum(1)),field(!b,jsonNum(2))]),!b,Two),'/util':assertEqual(Two,jsonNum(2),json))).
+extractField(jsonObj(Fields),Name,Value):-'/bootstrap':listMember(field(Name,Value),jsonField,Fields).

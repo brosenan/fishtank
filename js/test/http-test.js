@@ -39,6 +39,13 @@ describe('http', function(){
 	    assert.equal(resp[1].statusCode, 200);
 	    assert.equal(resp[2], '["str",2,{"a":2}]');
 	}));
+	it.skip('should handle dynamic content', $T(function*(){
+	    var resp = yield request('http://localhost:3002/calc?a=2&b=3', $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    assert.equal(resp[2], '{"result":5}');
+	}));
+
 
     });
     describe('.jsonToTerm(json)', function(){
@@ -47,8 +54,8 @@ describe('http', function(){
 	var term = nodalionHttp.jsonToTerm(json);
 	var json2 = parser.parse(cedParser.generate(term));
 	assert.deepEqual(term, ns.jsonList([ns.jsonStr("str"),
-					ns.jsonNum(2),
-					ns.jsonObj([ns.field("a", ns.jsonNum(2))])]));
+					    ns.jsonNum(2),
+					    ns.jsonObj([ns.field("a", ns.jsonNum(2))])]));
     });
 
 });

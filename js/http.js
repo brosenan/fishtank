@@ -3,7 +3,7 @@ var express = require('express');
 var $S = require('suspend'), $R = $S.resume, $RR = $S.resumeRaw, $T = function(gen) { return function(done) { $S.run(gen, done); } };
 
 var Nodalion = require('./nodalion.js');
-var ns = Nodalion.namespace('/nodalion', ['serveHandlers']);
+var ns = Nodalion.namespace('/nodalion', ['serveHandlers', 'bind']);
 
 var setupRouter = $S.async(function*(router, nodalion, app) {
     var Method = {var:'Method'};
@@ -18,6 +18,10 @@ var setupRouter = $S.async(function*(router, nodalion, app) {
 
 exports.app = function(nodalion, app) {
     var router = express.Router();
+    router.use(function(req, res, next) {
+	req.nodalion = nodalion;
+	next();
+    });
     setupRouter(router, nodalion, app, function(err) {
 	if(err) {
 	    console.error(err);
@@ -51,8 +55,7 @@ ns._register('outputText', function(contentType, text) {
 
 ns._register('outputJson', function(json) {
     return function(req, res) {
-	res.set('Content-Type', 'application/json');
-	res.send(JSON.stringify(json));
+	res.json(json);
     };
 });
 
@@ -70,4 +73,45 @@ ns._register('field', function(name, value) {
     return function(obj) {
 	obj[name] = value;
     };
+});
+
+// Taken from http://stackoverflow.com/questions/11709865/nodejs-express-connect-dynamically-add-middleware-in-current-flow
+var walkSubstack = function (stack, req, res, next) {
+
+  if (typeof stack === 'function') {
+    stack = [stack];
+  }
+
+  var walkStack = function (i, err) {
+
+    if (err) {
+      return next(err);
+    }
+
+    if (i >= stack.length) {
+      return next();
+    }
+
+    stack[i](req, res, walkStack.bind(null, i + 1));
+
+  };
+
+  walkStack(0);
+
+};
+
+
+ns._register('with', function(Ctx, Collect, Impred, Handlers) {
+    return $S(function*(req, res, next) {
+	var ctxValue = Object.create(null);
+	Collect.forEach(field => {ctxValue[field] = req[field]});
+	ctxValue = exports.jsonToTerm(ctxValue);
+	console.log(Handlers.toString());
+	var handlers = yield req.nodalion.findAll(Handlers, ns.bind(ctxValue, Ctx, Impred), $R());
+	if(handlers.length != 1) {
+	    throw Error('Got ' + handlers.length + ' solutions for with-where handler');
+	}
+	handlers = handlers[0];
+	walkSubstack(handlers, req, res, next);
+    });
 });
