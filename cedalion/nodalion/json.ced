@@ -16,6 +16,5 @@
 '/bootstrap':signature(jsonList(List)::json,[List::'/bootstrap':list(json)]).
 '/bootstrap':projection(jsonList(List)::json,'/bootstrap':horiz(['/bootstrap':brackets(cpi:vis(List::'/bootstrap':list(json),'/bootstrap':horizontal(0,0,'/bootstrap':label(! (,)),'/bootstrap':label(!''))),91,93)])).
 '/bootstrap':adapter(List::'/bootstrap':list(json),jsonList(List)::json).
-'/bootstrap':sandbox(jsonObj([field(!foo,jsonStr(!goo)),field(!bar,jsonStr(!gar)),field(!n,jsonNum(2)),field(!list,jsonList([jsonNum(1),jsonStr(!'2'),jsonObj([])]))])::json).
 '/bootstrap':signature(outputJson(Json)::handler,[Json::json]).
-serve(example:myApp,!'/hi-json',[outputJson(jsonList([jsonStr(!str),jsonNum(2),jsonObj([field(!a,jsonNum(2))])]))]).
+serve(example:myApp,get,!'/hi-json',[outputJson(jsonList([jsonStr(!str),jsonNum(2),jsonObj([field(!a,jsonNum(2))])]))]).

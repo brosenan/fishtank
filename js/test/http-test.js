@@ -6,8 +6,9 @@ var request = require('request');
 
 var Nodalion = require('../nodalion.js');
 var nodalionHttp = require('../http.js');
+var cedParser = require('../cedParser.js');
 
-var ns = Nodalion.namespace('/nodalion', ['http']);
+var ns = Nodalion.namespace('/nodalion', ['http', 'jsonObj', 'jsonList', 'jsonStr', 'jsonNum', 'field']);
 var example = Nodalion.namespace('example', ['myApp']);
 
 var nodalion = new Nodalion('/tmp/http.log');
@@ -39,6 +40,15 @@ describe('http', function(){
 	    assert.equal(resp[2], '["str",2,{"a":2}]');
 	}));
 
+    });
+    describe('.jsonToTerm(json)', function(){
+	var parser = new cedParser.CedParser();
+	var json = ["str", 2, {"a": 2}];
+	var term = nodalionHttp.jsonToTerm(json);
+	var json2 = parser.parse(cedParser.generate(term));
+	assert.deepEqual(term, ns.jsonList([ns.jsonStr("str"),
+					ns.jsonNum(2),
+					ns.jsonObj([ns.field("a", ns.jsonNum(2))])]));
     });
 
 });
