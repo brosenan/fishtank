@@ -16,11 +16,13 @@ describe('namespace', function(){
 	});
     });
     describe('._register(name, ctor)', function(){
-	var parser = new cedParser.CedParser();
-	var foo = new Namespace('/foo', parser);
-	foo._register('plus', function(a, b) { return a+b; });
-	var res = parser.parse(foo.plus(1, 2).toString());
-	assert.equal(res, 3);
+	it('should register a meaning for a term', function(){
+	    var parser = new cedParser.CedParser();
+	    var foo = new Namespace('/foo', parser);
+	    foo._register('plus', function(a, b) { return a+b; });
+	    var res = parser.parse(foo.plus(1, 2).toString());
+	    assert.equal(res, 3);
+	});
     });
 
     describe('.<concept>(args...)', function(){
