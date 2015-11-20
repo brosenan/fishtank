@@ -42,7 +42,7 @@ clazz.findAll = function(res, impred, cb) {
 		handleEvents(cont(err, value));
 	    }
 	    try {
-		task(self, contAndHandle);
+		task.meaning()(self, contAndHandle);
 	    } catch(e) {
 		cb(e);
 	    }

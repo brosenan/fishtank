@@ -1,20 +1,43 @@
 "use strict";
 var cedGrammar = require('./cedGrammar.js');
 
+function meaning(term) {
+    if(typeof term === 'object') {
+	return term.meaning();
+    } else {
+	return term;
+    }
+}
 
 var registered = {
-    // String handling
-    '!/1': function(str) { return str.name; },
-    './2': function(first, next) { return [first].concat(next); },
+    '[]/0': () => [],
+    './2': (first, next) => [first].concat(meaning(next)),
 };
 
 exports.CedParser = function() {
     this.registered = registered;
 };
 
-var clazz = exports.CedParser.prototype;
-clazz.parse = function(str) {
-    cedGrammar.parser.yy = this;
+exports.Term = function(name, args) {
+    this.name = name;
+    this.args = args;
+};
+
+exports.Term.prototype.toString = function() {
+    return exports.generate(this);
+}
+exports.Term.prototype.meaning = function() {
+    var key = this.name + '/' + this.args.length;
+    var ctor = registered[key];
+    if(ctor) {
+	return ctor.apply(null, this.args);
+    } else {
+	throw Error('Term ' + key + ' has no defined meaning');
+    }
+}
+
+exports.CedParser.prototype.parse = function(str) {
+    cedGrammar.parser.yy = exports;
     return cedGrammar.parse(str);
 };
 

@@ -46,7 +46,7 @@ var doConnect = $S.async(function*(nodalion, url, domain) {
     var workerSpecs = yield nodalion.findAll([{var:'Name'}, {var:'X'}, {var:'T'}, {var:'Impred'}],
 					     ns.workQueue(domain, {var:'Name'}, {var:'X'}, {var:'T'}, {var:'Impred'}), $R());
     for(let i = 0; i < workerSpecs.length; i++) {
-	let spec = workerSpecs[i];
+	let spec = workerSpecs[i].meaning();
 	let worker = context.socket('WORKER', {prefetch: PREFETCH});
 	worker.setEncoding('utf8'); // use strings
 	yield worker.connect(spec[0], $S.resumeRaw());
@@ -68,7 +68,7 @@ ns._register('enqueue', function(Queue, Term, Type) {
     return $S.async(function*(nodalion) {
 	yield waitForConnection($R());
 	var topic = topics[Queue];
-	if(!topic) throw Error("Bad queue: " + Queue + ' available topice: ' + Object.keys(topics).join(', '));
+	if(!topic) throw Error("Bad queue: " + Queue + ' available topics: ' + Object.keys(topics).join(', '));
 	topic.pusher.write(serializeTerm.encodeTerm(Term, {}));
 	return '';
     });
@@ -82,8 +82,8 @@ ns._register('findAll', function(Res, Impred) {
 
 ns._register('par', function(Task1, Task2) {
     return $S.async(function*(nodalion) {
-	Task1(nodalion, $S.fork());
-	Task2(nodalion, $S.fork());
+	Task1.meaning()(nodalion, $S.fork());
+	Task2.meaning()(nodalion, $S.fork());
 	var results = yield $S.join();
 	return bs.pair(results[0], results[1]);
     });

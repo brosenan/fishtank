@@ -48,17 +48,19 @@ describe('CedParser', function(){
 	});
 
 	it('should handle an empty list', function(){
-	    assert.deepEqual(parser.parse('[]'), []);
+	    assert.equal(parser.parse('[]').name, '[]');
 	});
 
 	it('should handle a non-empty list', function(){
 	    var list = parser.parse('[a, b, c]');
-	    assert.equal(list.length, 3);
-	    assert.equal(list[0].name, 'a');
+	    assert.equal(list.name, '.');
+	    assert.equal(list.args[0].name, 'a');
+	    assert.equal(list.args[1].name, '.');
+	    assert.equal(list.args[1].args[0].name, 'b');
 	});
 
 	it('should parse numbers', function(){
-	    assert.deepEqual(parser.parse('[1, 2e+5, 3.14]'), [1, 2e+5, 3.14]);
+	    assert.deepEqual(parser.parse('[1, 2e+5, 3.14]').meaning(), [1, 2e+5, 3.14]);
 	});
 	
 	it('should parse variables', function(){
@@ -74,10 +76,11 @@ describe('CedParser', function(){
 	});
     });
     describe('.register(concept, ctor)', function(){
-	it('should register a constructor for evaluating compound terms', function(){
-	    cedParser.register('+/2', function(a, b) { return a+b; });
-	    cedParser.register('*/2', function(a, b) { return a*b; });
-	    assert.equal(parser.parse('+(1, *(2, 3))'), 7);
+	it('should register a constructor for evaluating compound terms through the .meaning() method', function(){
+	    cedParser.register('const/1', function(a) { return a; });
+	    cedParser.register('+/2', function(a, b) { return a.meaning()+b.meaning(); });
+	    cedParser.register('*/2', function(a, b) { return a.meaning()*b.meaning(); });
+	    assert.equal(parser.parse('+(const(1), *(const(2), const(3)))').meaning(), 7);
 	});
     });
     describe('.generate(term)', function(){

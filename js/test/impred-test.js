@@ -32,7 +32,7 @@ describe('impred', function(){
 	it('should return the current time', $T(function*(){
 	    var X = {var:'X'};
 	    var result = yield nodalion.findAll(X, ns.testNow(X), $R());
-	    var list = result[0];
+	    var list = result[0].meaning();
 	    assert(list[0] < list[1], list[0] + ' < ' + list[1]);
 	    assert(list[1] < list[2], list[1] + ' < ' + list[2]);
 	    assert(list[2] - list[0] < 1, (list[2] - list[0]) + ' < 1');
@@ -42,7 +42,7 @@ describe('impred', function(){
 	it('should return a unique ID each time it is called', $T(function*(){
 	    var X = {var:'X'};
 	    var result = yield nodalion.findAll(X, ns.testUUID(X), $R());
-	    var list = result[0];
+	    var list = result[0].meaning();
 	    assert.notEqual(list[0], list[1]);
 	    assert.notEqual(list[2], list[1]);
 	    list.forEach(function(id) {

@@ -16,7 +16,7 @@ var example = nodalion.namespace('example', ['myQueueDomain', 'foo', 'bar', 'baz
 var n = new nodalion('/tmp/workQ-ced.log');
 
 var doTask = function(term, cb) {
-    var task = parser.parse(term.toString());
+    var task = parser.parse(term.toString()).meaning();
     task(n, cb);
 };
 

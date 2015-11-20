@@ -11,8 +11,9 @@ var setupRouter = $S.async(function*(router, nodalion, app) {
     var Handlers = {var:'Handlers'};
     var locations = yield nodalion.findAll([Method, Path, Handlers], ns.serveHandlers(app, Method, Path, Handlers), $R());
     locations.forEach(function(loc) {
+	loc = loc.meaning();
 	var method = loc[0].name.split('#')[1];
-	router[method](loc[1], loc[2]);
+	router[method](loc[1], loc[2].meaning().map(handler => handler.meaning()));
     });
 });
 
@@ -55,23 +56,23 @@ ns._register('outputText', function(contentType, text) {
 
 ns._register('outputJson', function(json) {
     return function(req, res) {
-	res.json(json);
+	res.json(json.meaning());
     };
 });
 
 function id(x) { return x; }
 
 ns._register('jsonStr', id);
-ns._register('jsonList', id);
+ns._register('jsonList', term => term.meaning().map(elem => elem.meaning()));
 ns._register('jsonNum', id);
 ns._register('jsonObj', function(fields) {
     var obj = Object.create(null);
-    fields.forEach(field => {field(obj);});
+    fields.meaning().forEach(field => {field.meaning()(obj);});
     return obj;
 });
 ns._register('field', function(name, value) {
     return function(obj) {
-	obj[name] = value;
+	obj[name] = value.meaning();
     };
 });
 

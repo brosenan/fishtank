@@ -42,18 +42,17 @@
     return listStack.pop();
   }
   function createTerm(scope, name, args) {
-    var key = name + '/' + args.length;
-    var ctor = scope.registered[key];
-    if(ctor) {
-      var result = ctor.apply(this, args);
-      if(typeof result === 'function') {
-        result._name = name;
-        result._args = args;
-      }
-      return result;
-    } else {
-      return {name: name, args: args};
+    if(name === '!' && args.length === 1) {
+      return args[0].name;
     }
+    return new scope.Term(name, args);
+  }
+  function createList(scope, elems) {
+    var list = createTerm(scope, '[]', []);
+    for(var i = elems.length - 1; i >= 0; i--) {
+      list = createTerm(scope, '.', [elems[i], list]);
+    }
+    return list;
   }
 %}
 %start term
@@ -71,9 +70,9 @@ t
     |  atom "(" termList ")"
     {$$ = createTerm(yy.parser.yy, $1, $3);}
     |  "[" "]"
-        {$$ = [];}
+    {$$ = createTerm(yy.parser.yy, '[]', []);}
     |  "[" termList "]"
-        {$$ = $2;}
+    {$$ = createList(yy.parser.yy, $2);}
     |  NUMBER
         {$$ = Number(yytext);}
     |  VAR

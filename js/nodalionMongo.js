@@ -66,6 +66,7 @@ exports.db = function(url) {
 };
 
 ns._register('trans', function(coll, row, ops) {
+    ops = ops.meaning().map(op => op.meaning());
     return function(nodalion, cb) {
 	$S.async(function*(nodalion) {
 	    var db = yield getDB(nodalion, $R());
@@ -113,6 +114,7 @@ ns._register('trans', function(coll, row, ops) {
 });
 
 ns._register('set', function(family, key, values) {
+    values = values.meaning();
     return function(update) {
 	if(!update.$set) {
 	    update.$set = {};
@@ -147,7 +149,7 @@ ns._register('get', function(family, key) {
 
 ns._register('check', function(family, key, value) {
     return function(update, fields, query, options) {
-	query[family + '.' + encode(key)] = value.map(encode);
+	query[family + '.' + encode(key)] = value.meaning().map(encode);
 	options.upsert = false;
     };
 });

@@ -12,7 +12,7 @@ var cedParser = require('../cedParser.js');
 var parser = new cedParser.CedParser();
 
 var doTask = function(term, cb) {
-    var task = parser.parse(term.toString());
+    var task = parser.parse(term.toString()).meaning();
     task(cb);
 };
 

@@ -49,13 +49,14 @@ describe('http', function(){
 
     });
     describe('.jsonToTerm(json)', function(){
-	var parser = new cedParser.CedParser();
-	var json = ["str", 2, {"a": 2}];
-	var term = nodalionHttp.jsonToTerm(json);
-	var json2 = parser.parse(cedParser.generate(term));
-	assert.deepEqual(term, ns.jsonList([ns.jsonStr("str"),
-					    ns.jsonNum(2),
-					    ns.jsonObj([ns.field("a", ns.jsonNum(2))])]));
+	it('should convert a json value to a term representation', function(){
+	    var parser = new cedParser.CedParser();
+	    var json = ["str", 2, {"a": 2}];
+	    var term = nodalionHttp.jsonToTerm(json);
+	    var json2 = parser.parse(cedParser.generate(term));
+	    assert.deepEqual(term, ns.jsonList([ns.jsonStr("str"),
+						ns.jsonNum(2),
+						ns.jsonObj([ns.field("a", ns.jsonNum(2))])]));
+	});
     });
-
 });

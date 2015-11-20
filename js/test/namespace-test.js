@@ -20,7 +20,7 @@ describe('namespace', function(){
 	    var parser = new cedParser.CedParser();
 	    var foo = new Namespace('/foo', parser);
 	    foo._register('plus', function(a, b) { return a+b; });
-	    var res = parser.parse(foo.plus(1, 2).toString());
+	    var res = parser.parse(foo.plus(1, 2).toString()).meaning();
 	    assert.equal(res, 3);
 	});
     });

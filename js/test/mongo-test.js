@@ -39,7 +39,7 @@ var n = new nodalion('/tmp/mongo-ced.log');
 
 var doTask = function(term, cb) {
     var task = parser.parse(term.toString());
-    task(n, cb);
+    task.meaning()(n, cb);
 };
 
 function encodeUnknown(term) {
