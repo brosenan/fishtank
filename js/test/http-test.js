@@ -39,7 +39,7 @@ describe('http', function(){
 	    assert.equal(resp[1].statusCode, 200);
 	    assert.equal(resp[2], '["str",2,{"a":2}]');
 	}));
-	it.skip('should handle dynamic content', $T(function*(){
+	it('should handle dynamic content', $T(function*(){
 	    var resp = yield request('http://localhost:3002/calc?a=2&b=3', $RR());
 	    assert.ifError(resp[0]);
 	    assert.equal(resp[1].statusCode, 200);

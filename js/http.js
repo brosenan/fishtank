@@ -105,14 +105,13 @@ var walkSubstack = function (stack, req, res, next) {
 ns._register('with', function(Ctx, Collect, Impred, Handlers) {
     return $S(function*(req, res, next) {
 	var ctxValue = Object.create(null);
-	Collect.forEach(field => {ctxValue[field] = req[field]});
+	Collect.meaning().forEach(field => {ctxValue[field] = req[field]});
 	ctxValue = exports.jsonToTerm(ctxValue);
-	console.log(Handlers.toString());
-	var handlers = yield req.nodalion.findAll(Handlers, ns.bind(ctxValue, Ctx, Impred), $R());
+	var handlers = yield req.nodalion.findAll(Handlers, ns.bind(ctxValue, Ctx, {var:'T'}, Impred), $R());
 	if(handlers.length != 1) {
 	    throw Error('Got ' + handlers.length + ' solutions for with-where handler');
 	}
-	handlers = handlers[0];
+	handlers = handlers[0].meaning().map(elem => elem.meaning());
 	walkSubstack(handlers, req, res, next);
     });
 });
