@@ -102,10 +102,15 @@ var walkSubstack = function (stack, req, res, next) {
 };
 
 
-ns._register('with', function(Ctx, Collect, Impred, Handlers) {
+ns._register('with', function(Ctx, Impred, Handlers) {
     return $S(function*(req, res, next) {
 	var ctxValue = Object.create(null);
-	Collect.meaning().forEach(field => {ctxValue[field] = req[field]});
+	if(!Ctx.name || Ctx.name !== '/nodalion#jsonObj') {
+	    throw Error("Expected JSON term: " + Ctx.toString());
+	}
+	var fieldList = Ctx.args[0].meaning();
+	var collect = fieldList.map(field => field.args[0]);
+	collect.forEach(key => {ctxValue[key] = req[key];});
 	ctxValue = exports.jsonToTerm(ctxValue);
 	var handlers = yield req.nodalion.findAll(Handlers, ns.bind(ctxValue, Ctx, {var:'T'}, Impred), $R());
 	if(handlers.length != 1) {

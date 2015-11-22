@@ -4,15 +4,16 @@
 '/bootstrap':defAtom(httpMethod::'/bootstrap':type).
 '/bootstrap':signature(serve(App,Method,Path,Handlers)::'/bootstrap':statement,[App::app,Method::httpMethod,Path::'/bootstrap':string,Handlers::'/bootstrap':list(handler)]).
 '/bootstrap':projection(serve(App,Method,Path,Handlers)::'/bootstrap':statement,'/bootstrap':vert(['/bootstrap':horiz(['/bootstrap':label(!app),'/bootstrap':vis(App::app),'/bootstrap':label(!serves),'/bootstrap':vis(Method::httpMethod),'/bootstrap':vis(Path::'/bootstrap':string),'/bootstrap':label(!'as:')]),'/bootstrap':horiz(['/bootstrap':label(!'    '),cpi:vis(Handlers::'/bootstrap':list(handler),'/bootstrap':vert)])])).
+'/bootstrap':alias(serve(App,Method,Path,Handlers)::'/bootstrap':statement,!app).
 '/bootstrap':signature(outputText(ContentType,Text)::handler,[ContentType::'/bootstrap':string,Text::'/bootstrap':string]).
 '/bootstrap':defAtom(get::httpMethod).
 '/bootstrap':projection(get::httpMethod,'/bootstrap':label(!'GET')).
 serve(example:myApp,get,!'/hello',[outputText(!'text/plain',!'Hello, World')]).
 '/bootstrap':signature(serveHandlers(App,Method,Path,Handlers)::'/impred':impred,[App::app,Method::httpMethod,Path::'/bootstrap':string,Handlers::'/bootstrap':list(handler)]).
 serve(App,Method,Path,Handlers)~>'/impred':clause(serveHandlers(App,Method,Path,Handlers),'/impred':true).
-'/bootstrap':signature(with(Ctx,Collect,Impred,Handlers)::handler,[Ctx::json,Collect::'/bootstrap':list('/bootstrap':string),Impred::'/impred':impred,Handlers::'/bootstrap':list(handler)]).
-'/bootstrap':projection(with(Ctx,Collect,Impred,Handlers)::handler,'/bootstrap':vert(['/bootstrap':horiz(['/bootstrap':label(!with),'/bootstrap':vis(Ctx::json),'/bootstrap':label(!containing),'/bootstrap':vis(Collect::'/bootstrap':list('/bootstrap':string)),'/bootstrap':label(!'do:')]),'/bootstrap':horiz(['/bootstrap':label(!'    '),cpi:vis(Handlers::'/bootstrap':list(handler),'/bootstrap':vert)]),'/bootstrap':horiz(['/bootstrap':label(!where),'/bootstrap':vis(Impred::'/impred':impred)])])).
+'/bootstrap':signature(with(Ctx,Impred,Handlers)::handler,[Ctx::json,Impred::'/impred':impred,Handlers::'/bootstrap':list(handler)]).
+'/bootstrap':projection(with(Ctx,Impred,Handlers)::handler,'/bootstrap':vert(['/bootstrap':horiz(['/bootstrap':label(!with),'/bootstrap':vis(Ctx::json),'/bootstrap':label(!'do:')]),'/bootstrap':horiz(['/bootstrap':label(!'    '),cpi:vis(Handlers::'/bootstrap':list(handler),'/bootstrap':vert)]),'/bootstrap':horiz(['/bootstrap':label(!where),'/bootstrap':vis(Impred::'/impred':impred)])])).
 '/bootstrap':signature('str2num'(Str)::'/Functional':expr('/bootstrap':number),[Str::'/Functional':expr('/bootstrap':string)]).
 '/util':behavior('str2num'(Str)::'/Functional':expr('/bootstrap':number),!'should convert strings to numbers', ('/Functional':eval('str2num'('/Functional':const(!'-2.3')),'/bootstrap':number,Value),'/util':assertEqual(Value,-2.3,'/bootstrap':number))).
 '/Functional':eval('str2num'(Str),'/bootstrap':number,Num):-'/Functional':eval(Str,'/bootstrap':string,StrPrime),builtin:rawTermToString(Num::'/bootstrap':number,StrPrime).
-serve(example:myApp,get,!'/calc',[with(Ctx,[!query],'/impred':pred((extractField(Ctx,!query,Q),extractField(Q,!a,jsonStr(A)),extractField(Q,!b,jsonStr(B)),'/Functional':eval('/Functional':applyBinOp('str2num'('/Functional':const(A)),'/Functional':numPlus,'str2num'('/Functional':const(B))),'/bootstrap':number,C))),[outputJson(jsonObj([field(!result,jsonNum(C))]))])]).
+serve(example:myApp,get,!'/calc',[with(jsonObj([field(!query,Q)]),'/impred':pred((extractField(Q,!a,jsonStr(A)),extractField(Q,!b,jsonStr(B)),'/Functional':eval('/Functional':applyBinOp('str2num'('/Functional':const(A)),'/Functional':numPlus,'str2num'('/Functional':const(B))),'/bootstrap':number,C))),[outputJson(jsonObj([field(!result,jsonNum(C))]))])]).
