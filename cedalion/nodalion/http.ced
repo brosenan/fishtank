@@ -17,3 +17,4 @@ serve(App,Method,Path,Handlers)~>'/impred':clause(serveHandlers(App,Method,Path,
 '/util':behavior('str2num'(Str)::'/Functional':expr('/bootstrap':number),!'should convert strings to numbers', ('/Functional':eval('str2num'('/Functional':const(!'-2.3')),'/bootstrap':number,Value),'/util':assertEqual(Value,-2.3,'/bootstrap':number))).
 '/Functional':eval('str2num'(Str),'/bootstrap':number,Num):-'/Functional':eval(Str,'/bootstrap':string,StrPrime),builtin:rawTermToString(Num::'/bootstrap':number,StrPrime).
 serve(example:myApp,get,!'/calc',[with(jsonObj([field(!query,Q)]),'/impred':pred((extractField(Q,!a,jsonStr(A)),extractField(Q,!b,jsonStr(B)),'/Functional':eval('/Functional':applyBinOp('str2num'('/Functional':const(A)),'/Functional':numPlus,'str2num'('/Functional':const(B))),'/bootstrap':number,C))),[outputJson(jsonObj([field(!result,jsonNum(C))]))])]).
+'/bootstrap':disabled(serve(example:myApp,get,!'/ipfs',[with(jsonObj([field(!query,Q)]),'/impred':true,[_])])).

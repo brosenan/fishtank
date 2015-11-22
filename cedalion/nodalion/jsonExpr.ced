@@ -1,0 +1,6 @@
+'/bootstrap':signature(jsonMember(Obj,Field)::'/Functional':expr(json),[Obj::'/Functional':expr(json),Field::'/bootstrap':string]).
+'/bootstrap':projection(jsonMember(Obj,Field)::'/Functional':expr(json),'/bootstrap':horiz(['/bootstrap':vis(Obj::'/Functional':expr(json)),'/bootstrap':label(!.),'/bootstrap':vis(Field::'/bootstrap':string)])).
+'/util':behavior(jsonMember(Obj,Field)::'/Functional':expr(json),!'should evaluate to Object\'s field named Field', ('/Functional':eval(jsonMember('/Functional':const(jsonObj([field(!a,jsonNum(1)),field(!b,jsonNum(2))])),!b),json,Two),'/util':assertEqual(Two,jsonNum(2),json))).
+'/bootstrap':signature(fieldDoesNotExist(C)::'/bootstrap':exception,[C::'/bootstrap':string]).
+'/util':behavior(jsonMember(Obj,Field)::'/Functional':expr(json),!'should throw an exception if Field does not exist in Object',builtin:catch(('/Functional':eval(jsonMember('/Functional':const(jsonObj([field(!a,jsonNum(1)),field(!b,jsonNum(2))])),!c),json,_),builtin:fail),fieldDoesNotExist(C),'/util':assertEqual(C,!c,'/bootstrap':string))).
+'/Functional':eval(jsonMember(Obj,FieldName),json,FieldVal):-'/Functional':eval(Obj,json,jsonObj(Fields)),builtin:if('/bootstrap':listMember(field(FieldName,FieldVal),jsonField,Fields),builtin:true,builtin:throw(fieldDoesNotExist(FieldName))).
