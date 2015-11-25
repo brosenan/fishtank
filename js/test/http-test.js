@@ -64,7 +64,29 @@ describe('http', function(){
 	    assert.equal(resp[2], '{"url":"http://localhost:3002/ipfs/QmTE9Xp76E67vkYeygbKJrsVj8W2LLcyUifuMHMEkyRfUL"}');
 	}));
 
+	it('should handle json POST requests', $T(function*(){
+	    var resp = yield request({
+		url: 'http://localhost:3002/hello',
+		method: 'POST',
+		json: true,
+		body: {firstName: 'Boaz', lastName: 'Rosenan'},
+	    }, $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    assert.equal(resp[2], 'hello, Boaz Rosenan');
+	}));
 
+	it('should handle text POST requests', $T(function*(){
+	    var resp = yield request({
+		url: 'http://localhost:3002/helloText',
+		method: 'POST',
+		headers: {'content-type': 'text/plain'},
+		body: "Boaz",
+	    }, $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    assert.equal(resp[2], 'hello, Boaz');
+	}));
 
     });
     describe('.jsonToTerm(json)', function(){

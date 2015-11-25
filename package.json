@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "amqp": "^0.2.4",
+    "body-parser": "^1.14.1",
     "byline": "^4.2.1",
     "express": "^4.13.3",
     "ioredis": "^1.7.4",

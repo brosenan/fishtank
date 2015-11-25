@@ -2,6 +2,7 @@
 var express = require('express');
 var $S = require('suspend'), $R = $S.resume, $RR = $S.resumeRaw, $T = function(gen) { return function(done) { $S.run(gen, done); } };
 var ipfs = require('ipfs-client');
+var bodyParser = require('body-parser');
 
 var Nodalion = require('./nodalion.js');
 var ns = Nodalion.namespace('/nodalion', ['serveHandlers', 'bind']);
@@ -143,4 +144,11 @@ ns._register('ipfsBody', function() {
 	    next();
 	});
     };
+});
+
+ns._register('jsonBody', function() {
+    return bodyParser.json();
+});
+ns._register('textBody', function() {
+    return bodyParser.text();
 });
