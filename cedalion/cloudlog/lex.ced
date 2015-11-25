@@ -12,10 +12,10 @@
 '/util':behavior(stringBody(Codes)::'/parsing':pattern('/bootstrap':number),!'should handle escape characters', ('/parsing':parse(stringBody(Codes),[33,92,34],'/bootstrap':number,[]),'/util':assertEqual(Codes,[33,34],'/bootstrap':list('/bootstrap':number)))).
 '/util':behavior(stringBody(Codes)::'/parsing':pattern('/bootstrap':number),!'should handle backslash-n', ('/parsing':parse(stringBody(Codes),[92,110],'/bootstrap':number,[]),'/util':assertEqual(Codes,[10],'/bootstrap':list('/bootstrap':number)))).
 '/util':behavior(stringBody(Codes)::'/parsing':pattern('/bootstrap':number),!'should handle backslash-t', ('/parsing':parse(stringBody(Codes),[92,116],'/bootstrap':number,[]),'/util':assertEqual(Codes,[9],'/bootstrap':list('/bootstrap':number)))).
-'/parsing':prod(stringBody([First|Rest]),'/bootstrap':number,'/parsing':follow('/parsing':alt('/parsing':follow('/parsing':bind('/parsing':not(!'"'),[First]),'/parsing':pred(\+First::'/bootstrap':number=92::'/bootstrap':number)),escapeSeq(First)),stringBody(Rest))).
+'/parsing':prod(stringBody([First|Rest]),'/bootstrap':number,'/parsing':follow(stringChar(First),stringBody(Rest))).
 '/parsing':prod(stringBody([]),'/bootstrap':number,'/parsing':empty).
-'/bootstrap':signature(escapeSeq(First)::'/parsing':pattern('/bootstrap':number),[First::'/bootstrap':number]).
-'/parsing':prod(escapeSeq(Char),'/bootstrap':number,'/parsing':follow('/parsing':terminal(92),'/parsing':if(escapeChar(Char),'/parsing':empty,'/parsing':terminal(Char)))).
+'/bootstrap':signature(stringChar(Char)::'/parsing':pattern('/bootstrap':number),[Char::'/bootstrap':number]).
+annotation:shrink('/parsing':prod(stringChar(Char),'/bootstrap':number,'/parsing':follow('/parsing':terminal(CharPrime),'/parsing':if('/parsing':pred(CharPrime::'/bootstrap':number=92::'/bootstrap':number),'/parsing':if(escapeChar(Char),'/parsing':empty,'/parsing':terminal(Char)),'/parsing':pred((\+CharPrime::'/bootstrap':number=34::'/bootstrap':number,CharPrime::'/bootstrap':number=Char::'/bootstrap':number)))))).
 '/bootstrap':signature(escapeChar(Char)::'/parsing':pattern('/bootstrap':number),[Char::'/bootstrap':number]).
 '/parsing':prod(escapeChar(10),'/bootstrap':number,'/parsing':char(!n)).
 '/parsing':prod(escapeChar(9),'/bootstrap':number,'/parsing':char(!t)).
