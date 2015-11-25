@@ -1,0 +1,25 @@
+'/bootstrap':defAtom(lexicalContext::'/bootstrap':type).
+'/bootstrap':signature(token(Lex)::'/bootstrap':type,[Lex::lexicalContext]).
+'/bootstrap':signature(token(Token,Lex)::pattern('/bootstrap':number),[Token::token(Lex),Lex::lexicalContext]).
+'/bootstrap':signature(tokens(Tokens,Lex)::pattern('/bootstrap':number),[Tokens::'/bootstrap':list(token(Lex)),Lex::lexicalContext]).
+prod(tokens([Token],Lex),'/bootstrap':number,token(Token,Lex)).
+prod(tokens([Token|Tokens],Lex),'/bootstrap':number,follow(follow(token(Token,Lex),repeatMax(char(!' '))),tokens(Tokens,Lex))).
+'/bootstrap':projection(tokenDef(Token,Pattern,Lex)::'/bootstrap':statement,'/bootstrap':horiz(['/bootstrap':label(!token),'/bootstrap':halfSize('/bootstrap':brackets('/bootstrap':vis(Lex::lexicalContext),40,41)),'/bootstrap':vis(Token::token(Lex)),'/bootstrap':label(!'::='),'/bootstrap':vis(Pattern::pattern('/bootstrap':number))])).
+'/bootstrap':signature(tokenDef(Token,Pattern,Lex)::'/bootstrap':statement,[Token::token(Lex),Pattern::pattern('/bootstrap':number),Lex::lexicalContext]).
+tokenDef(Token,Pattern,Lex)~>prod(token(Token,Lex),'/bootstrap':number,Pattern).
+'/bootstrap':defAtom(words::lexicalContext).
+'/bootstrap':signature(word(W)::token(words),[W::'/bootstrap':string]).
+'/bootstrap':projection(word(W)::token(words),'/bootstrap':horiz(['/bootstrap':label(!'\''),'/bootstrap':vis(W::'/bootstrap':string),'/bootstrap':label(!'\'')])).
+'/bootstrap':adapter(W::'/bootstrap':string,word(W)::token(words)).
+'/bootstrap':adapter(W::'/bootstrap':string,terminal(word(W))::pattern(token(words))).
+tokenDef(word(Str),follow(bind(oneOrMoreMax(annotation:parentheses(alt(charRange(!a,!z),charRange(!'A',!'Z')))),StrPrime),pred(builtin:charCodes(Str,StrPrime))),words).
+'/bootstrap':unitTest(parseString(tokens([word(!hello),word(!world)],words),!'hello world')).
+'/bootstrap':sigProj(lexParseString(Pattern,String,Lex)::'/bootstrap':pred,[Pattern::pattern(token(Lex)),String::'/bootstrap':string,Lex::lexicalContext],'/bootstrap':horiz(['/bootstrap':vis(Pattern::pattern(token(Lex))),'/bootstrap':label(!'parses the tokens of'),'/bootstrap':vis(String::'/bootstrap':string),'/bootstrap':label(!'under context'),'/bootstrap':vis(Lex::lexicalContext)])).
+lexParseString(Pattern,String,Lex):-parseString(tokens(Tokens,Lex),String),parse(Pattern,Tokens,token(Lex),[]).
+'/bootstrap':signature(symbol(Symbol)::token(Lex),[Symbol::'/bootstrap':string]).
+'/bootstrap':signature(defSymbol(Symbol,Lex)::'/bootstrap':statement,[Symbol::'/bootstrap':string,Lex::lexicalContext]).
+'/bootstrap':projection(defSymbol(Symbol,Lex)::'/bootstrap':statement,'/bootstrap':horiz(['/bootstrap':label(!symbol),'/bootstrap':vis(Symbol::'/bootstrap':string),'/bootstrap':label(!'in context'),'/bootstrap':vis(Lex::lexicalContext)])).
+defSymbol(Symbol,Lex)~>prod(token(symbol(Symbol),Lex),'/bootstrap':number,follow(pred(builtin:charCodes(Symbol,Codes)),terminals(Codes))).
+'/bootstrap':signature(terminals(Terminals)::pattern(Type),[Terminals::'/bootstrap':list(Type)]).
+prod(terminals([]),Type,empty).
+prod(terminals([First|Rest]),Type,follow(terminal(First),terminals(Rest))).

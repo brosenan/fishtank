@@ -1,0 +1,3 @@
+'/bootstrap':signature(if(P1,P2,PPrime)::pattern(T),[P1::pattern(T),P2::pattern(T),PPrime::pattern(T)]).
+'/bootstrap':projection(if(P1,P2,PPrime)::pattern(T),'/bootstrap':vert(['/bootstrap':horiz(['/bootstrap':label(!if),'/bootstrap':vis(P1::pattern(T))]),'/bootstrap':horiz(['/bootstrap':label(!'    '),'/bootstrap':vis(P2::pattern(T))]),'/bootstrap':label(!else),'/bootstrap':horiz(['/bootstrap':label(!'    '),'/bootstrap':vis(PPrime::pattern(T))])])).
+parse(if(P1,P2,PPrime),Text,T,Residue):-builtin:if(parse(P1,Text,T,Interim),parse(P2,Interim,T,Residue),parse(PPrime,Text,T,Residue)).

@@ -1,0 +1,28 @@
+'/bootstrap':signature(alt(A,B)::pattern(T),[A::pattern(T),B::pattern(T)]).
+'/bootstrap':projection(alt(A,B)::pattern(T),'/bootstrap':horiz(['/bootstrap':vis(A::pattern(T)),'/bootstrap':label(! ('|')),'/bootstrap':vis(B::pattern(T))])).
+prod(alt(A,B),T,A).
+prod(alt(A,B),T,B).
+'/bootstrap':signature(repeat(P)::pattern(T),[P::pattern(T)]).
+'/bootstrap':projection(repeat(P)::pattern(T),'/bootstrap':horiz(['/bootstrap':vis(P::pattern(T)),'/bootstrap':smaller('/bootstrap':label(! (*)))],cpi:top)).
+'/bootstrap':alias(repeat(P)::pattern(T),! (*)).
+prod(repeat(P),T,alt(empty,follow(P,repeat(P)))).
+'/bootstrap':signature(oneOrMore(P)::pattern(T),[P::pattern(T)]).
+'/bootstrap':projection(oneOrMore(P)::pattern(T),'/bootstrap':horiz(['/bootstrap':vis(P::pattern(T)),'/bootstrap':halfSize('/bootstrap':label(! (+)))],cpi:top)).
+'/bootstrap':alias(oneOrMore(P)::pattern(T),! (+)).
+prod(oneOrMore(P),T,alt(P,follow(P,oneOrMore(P)))).
+'/bootstrap':unitTest(parse(follow(terminal(1),follow(repeat(terminal(2)),terminal(3))),[1,2,2,2,3],'/bootstrap':number,[])).
+'/bootstrap':signature(repeatMax(P)::pattern(T),[P::pattern(T)]).
+'/bootstrap':projection(repeatMax(P)::pattern(T),'/bootstrap':horiz(['/bootstrap':vis(P::pattern(T)),'/bootstrap':smaller('/bootstrap':label(!'*!'))],cpi:top)).
+'/bootstrap':alias(repeatMax(P)::pattern(T),!'*!').
+prod(repeatMax(P),T,if(P,repeatMax(P),empty)).
+'/bootstrap':signature(oneOrMoreMax(P)::pattern(T),[P::pattern(T)]).
+'/bootstrap':projection(oneOrMoreMax(P)::pattern(T),'/bootstrap':horiz(['/bootstrap':vis(P::pattern(T)),'/bootstrap':halfSize('/bootstrap':label(!'+!'))],cpi:top)).
+'/bootstrap':alias(oneOrMoreMax(P)::pattern(T),!'+!').
+prod(oneOrMoreMax(P),T,follow(P,repeatMax(P))).
+'/bootstrap':unitTest(parseString(follow(repeatMax(charRange(!'A',!'Z')),repeat(charRange(!a,!z))),!'HELLOworld')).
+'/bootstrap':unitTest(parseString(follow(repeatMax(charRange(!a,!z)),bind(repeat(charRange(!a,!z)),[])),!helloworld)).
+'/bootstrap':unitTest(\+parseString(follow(repeatMax(charRange(!a,!z)),bind(repeat(charRange(!a,!z)),[_|_])),!helloworld)).
+'/bootstrap':signature(opt(P)::pattern(T),[P::pattern(T)]).
+'/bootstrap':projection(opt(P)::pattern(T),'/bootstrap':horiz(['/bootstrap':vis(P::pattern(T)),'/bootstrap':halfSize('/bootstrap':label(! (?)))],cpi:top)).
+'/bootstrap':alias(opt(P)::pattern(T),! (?)).
+prod(opt(P),T,alt(P,empty)).

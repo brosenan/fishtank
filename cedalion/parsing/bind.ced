@@ -1,0 +1,4 @@
+annotation:shrink('/bootstrap':signature(bind(Pattern,Str)::pattern(T),[Pattern::pattern(T),Str::'/bootstrap':list(T)])).
+annotation:shrink('/bootstrap':projection(bind(Pattern,Str)::pattern(T),'/bootstrap':horiz(['/bootstrap':vis(Pattern::pattern(T)),'/bootstrap':label(! (as)),'/bootstrap':vis(Str::'/bootstrap':list(T))]))).
+annotation:shrink((parse(bind(Pattern,Str),Text,T,Residue):-parse(Pattern,Text,T,Residue),'/bootstrap':append(Str,Residue,Text,T))).
+'/bootstrap':unitTest((builtin:charCodes(!'123hello456',Str),parse(follow(repeat(charRange(!'0',!'9')),follow(bind(repeat(charRange(!a,!z)),Hello),repeat(charRange(!'0',!'9')))),Str,'/bootstrap':number,[]),builtin:charCodes(!hello,Hello))).

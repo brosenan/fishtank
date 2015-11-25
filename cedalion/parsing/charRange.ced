@@ -1,0 +1,19 @@
+'/bootstrap':signature(charRange(C1,C2)::pattern('/bootstrap':number),[C1::'/bootstrap':string,C2::'/bootstrap':string]).
+'/bootstrap':projection(charRange(C1,C2)::pattern('/bootstrap':number),'/bootstrap':brackets('/bootstrap':horiz(['/bootstrap':vis(C1::'/bootstrap':string),'/bootstrap':label(! (-)),'/bootstrap':vis(C2::'/bootstrap':string)]),91,93)).
+'/bootstrap':alias(charRange(!a,!z)::pattern('/bootstrap':number),!'[-]').
+parse(charRange(C1,C2),[FirstChar|Rest],'/bootstrap':number,Rest):-'/Functional':ge('/Functional':const(FirstChar),charCode(C1),'/bootstrap':number),'/Functional':ge(charCode(C2),'/Functional':const(FirstChar),'/bootstrap':number).
+'/bootstrap':unitTest(parseString(repeat(alt(charRange(!a,!z),charRange(!'A',!'Z'))),!'Hello')).
+'/bootstrap':unitTest((builtin:charCodes(!'Hello',Codes),\+parse(repeat(charRange(!a,!z)),Codes,'/bootstrap':number,[]))).
+'/bootstrap':signature(char(Char)::pattern('/bootstrap':number),[Char::'/bootstrap':string]).
+'/bootstrap':projection(char(Char)::pattern('/bootstrap':number),'/bootstrap':brackets('/bootstrap':vis(Char::'/bootstrap':string),39,39)).
+'/bootstrap':adapter(Char::'/bootstrap':string,char(Char)::pattern('/bootstrap':number)).
+parse(char(Char),Text,'/bootstrap':number,Residue):-builtin:charCodes(Char,CharCodes),'/bootstrap':append(CharCodes,Residue,Text,'/bootstrap':number).
+'/bootstrap':signature(parseString(Pattern,Str)::'/bootstrap':pred,[Pattern::pattern('/bootstrap':number),Str::'/bootstrap':string]).
+'/bootstrap':projection(parseString(Pattern,Str)::'/bootstrap':pred,'/bootstrap':horiz(['/bootstrap':vis(Pattern::pattern('/bootstrap':number)),'/bootstrap':label(!parses),'/bootstrap':vis(Str::'/bootstrap':string)])).
+parseString(Pattern,Str):-builtin:charCodes(Str,Codes),parse(Pattern,Codes,'/bootstrap':number,[]).
+'/bootstrap':signature(charCode(Char)::'/Functional':expr('/bootstrap':number),[Char::'/bootstrap':string]).
+'/Functional':def(charCode(Char),'/bootstrap':number,'/Functional':where('/Functional':const(Code),builtin:charCodes(Char,[Code]))).
+'/bootstrap':signature(not(C)::pattern('/bootstrap':number),[C::'/bootstrap':string]).
+'/bootstrap':projection(not(C)::pattern('/bootstrap':number),'/bootstrap':brackets('/bootstrap':horiz(['/bootstrap':label(! (^)),'/bootstrap':vis(C::'/bootstrap':string)]),91,93)).
+'/bootstrap':alias(not(C)::pattern('/bootstrap':number),! (^)).
+prod(not(C),'/bootstrap':number,follow(terminal(Code),pred((builtin:charCodes(C,Codes),\+'/bootstrap':listMember(Code,'/bootstrap':number,Codes))))).

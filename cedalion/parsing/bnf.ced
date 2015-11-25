@@ -1,0 +1,21 @@
+'/bootstrap':signature(pattern(T)::'/bootstrap':type,[T::'/bootstrap':type]).
+'/bootstrap':signature(parse(Pattern,Text,T,Residue)::'/bootstrap':pred,[Pattern::pattern(T),Text::'/bootstrap':list(T),T::'/bootstrap':type,Residue::'/bootstrap':list(T)]).
+'/bootstrap':projection(parse(Pattern,Text,T,Residue)::'/bootstrap':pred,'/bootstrap':horiz(['/bootstrap':vis(Pattern::pattern(T)),'/bootstrap':label(!parses),'/bootstrap':vis(Text::'/bootstrap':list(T)),'/bootstrap':label(! (::)),'/bootstrap':vis(T::'/bootstrap':type),'/bootstrap':label(!leaving),'/bootstrap':vis(Residue::'/bootstrap':list(T))])).
+'/bootstrap':defAtom(empty::pattern(_)).
+'/bootstrap':projection(empty::pattern(_),'/bootstrap':symbol(949)).
+parse(empty,Text,T,Text):-builtin:true.
+'/bootstrap':signature(terminal(Term)::pattern(T),[Term::T]).
+'/bootstrap':projection(terminal(Term)::pattern(T),'/bootstrap':horiz(['/bootstrap':brackets('/bootstrap':vis(Term::T),91,93)])).
+'/bootstrap':adapter(Term::T,terminal(Term)::pattern(T)).
+parse(terminal(Term),[Term|Residue],T,Residue):-builtin:true.
+'/bootstrap':signature(follow(A,B)::pattern(T),[A::pattern(T),B::pattern(T)]).
+'/bootstrap':projection(follow(A,B)::pattern(T),'/bootstrap':horiz(['/bootstrap':vis(A::pattern(T)),'/bootstrap':label(!.),'/bootstrap':vis(B::pattern(T))])).
+annotation:shrink((parse(follow(A,B),Text,T,Residue):-parse(A,Text,T,Interim),parse(B,Interim,T,Residue))).
+'/bootstrap':signature(prod(Sym,T,Body)::'/bootstrap':statement,[Sym::pattern(T),T::'/bootstrap':type,Body::pattern(T)]).
+'/bootstrap':projection(prod(Sym,T,Body)::'/bootstrap':statement,'/bootstrap':horiz(['/bootstrap':vis(T::'/bootstrap':type),'/bootstrap':vis(Sym::pattern(T)),'/bootstrap':label(!'::='),'/bootstrap':vis(Body::pattern(T))])).
+'/bootstrap':alias(prod(Sym,T,Body)::'/bootstrap':statement,!'::=').
+prod(Sym,T,Body)~>annotation:shrink((parse(Sym,Text,T,Residue):-parse(Body,Text,T,Residue))).
+'/bootstrap':defAtom(ones::pattern('/bootstrap':number)).
+prod(ones,'/bootstrap':number,empty).
+prod(ones,'/bootstrap':number,follow(terminal(1),ones)).
+'/bootstrap':unitTest(parse(ones,[1,1,1],'/bootstrap':number,[])).

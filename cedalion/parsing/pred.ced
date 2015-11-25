@@ -1,0 +1,4 @@
+'/bootstrap':signature(pred(G)::pattern(T),[G::'/bootstrap':pred]).
+'/bootstrap':projection(pred(G)::pattern(T),'/bootstrap':brackets('/bootstrap':vis(G::'/bootstrap':pred),123,125)).
+'/bootstrap':adapter(G::'/bootstrap':pred,pred(G)::pattern(T)).
+parse(pred(G),Text,T,Text):-G.
