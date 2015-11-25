@@ -1,5 +1,7 @@
 '/bootstrap':defAtom(lexicalContext::'/bootstrap':type).
 '/bootstrap':signature(token(Lex)::'/bootstrap':type,[Lex::lexicalContext]).
+'/bootstrap':projection(token(Lex)::'/bootstrap':type,'/bootstrap':horiz(['/bootstrap':brackets('/bootstrap':vis(Lex::lexicalContext),60,62)])).
+'/bootstrap':adapter(Lex::lexicalContext,token(Lex)::'/bootstrap':type).
 '/bootstrap':signature(token(Token,Lex)::pattern('/bootstrap':number),[Token::token(Lex),Lex::lexicalContext]).
 '/bootstrap':signature(tokens(Tokens,Lex)::pattern('/bootstrap':number),[Tokens::'/bootstrap':list(token(Lex)),Lex::lexicalContext]).
 prod(tokens([Token],Lex),'/bootstrap':number,token(Token,Lex)).
