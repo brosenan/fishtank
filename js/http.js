@@ -1,6 +1,7 @@
 "use strict";
 var express = require('express');
 var $S = require('suspend'), $R = $S.resume, $RR = $S.resumeRaw, $T = function(gen) { return function(done) { $S.run(gen, done); } };
+var ipfs = require('ipfs-client');
 
 var Nodalion = require('./nodalion.js');
 var ns = Nodalion.namespace('/nodalion', ['serveHandlers', 'bind']);
@@ -119,4 +120,27 @@ ns._register('with', function(Ctx, Impred, Handlers) {
 	handlers = handlers[0].meaning().map(elem => elem.meaning());
 	walkSubstack(handlers, req, res, next);
     });
+});
+
+ns._register('header', function(Name, Value) {
+    return function(req, res, next) {
+	res.set(Name, Value);
+	next();
+    };
+});
+
+ns._register('ipfsCat', function(hash) {
+    return function(req, res, next) {
+	ipfs.cat(hash).pipe(res);
+    };
+});
+
+ns._register('ipfsBody', function() {
+    return function(req, res, next) {
+	ipfs.add(req, function(err, hash) {
+	    if(err) return next(err);
+	    req.body = hash;
+	    next();
+	});
+    };
 });

@@ -45,6 +45,25 @@ describe('http', function(){
 	    assert.equal(resp[1].statusCode, 200);
 	    assert.equal(resp[2], '{"result":5}');
 	}));
+	it('should handle ipfs content requests', $T(function*(){
+	    var resp = yield request('http://localhost:3002/ipfs/QmTE9Xp76E67vkYeygbKJrsVj8W2LLcyUifuMHMEkyRfUL', $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    assert.equal(resp[1].headers['content-type'].split(';')[0], 'text/foo');
+	    assert.equal(resp[2], 'Hello, World\n');
+	}));
+	it('should handle ipfs add requests', $T(function*(){
+	    var resp = yield request({
+		url: 'http://localhost:3002/ipfs',
+		method: 'POST',
+		headers: {'content-type': 'text/foo'},
+		body: 'Hello, World\n',
+	    }, $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    assert.equal(resp[2], '{"url":"http://localhost:3002/ipfs/QmTE9Xp76E67vkYeygbKJrsVj8W2LLcyUifuMHMEkyRfUL"}');
+	}));
+
 
 
     });
