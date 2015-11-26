@@ -29,4 +29,6 @@ serve(example:myApp,post,!'/ipfs',[ipfsBody,with(jsonObj([field(!body,Hash),fiel
 '/bootstrap':defAtom(jsonBody::handler).
 serve(example:myApp,post,!'/hello',[jsonBody,with(jsonObj([field(!body,Details)]),'/impred':pred('/Functional':eval('/Functional':applyBinOp('/Functional':applyBinOp('/Functional':applyBinOp('/Functional':const(!'hello, '),'/Functional':concat,asString(jsonMember('/Functional':const(Details),!firstName))),'/Functional':concat,'/Functional':const(!' ')),'/Functional':concat,asString(jsonMember('/Functional':const(Details),!lastName))),'/bootstrap':string,Greet)),[outputText(!'text/plain',Greet)])]).
 '/bootstrap':defAtom(textBody::handler).
+'/bootstrap':defAtom(put::httpMethod).
+'/bootstrap':projection(put::httpMethod,'/bootstrap':label(!'PUT')).
 serve(example:myApp,post,!'/helloText',[textBody,with(jsonObj([field(!body,Name)]),'/impred':pred('/Functional':eval('/Functional':applyBinOp('/Functional':const(!'hello, '),'/Functional':concat,asString('/Functional':const(Name))),'/bootstrap':string,Greet)),[outputText(!'text/plain',Greet)])]).
