@@ -11,12 +11,27 @@ var matchContinuation = /([0-9]+)[ \t]+(.*)/
 var js = new Namespace('js');
 js._define(['exception']);
 
+function logger(out) {
+    var input = new EventEmitter();
+    input.on('data', function(data) {
+	data = data.toString('utf-8');
+	data.split('\n').forEach(line => {
+	    out.write((new Date()).getTime() + '\t' + line + '\n');
+	});
+    });
+    input.on('end', function() { out.close(); });
+    input.write = function(str) {
+	input.emit('data', str);
+    };
+    return input;
+}
+
 module.exports = function(logfile) {
     var self = this;
     this.prolog = spawn('swipl', ['-f', __dirname + '/../prolog/impred.pl', '-t', 'go']);
     this.prolog.stdout.setEncoding('utf-8');
     if(logfile) {
-	this._log = fs.createWriteStream(logfile);
+	this._log = logger(fs.createWriteStream(logfile));
 	this.prolog.stderr.pipe(this._log);
 	this.prolog.stdout.pipe(this._log);
     }
