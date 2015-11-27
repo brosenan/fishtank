@@ -6,6 +6,7 @@
 '/bootstrap':defAtom(axiom::'/bootstrap':type).
 '/bootstrap':signature(clause(Q,Body)::axiom,[Q::pred,Body::pred]).
 '/bootstrap':projection(clause(Q,Body)::axiom,'/bootstrap':horiz(['/bootstrap':vis(Q::pred),'/bootstrap':label(! (:-)),'/bootstrap':vis(Body::pred)])).
+'/bootstrap':adapter(Q::pred,clause(Q,true)::axiom).
 annotation:shrink('/impred':clause(logicQuery(Q,V),'/impred':if('/impred':pred(Q::pred=true::pred),'/impred':pred(V::'/bootstrap':number=1::'/bootstrap':number),'/impred':if('/impred':pred(Q::pred=local(QPrime)::pred),'/impred':pred((V::'/bootstrap':number=1::'/bootstrap':number,executeLocal(QPrime))),'/impred':if('/impred':pred(Q::pred=annotation:parentheses(conj(G1,G2))::pred),'/impred':conj(logicQuery(G1,V1),'/impred':conj(logicQuery(G2,V2),'/impred':pred('/Functional':eval('/Functional':applyBinOp('/Functional':const(V1),'/Functional':times,'/Functional':const(V2)),'/bootstrap':number,V)))),'/impred':if('/impred':pred(Q::pred=not(G)::pred),'/impred':conj('/impred':pred(V::'/bootstrap':number=1::'/bootstrap':number),'/impred':not(logicQuery(G,_))),'/impred':conj(dbFind(clause(Q,Body),V1),'/impred':conj(logicQuery(Body,V2),'/impred':pred(('/Functional':eval('/Functional':applyBinOp('/Functional':const(V1),'/Functional':times,'/Functional':const(V2)),'/bootstrap':number,V),V>0)))))))))).
 '/bootstrap':defAtom(true::pred).
 '/bootstrap':projection(true::pred,'/bootstrap':symbol(8868)).

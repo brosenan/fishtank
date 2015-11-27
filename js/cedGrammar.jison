@@ -15,7 +15,7 @@
 <quoted>"'"                                  this.popState(); return "QUOTE";
 <quoted>[^\\]                                strBuff.push(yytext); return "QUOTED_CHAR";
 <quoted>\\.                                  strBuff.push(unescape(yytext[1])); return "ESC_SEQ";
-[0-9]+(\.[0-9]*)?([eE][+\-][0-9]+)?          return "NUMBER";
+("-")?[0-9]+(\.[0-9]*)?([eE][+\-][0-9]+)?          return "NUMBER";
 [^a-zA-Z_0-9()]+                             return "ATOM";
 <<EOF>>                                      return 'EOF';
 

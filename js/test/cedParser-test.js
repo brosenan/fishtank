@@ -60,7 +60,7 @@ describe('CedParser', function(){
 	});
 
 	it('should parse numbers', function(){
-	    assert.deepEqual(parser.parse('[1, 2e+5, 3.14]').meaning(), [1, 2e+5, 3.14]);
+	    assert.deepEqual(parser.parse('[1, -2e+5, 3.14]').meaning(), [1, -2e+5, 3.14]);
 	});
 	
 	it('should parse variables', function(){
@@ -74,6 +74,7 @@ describe('CedParser', function(){
 	it('should parse cedalion code', function(){
 	    parser.parse(cedalionCode);
 	});
+
     });
     describe('.register(concept, ctor)', function(){
 	it('should register a constructor for evaluating compound terms through the .meaning() method', function(){

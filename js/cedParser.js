@@ -38,7 +38,12 @@ exports.Term.prototype.meaning = function() {
 
 exports.CedParser.prototype.parse = function(str) {
     cedGrammar.parser.yy = exports;
-    return cedGrammar.parse(str);
+    try {
+	return cedGrammar.parse(str);
+    } catch(e) {
+	console.error('error while parsing ' + str);
+	throw e;
+    }
 };
 
 exports.register = function(concept, ctor) {

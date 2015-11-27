@@ -10,23 +10,16 @@ var bs = Nodalion.namespace('/bootstrap', ['pair']);
 
 var topics = {};
 
-var connected = false;
+var connectCtr = 0;
 var connErr;
 var connCBs = [];
 
 function waitForConnection(cb) {
-    if(connected) {
+    if(connectCtr == 0) {
 	cb();
     } else {
 	connCBs.push(cb);
     }
-}
-
-function notifyConnected(err) {
-    connected = true;
-    connErr = err;
-    connCBs.forEach(function(x) { x(err); });
-    connCBs = [];
 }
 
 function handleDataForSpec(nodalion, spec, worker) {
@@ -59,8 +52,14 @@ var doConnect = $S.async(function*(nodalion, url, domain) {
 });
 
 exports.connect = function(nodalion, url, domain) {
+    connectCtr += 1;
     doConnect(nodalion, url, domain, function(err) {
-	notifyConnected(err);
+	connectCtr -= 1;
+	connErr = err;
+	if(connectCtr == 0) {
+	    connCBs.forEach(function(x) { x(err); });
+	    connCBs = [];
+	}
     });
 };
 
