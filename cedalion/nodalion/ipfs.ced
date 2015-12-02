@@ -1,0 +1,2 @@
+'/bootstrap':signature(ipfsAdd(Str)::'/impred':task('/bootstrap':string),[Str::'/bootstrap':string]).
+'/bootstrap':sandbox(ipfsAdd(Str)::'/impred':task('/bootstrap':string)).

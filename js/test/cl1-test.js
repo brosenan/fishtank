@@ -62,7 +62,7 @@ describe('cl1', function(){
 	    assert.ifError(resp[0]);
 	    assert.equal(resp[1].statusCode, 200);
 	    assert.equal(resp[1].headers['content-type'].split(';')[0], 'application/json');
-	    assert(resp[2].startsWith('{"url":"http://localhost:3003/q'), 'not a URL: ' + resp[2]);
+	    assert.equal(resp[2], '{"url":"http://localhost:3003/q/QmNirCniYxrjgwsaVrak1bRLg9ooo4pXiY4gfeFtZAXoH1"}');
 	}));
 	it('should fail for an invalid term', $T(function*(){
 	    var term = 'an invalid term';
