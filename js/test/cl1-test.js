@@ -81,7 +81,9 @@ describe('cl1', function(){
     describe('/q', function(){
 	var urls = [];
 	var terms = ['<builtin:succ(1, X), builtin:succ(X, Y)>',
-		    '<bs:listMember(X, bs:number, [1, 2, 3])>'];
+		     '<bs:listMember(X, bs:number, [1, 2, 3])>',
+		     '<bs:listMember(S, bs:string, ["abc", "abd", "cde", "cdf"]), builtin:strcat(Prefix, Suffix, S)>',
+		    '<bs:listMember(N, bs:number, [1, 2, 3, 4, 5]), builtin:greaterThen(N, Min)>'];
 	before($T(function*() {
 	    for(let i = 0; i < terms.length; i++) {
 		var resp = yield request({
@@ -106,6 +108,20 @@ describe('cl1', function(){
 	    assert.ifError(resp[0]);
 	    assert.equal(resp[1].statusCode, 200);
 	    assert.equal(resp[2], '[{"_count":1,"X":1},{"_count":1,"X":2},{"_count":1,"X":3}]');
+	}));
+	it('should accept str-* query params to assign strings to variables', $T(function*(){
+	    var resp = yield request(urls[2] + "?import-bs=/bootstrap&str-Prefix=cd", $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    var res = JSON.parse(resp[2]);
+	    assert.deepEqual(res.map(rec => rec.S), ['cde', 'cdf']);
+	}));
+	it('should accept num-* query params to assign numbers to variables', $T(function*(){
+	    var resp = yield request(urls[3] + "?import-bs=/bootstrap&num-Min=2", $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    var res = JSON.parse(resp[2]);
+	    assert.deepEqual(res.map(rec => rec.N), [3, 4, 5]);
 	}));
     });
 });
