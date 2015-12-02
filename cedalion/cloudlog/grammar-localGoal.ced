@@ -1,0 +1,7 @@
+'/bootstrap':signature(localGoal(Guard,Ctx1,Ctx2)::'/parsing':pattern('/parsing':token(cloudlog)),[Guard::'/bootstrap':pred,Ctx1::'/bootstrap':list(ctxElem),Ctx2::'/bootstrap':list(ctxElem)]).
+'/util':behavior(localGoal(Goal,Ctx1,Ctx2)::'/parsing':pattern('/parsing':token(cloudlog)),!'should parse a compound term', ('/parsing':lexParseString(localGoal(Goal,[],Ctx),!'builtin:succ(1, X)',cloudlog),'/util':assertStracturallyEqual(Goal,builtin:succ(1,X),'/bootstrap':pred))).
+'/bootstrap':signature(localGoalSuffix(Goal1,Goal,Ctx2,Ctx3)::'/parsing':pattern('/parsing':token(cloudlog)),[Goal1::_,Goal::'/bootstrap':pred,Ctx2::'/bootstrap':list(ctxElem),Ctx3::'/bootstrap':list(ctxElem)]).
+'/parsing':prod(localGoal(Goal,Ctx1,Ctx3),'/parsing':token(cloudlog),'/parsing':follow(term(Goal1::'/bootstrap':pred,Ctx1,Ctx2),localGoalSuffix(Goal1,Goal,Ctx2,Ctx3))).
+'/util':behavior(localGoal(Goal,Ctx1,Ctx2)::'/parsing':pattern('/parsing':token(cloudlog)),!'should parse a conjunction', ('/parsing':lexParseString(localGoal(Goal,[],Ctx),!'builtin:succ(1, X), builtin:succ(X, Y)',cloudlog),'/util':assertStracturallyEqual(Goal, (builtin:succ(1,X),builtin:succ(X,Y)),'/bootstrap':pred))).
+'/parsing':prod(localGoalSuffix(Goal,Goal,Ctx,Ctx),'/parsing':token(cloudlog),'/parsing':empty).
+'/parsing':prod(localGoalSuffix(Goal1,annotation:parentheses((Goal1,Goal2)),Ctx1,Ctx2),'/parsing':token(cloudlog),'/parsing':follow('/parsing':terminal('/parsing':symbol(! (,))),localGoal(Goal2,Ctx1,Ctx2))).

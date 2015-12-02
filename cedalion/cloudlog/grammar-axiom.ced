@@ -1,0 +1,13 @@
+'/bootstrap':signature(axiom(Axiom,CtxIn,CtxOut)::'/parsing':pattern('/parsing':token(cloudlog)),[Axiom::axiom,CtxIn::'/bootstrap':list(ctxElem),CtxOut::'/bootstrap':list(ctxElem)]).
+'/util':behavior(axiom(Axiom,CtxIn,CtxOut)::'/parsing':pattern('/parsing':token(cloudlog)),!'should accept a compound term as a fact', ('/parsing':lexParseString(axiom(Axiom,[package(!example)],_),!'someFact(1, 2)',cloudlog),'/util':assertEqual(Axiom,example:someFact(1,2),axiom))).
+'/parsing':prod(axiom(Fact,CtxIn,CtxOut),'/parsing':token(cloudlog),term(Fact::axiom,CtxIn,CtxOut)).
+'/util':behavior(axiom(Axiom,CtxIn,CtxOut)::'/parsing':pattern('/parsing':token(cloudlog)),!'should accept guardless rules', ('/parsing':lexParseString(axiom(Axiom,[package(!example)],_),!'someFact(1, X) -> someFact(X, 2)',cloudlog),'/util':assertStracturallyEqual(Axiom,rule(example:someFact(1,X),builtin:true,example:someFact(X,2)),axiom))).
+'/parsing':defSymbol(! (->),cloudlog).
+'/parsing':prod(axiom(rule(Fact,builtin:true,Axiom),CtxIn,CtxOut),'/parsing':token(cloudlog),'/parsing':follow('/parsing':follow(term(Fact::axiom,CtxIn,Ctx1),'/parsing':terminal('/parsing':symbol(! (->)))),axiom(Axiom,Ctx1,CtxOut))).
+'/util':behavior(axiom(Axiom,CtxIn,CtxOut)::'/parsing':pattern('/parsing':token(cloudlog)),!'should accept guarded rules', ('/parsing':lexParseString(axiom(Axiom,[package(!example)],_),!'someFact(1, X) {builtin:succ(X, Y)} -> someFact(Y, 2)',cloudlog),'/util':assertStracturallyEqual(Axiom,rule(example:someFact(1,X),builtin:succ(X,Y),example:someFact(Y,2)),axiom))).
+'/parsing':defSymbol(!'{',cloudlog).
+'/parsing':defSymbol(!'}',cloudlog).
+annotation:shrink('/parsing':prod(axiom(rule(Fact,Guard,Axiom),CtxIn,CtxOut),'/parsing':token(cloudlog),'/parsing':follow('/parsing':follow('/parsing':follow('/parsing':follow(term(Fact::axiom,CtxIn,Ctx1),'/parsing':follow('/parsing':terminal('/parsing':symbol(!'{')),localGoal(Guard,Ctx1,Ctx2))),'/parsing':terminal('/parsing':symbol(!'}'))),'/parsing':terminal('/parsing':symbol(! (->)))),term(Axiom::axiom,Ctx2,CtxOut)))).
+'/util':behavior(axiom(Axiom,CtxIn,CtxOut)::'/parsing':pattern('/parsing':token(cloudlog)),!'should accept a clause', ('/parsing':lexParseString(axiom(Axiom,[package(!example)],_),!'example:somePred([1, 2], X) :- somePred([X], 3)',cloudlog),'/util':assertStracturallyEqual(Axiom,clause(example:somePred([1,2],X),example:somePred([X],3)),axiom))).
+'/parsing':defSymbol(! (:-),cloudlog).
+'/parsing':prod(axiom(clause(Head,Body),Ctx1,Ctx3),'/parsing':token(cloudlog),'/parsing':follow(term(Head::pred,Ctx1,Ctx2),'/parsing':follow('/parsing':terminal('/parsing':symbol(! (:-))),term(Body::pred,Ctx2,Ctx3)))).
