@@ -78,4 +78,29 @@ describe('cl1', function(){
 	    assert.equal(resp[2], 'Invalid term: ' + term);
 	}));
     });
+    describe('/q', function(){
+	var urls = [];
+	var terms = ['<builtin:succ(1, X), builtin:succ(X, Y)>'];
+	before($T(function*() {
+	    for(let i = 0; i < terms.length; i++) {
+		var resp = yield request({
+		    method: 'POST',
+		    url: 'http://localhost:3003/encode/q',
+		    headers: {'content-type': 'text/plain'},
+		    body: terms[i],
+		}, $RR());
+		assert.ifError(resp[0]);
+		assert.equal(resp[1].statusCode, 200);
+		urls.push(JSON.parse(resp[2]).url);
+	    }
+	}));
+	it('should provide the solutions of the query', $T(function*(){
+	    var resp = yield request(urls[0], $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    assert.equal(resp[2], '[{"_count":1,"Y":3,"X":2}]');
+	}));
+
+    });
+
 });

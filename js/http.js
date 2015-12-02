@@ -72,6 +72,7 @@ ns._register('jsonObj', function(fields) {
     fields.meaning().forEach(field => {field.meaning()(obj);});
     return obj;
 });
+ns._register('jsonTypedTerm', (Term, Type) => Term);
 ns._register('field', function(name, value) {
     return function(obj) {
 	obj[name] = value.meaning();

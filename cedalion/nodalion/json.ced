@@ -18,3 +18,6 @@
 '/bootstrap':adapter(List::'/bootstrap':list(json),jsonList(List)::json).
 '/bootstrap':signature(outputJson(Json)::handler,[Json::json]).
 serve(example:myApp,get,!'/hi-json',[outputJson(jsonList([jsonStr(!str),jsonNum(2),jsonObj([field(!a,jsonNum(2))])]))]).
+'/bootstrap':signature(jsonTypedTerm(Term,Type)::json,[Term::Type,Type::'/bootstrap':type]).
+'/bootstrap':projection(jsonTypedTerm(Term,Type)::json,'/bootstrap':horiz(['/bootstrap':vis(Term::Type),'/bootstrap':label(! (::)),'/bootstrap':vis(Type::'/bootstrap':type)])).
+serve(example:myApp,get,!'/json-with-ced-values',[outputJson(jsonList([jsonTypedTerm(!str,'/bootstrap':string),jsonTypedTerm(2,'/bootstrap':number),jsonTypedTerm(builtin:succ(Y,X),'/bootstrap':pred)]))]).

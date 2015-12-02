@@ -39,6 +39,15 @@ describe('http', function(){
 	    assert.equal(resp[1].statusCode, 200);
 	    assert.equal(resp[2], '["str",2,{"a":2}]');
 	}));
+	it('should handle JSON with typeTerms', $T(function*(){
+	    var resp = yield request('http://localhost:3002/json-with-ced-values', $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    var res = JSON.parse(resp[2]);
+	    assert.equal(res[0], "str");
+	    assert.equal(res[1], 2);
+	    assert.equal(res[2].name, 'builtin#succ');
+	}));
 	it('should handle dynamic content', $T(function*(){
 	    var resp = yield request('http://localhost:3002/calc?a=2&b=3', $RR());
 	    assert.ifError(resp[0]);
