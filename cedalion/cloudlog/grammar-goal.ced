@@ -1,0 +1,14 @@
+'/bootstrap':signature(goal(Goal,Ctx1,Ctx2)::'/parsing':pattern('/parsing':token(cloudlog)),[Goal::pred,Ctx1::'/bootstrap':list(ctxElem),Ctx2::'/bootstrap':list(ctxElem)]).
+'/util':behavior(goal(Goal,Ctx1,Ctx2)::'/parsing':pattern('/parsing':token(cloudlog)),!'should parse a compound term', ('/parsing':lexParseString(goal(Goal,[],Ctx2),!'example:somePred([1, 2], 3)',cloudlog),'/util':assertEqual(Goal,example:somePred([1,2],3),pred))).
+'/parsing':prod(goal(Goal,Ctx1,Ctx3),'/parsing':token(cloudlog),'/parsing':follow(term(Goal1::pred,Ctx1,Ctx2),goalSuffix(Goal1,Goal,Ctx2,Ctx3))).
+'/util':behavior(goal(Goal,Ctx1,Ctx2)::'/parsing':pattern('/parsing':token(cloudlog)),!'should parse a conjunction', ('/parsing':lexParseString(goal(Goal,[],Ctx2),!'example:somePred([1, 2], 3), example:somePred([4], 5)',cloudlog),'/util':assertEqual(Goal,conj(example:somePred([1,2],3),example:somePred([4],5)),pred))).
+'/bootstrap':signature(goalSuffix(Goal1,Goal,Ctx2,Ctx3)::'/parsing':pattern('/parsing':token(cloudlog)),[Goal1::pred,Goal::pred,Ctx2::'/bootstrap':list(ctxElem),Ctx3::'/bootstrap':list(ctxElem)]).
+'/parsing':prod(goalSuffix(Goal,Goal,Ctx,Ctx),'/parsing':token(cloudlog),'/parsing':empty).
+'/parsing':prod(goalSuffix(Goal1,annotation:parentheses(conj(Goal1,Goal2)),Ctx1,Ctx2),'/parsing':token(cloudlog),'/parsing':follow('/parsing':terminal('/parsing':symbol(! (,))),goal(Goal2,Ctx1,Ctx2))).
+'/util':behavior(goal(Goal,Ctx1,Ctx2)::'/parsing':pattern('/parsing':token(cloudlog)),!'should parse local goal references', ('/parsing':lexParseString(goal(Goal,[],Ctx2),!'<builtin:succ(1, X)>',cloudlog),'/util':assertStracturallyEqual(Goal,local(builtin:succ(1,X)),pred))).
+'/parsing':defSymbol(! (<),cloudlog).
+'/parsing':defSymbol(! (>),cloudlog).
+'/parsing':prod(goal(local(Goal),Ctx1,Ctx2),'/parsing':token(cloudlog),'/parsing':follow('/parsing':terminal('/parsing':symbol(! (<))),'/parsing':follow(localGoal(Goal,Ctx1,Ctx2),'/parsing':terminal('/parsing':symbol(! (>)))))).
+'/util':behavior(goal(Goal,Ctx1,Ctx2)::'/parsing':pattern('/parsing':token(cloudlog)),!'should parse true', ('/parsing':lexParseString(goal(Goal,[],Ctx2),!true,cloudlog),'/util':assertStracturallyEqual(Goal,true,pred))).
+'/parsing':defSymbol(!true,cloudlog).
+'/parsing':prod(goal(true,Ctx,Ctx),'/parsing':token(cloudlog),'/parsing':terminal('/parsing':symbol(!true))).
