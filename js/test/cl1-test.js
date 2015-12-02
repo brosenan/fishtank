@@ -77,7 +77,5 @@ describe('cl1', function(){
 	    assert.equal(resp[1].headers['content-type'].split(';')[0], 'text/plain');
 	    assert.equal(resp[2], 'Invalid term: ' + term);
 	}));
-
     });
-
 });
