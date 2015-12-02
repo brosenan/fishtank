@@ -9,6 +9,6 @@
 '/parsing':defSymbol(! (<),cloudlog).
 '/parsing':defSymbol(! (>),cloudlog).
 '/parsing':prod(goal(local(Goal),Ctx1,Ctx2),'/parsing':token(cloudlog),'/parsing':follow('/parsing':terminal('/parsing':symbol(! (<))),'/parsing':follow(localGoal(Goal,Ctx1,Ctx2),'/parsing':terminal('/parsing':symbol(! (>)))))).
-'/util':behavior(goal(Goal,Ctx1,Ctx2)::'/parsing':pattern('/parsing':token(cloudlog)),!'should parse true', ('/parsing':lexParseString(goal(Goal,[],Ctx2),!true,cloudlog),'/util':assertStracturallyEqual(Goal,true,pred))).
-'/parsing':defSymbol(!true,cloudlog).
-'/parsing':prod(goal(true,Ctx,Ctx),'/parsing':token(cloudlog),'/parsing':terminal('/parsing':symbol(!true))).
+'/util':behavior(goal(Goal,Ctx1,Ctx2)::'/parsing':pattern('/parsing':token(cloudlog)),!'should parse !', ('/parsing':lexParseString(goal(Goal,[],Ctx2),! (!),cloudlog),'/util':assertStracturallyEqual(Goal,true,pred))).
+'/parsing':defSymbol(! (!),cloudlog).
+'/parsing':prod(goal(true,Ctx,Ctx),'/parsing':token(cloudlog),'/parsing':terminal('/parsing':symbol(! (!)))).
