@@ -80,10 +80,12 @@ describe('cl1', function(){
     });
     describe('/q', function(){
 	var urls = [];
-	var terms = ['<builtin:succ(1, X), builtin:succ(X, Y)>',
-		     '<bs:listMember(X, bs:number, [1, 2, 3])>',
-		     '<bs:listMember(S, bs:string, ["abc", "abd", "cde", "cdf"]), builtin:strcat(Prefix, Suffix, S)>',
-		    '<bs:listMember(N, bs:number, [1, 2, 3, 4, 5]), builtin:greaterThen(N, Min)>'];
+	var terms = [
+	    '<builtin:succ(1, X), builtin:succ(X, Y)>',
+	    '<bs:listMember(X, bs:number, [1, 2, 3])>',
+	    '<bs:listMember(S, bs:string, ["abc", "abd", "cde", "cdf"]), builtin:strcat(Prefix, Suffix, S)>',
+	    '<bs:listMember(N, bs:number, [1, 2, 3, 4, 5]), builtin:greaterThen(N, Min)>',
+	    '<cl1:assign(foo, T, X)>'];
 	before($T(function*() {
 	    for(let i = 0; i < terms.length; i++) {
 		var resp = yield request({
@@ -122,6 +124,13 @@ describe('cl1', function(){
 	    assert.equal(resp[1].statusCode, 200);
 	    var res = JSON.parse(resp[2]);
 	    assert.deepEqual(res.map(rec => rec.N), [3, 4, 5]);
+	}));
+	it('should use the domain name as package', $T(function*(){
+	    var resp = yield request(urls[4] + "?import-cl1=/cl1", $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    var res = JSON.parse(resp[2]);
+	    assert.deepEqual(res.map(rec => rec.X.name), ['localhost#foo']);
 	}));
     });
 });

@@ -22,8 +22,8 @@
 '/bootstrap':signature(varName(TVar,Name)::ctxElem,[TVar::'/bootstrap':typedTerm,Name::'/bootstrap':string]).
 annotation:shrink('/parsing':prod(term(TTerm,CtxIn,CtxOut),'/parsing':token(cloudlog),'/parsing':follow('/parsing':terminal(varName(Name)),'/parsing':pred(builtin:if('/bootstrap':listMember(varName(TTerm,Name),ctxElem,CtxIn),CtxOut::'/bootstrap':list(ctxElem)=CtxIn::'/bootstrap':list(ctxElem),CtxOut::'/bootstrap':list(ctxElem)=[varName(TTerm,Name)|CtxIn]::'/bootstrap':list(ctxElem)))))).
 '/util':behavior(term(TTerm,CtxIn,CtxOut)::'/parsing':pattern('/parsing':token(cloudlog)),!'should stream the context trhoughout a compound term', ('/parsing':lexParseString(term(TTerm,[package(!foo)],Ctx),!'a(X, b(Y, X), Y)',cloudlog),'/util':assertStracturallyEqual(TTerm,foo:a(X,foo:b(Y,X),Y)::_,'/bootstrap':typedTerm))).
-'/util':behavior(term(TTerm,CtxIn,CtxOut)::'/parsing':pattern('/parsing':token(cloudlog)),!'should parse a list','/parsing':lexParseString(term(List::'/bootstrap':list('/bootstrap':number),CtxIn,CtxOut),!'[1, 2, 3]',cloudlog)).
-'/util':behavior(term(TTerm,CtxIn,CtxOut)::'/parsing':pattern('/parsing':token(cloudlog)),!'should parse an empty list','/parsing':lexParseString(term(List::'/bootstrap':list('/bootstrap':number),CtxIn,CtxOut),![],cloudlog)).
+'/util':behavior(term(TTerm,CtxIn,CtxOut)::'/parsing':pattern('/parsing':token(cloudlog)),!'should parse a list', ('/parsing':lexParseString(term(List::'/bootstrap':list('/bootstrap':number),CtxIn,CtxOut),!'[1, 2, 3]',cloudlog),'/util':assertEqual(List,[1,2,3],'/bootstrap':list('/bootstrap':number)))).
+'/util':behavior(term(TTerm,CtxIn,CtxOut)::'/parsing':pattern('/parsing':token(cloudlog)),!'should parse an empty list', ('/parsing':lexParseString(term(List::'/bootstrap':list('/bootstrap':number),CtxIn,CtxOut),![],cloudlog),'/util':assertEqual(List,[],'/bootstrap':list('/bootstrap':number)))).
 '/parsing':defSymbol(!'[',cloudlog).
 '/parsing':defSymbol(!']',cloudlog).
 '/bootstrap':signature(convertTypedList(TList,T,List)::'/bootstrap':pred,[TList::'/bootstrap':list('/bootstrap':typedTerm),T::'/bootstrap':type,List::'/bootstrap':list(T)]).
