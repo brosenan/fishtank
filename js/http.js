@@ -130,7 +130,7 @@ ns._register('header', function(Name, Value) {
     };
 });
 
-ns._register('ipfsCat', function(hash) {
+ns._register('ipfsGet', function(hash) {
     return function(req, res, next) {
 	ipfs.cat(hash).pipe(res);
     };

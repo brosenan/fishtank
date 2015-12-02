@@ -5,7 +5,7 @@ var $S = require('suspend'), $R = $S.resume, $RR = $S.resumeRaw, $T = function(g
 var Nodalion = require('../nodalion.js');
 require('../ipfs.js');
 
-var ns = Nodalion.namespace('/nodalion', ['ipfsAdd']);
+var ns = Nodalion.namespace('/nodalion', ['ipfsAdd', 'ipfsCat']);
 var nodalion = new Nodalion('/tmp/ipfs.log');
 
 var doTask = function(task, cb) {
@@ -17,4 +17,12 @@ describe('/nodalion#ipfsAdd(Str)', function(){
 	var hash = yield doTask(ns.ipfsAdd("Hello, World\n"), $R());
 	assert.equal(hash, 'QmTE9Xp76E67vkYeygbKJrsVj8W2LLcyUifuMHMEkyRfUL');
     }));
+});
+
+describe('/nodalion#ipfsCat(Hash)', function(){
+    it('should turn a hash into a string', $T(function*(){
+	var str = yield doTask(ns.ipfsCat('QmTE9Xp76E67vkYeygbKJrsVj8W2LLcyUifuMHMEkyRfUL'), $R());
+	assert.equal(str, "Hello, World\n");
+    }));
+
 });

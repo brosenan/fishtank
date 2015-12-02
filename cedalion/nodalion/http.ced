@@ -19,9 +19,9 @@ serve(App,Method,Path,Handlers)~>'/impred':clause(serveHandlers(App,Method,Path,
 serve(example:myApp,get,!'/calc',[with(jsonObj([field(!query,Q)]),'/impred':pred('/Functional':eval('/Functional':applyBinOp('str2num'(asString(jsonMember('/Functional':const(Q),!a))),'/Functional':numPlus,'str2num'(asString(jsonMember('/Functional':const(Q),!b)))),'/bootstrap':number,C)),[outputJson(jsonObj([field(!result,jsonNum(C))]))])]).
 '/bootstrap':signature(header(Name,Value)::handler,[Name::'/bootstrap':string,Value::'/bootstrap':string]).
 '/bootstrap':projection(header(Name,Value)::handler,'/bootstrap':horiz(['/bootstrap':vis(Name::'/bootstrap':string),'/bootstrap':label(! (:)),'/bootstrap':vis(Value::'/bootstrap':string)])).
-'/bootstrap':signature(ipfsCat(Hash)::handler,[Hash::'/bootstrap':string]).
-'/bootstrap':projection(ipfsCat(Hash)::handler,'/bootstrap':horiz(['/bootstrap':label(!'ipfs cat'),'/bootstrap':vis(Hash::'/bootstrap':string)])).
-serve(example:myApp,get,!'/ipfs/:hash',[with(jsonObj([field(!params,Params)]),'/impred':pred('/Functional':eval(asString(jsonMember('/Functional':const(Params),!hash)),'/bootstrap':string,Hash)),[header(!'content-type',!'text/foo'),ipfsCat(Hash)])]).
+'/bootstrap':signature(ipfsGet(Hash)::handler,[Hash::'/bootstrap':string]).
+'/bootstrap':projection(ipfsGet(Hash)::handler,'/bootstrap':horiz(['/bootstrap':label(!'ipfs cat'),'/bootstrap':vis(Hash::'/bootstrap':string)])).
+serve(example:myApp,get,!'/ipfs/:hash',[with(jsonObj([field(!params,Params)]),'/impred':pred('/Functional':eval(asString(jsonMember('/Functional':const(Params),!hash)),'/bootstrap':string,Hash)),[header(!'content-type',!'text/foo'),ipfsGet(Hash)])]).
 '/bootstrap':defAtom(post::httpMethod).
 '/bootstrap':projection(post::httpMethod,'/bootstrap':label(!'POST')).
 '/bootstrap':defAtom(ipfsBody::handler).
