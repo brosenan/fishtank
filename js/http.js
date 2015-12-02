@@ -152,3 +152,9 @@ ns._register('jsonBody', function() {
 ns._register('textBody', function() {
     return bodyParser.text();
 });
+ns._register('setStatus', function(status) {
+    return (req, res, next) => {
+	res.status(status);
+	next();
+    };
+});

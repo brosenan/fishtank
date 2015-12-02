@@ -87,6 +87,11 @@ describe('http', function(){
 	    assert.equal(resp[1].statusCode, 200);
 	    assert.equal(resp[2], 'hello, Boaz');
 	}));
+	it('should be able to provide arbitrary status', $T(function*(){
+	    var resp = yield request('http://localhost:3002/someStatus?status=402', $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 402);
+	}));
 
     });
     describe('.jsonToTerm(json)', function(){

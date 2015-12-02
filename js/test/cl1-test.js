@@ -49,6 +49,34 @@ describe('cl1', function(){
 	    assert.equal(resp[1].headers['content-type'].split(';')[0], 'text/foo');
 	    assert.equal(resp[2], content);
 	}));
+    });
+    describe('/encode', function(){
+	it('should return a URL that represents the given term', $T(function*(){
+	    var term = 'foo(bar, 2, "three", X)';
+	    var resp = yield request({
+		method: 'POST',
+		url: 'http://localhost:3003/encode/q',
+		headers: {'content-type': 'text/plain'},
+		body: term,
+	    }, $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    assert.equal(resp[1].headers['content-type'].split(';')[0], 'application/json');
+	    assert(resp[2].startsWith('{"url":"http://localhost:3003/q'), 'not a URL: ' + resp[2]);
+	}));
+	it('should fail for an invalid term', $T(function*(){
+	    var term = 'an invalid term';
+	    var resp = yield request({
+		method: 'POST',
+		url: 'http://localhost:3003/encode/q',
+		headers: {'content-type': 'text/plain'},
+		body: term,
+	    }, $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 400);
+	    assert.equal(resp[1].headers['content-type'].split(';')[0], 'text/plain');
+	    assert.equal(resp[2], 'Invalid term: ' + term);
+	}));
 
     });
 

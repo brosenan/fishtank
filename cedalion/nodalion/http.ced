@@ -32,3 +32,5 @@ serve(example:myApp,post,!'/hello',[jsonBody,with(jsonObj([field(!body,Details)]
 '/bootstrap':defAtom(put::httpMethod).
 '/bootstrap':projection(put::httpMethod,'/bootstrap':label(!'PUT')).
 serve(example:myApp,post,!'/helloText',[textBody,with(jsonObj([field(!body,Name)]),'/impred':pred('/Functional':eval('/Functional':applyBinOp('/Functional':const(!'hello, '),'/Functional':concat,asString('/Functional':const(Name))),'/bootstrap':string,Greet)),[outputText(!'text/plain',Greet)])]).
+'/bootstrap':signature(setStatus(Status)::handler,[Status::'/bootstrap':number]).
+serve(example:myApp,get,!'/someStatus',[with(jsonObj([field(!query,Query)]),'/impred':pred('/Functional':eval('str2num'(asString(jsonMember('/Functional':const(Query),!status))),'/bootstrap':number,Status)),[setStatus(Status),outputText(!'text/plain',!'Sending your requested status')])]).
