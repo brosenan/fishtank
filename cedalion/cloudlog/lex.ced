@@ -23,3 +23,12 @@ annotation:shrink('/parsing':prod(stringChar(Char),'/bootstrap':number,'/parsing
 '/util':behavior(varName(Name)::'/parsing':token(cloudlog),!'should parse identifiers starting with a capital letter', ('/parsing':parseString('/parsing':tokens(Tokens,cloudlog),!'Foo BAR'),'/util':assertEqual(Tokens,[varName(!'Foo'),varName(!'BAR')],'/bootstrap':list('/parsing':token(cloudlog))))).
 '/parsing':tokenDef(varName(Name),'/parsing':follow('/parsing':bind(annotation:parentheses('/parsing':follow(annotation:parentheses('/parsing':alt('/parsing':charRange(!'A',!'Z'),'/parsing':char(!'_'))),'/parsing':repeatMax(annotation:parentheses('/parsing':alt('/parsing':alt('/parsing':charRange(!a,!z),'/parsing':charRange(!'A',!'Z')),'/parsing':charRange(!'0',!'9')))))),Codes),'/parsing':pred(builtin:charCodes(Name,Codes))),cloudlog).
 '/util':behavior(varName(Name)::'/parsing':token(cloudlog),!'should parse identifiers starting with an underscore', ('/parsing':parseString('/parsing':tokens(Tokens,cloudlog),!'_foo _123'),'/util':assertEqual(Tokens,[varName(!'_foo'),varName(!'_123')],'/bootstrap':list('/parsing':token(cloudlog))))).
+'/parsing':prod('/parsing':layout(cloudlog),'/bootstrap':number,'/parsing':char(!' ')).
+'/parsing':prod('/parsing':layout(cloudlog),'/bootstrap':number,'/parsing':terminal(9)).
+'/parsing':prod('/parsing':layout(cloudlog),'/bootstrap':number,'/parsing':terminal(10)).
+'/bootstrap':defAtom(notEOL::'/parsing':pattern('/bootstrap':number)).
+'/parsing':prod(notEOL,'/bootstrap':number,'/parsing':follow('/parsing':terminal(Char),'/parsing':pred(\+Char::'/bootstrap':number=10::'/bootstrap':number))).
+'/parsing':prod('/parsing':layout(cloudlog),'/bootstrap':number,'/parsing':follow('/parsing':char(!'%'),'/parsing':repeatMax(notEOL))).
+'/util':behavior(cloudlog::'/parsing':lexicalContext,!'should support spaces, tabs, line-ends and line comments', ('/parsing':parseString('/parsing':tokens(List,cloudlog),!'1 2	3
+4 %^^
+ 5'),'/util':assertEqual(List,[number(1),number(2),number(3),number(4),number(5)],'/bootstrap':list('/parsing':token(cloudlog))))).
