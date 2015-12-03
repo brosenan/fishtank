@@ -4,8 +4,8 @@
 '/bootstrap':adapter(Lex::lexicalContext,token(Lex)::'/bootstrap':type).
 '/bootstrap':signature(token(Token,Lex)::pattern('/bootstrap':number),[Token::token(Lex),Lex::lexicalContext]).
 '/bootstrap':signature(tokens(Tokens,Lex)::pattern('/bootstrap':number),[Tokens::'/bootstrap':list(token(Lex)),Lex::lexicalContext]).
-prod(tokens([Token],Lex),'/bootstrap':number,token(Token,Lex)).
-prod(tokens([Token|Tokens],Lex),'/bootstrap':number,follow(follow(token(Token,Lex),repeatMax(layout(Lex))),tokens(Tokens,Lex))).
+prod(tokens([],Lex),'/bootstrap':number,repeatMax(layout(Lex))).
+prod(tokens([Token|Tokens],Lex),'/bootstrap':number,follow(follow(repeatMax(layout(Lex)),token(Token,Lex)),tokens(Tokens,Lex))).
 '/bootstrap':signature(layout(Lex)::pattern('/bootstrap':number),[Lex::lexicalContext]).
 prod(layout(words),'/bootstrap':number,char(!' ')).
 '/bootstrap':projection(tokenDef(Token,Pattern,Lex)::'/bootstrap':statement,'/bootstrap':horiz(['/bootstrap':label(!token),'/bootstrap':halfSize('/bootstrap':brackets('/bootstrap':vis(Lex::lexicalContext),40,41)),'/bootstrap':vis(Token::token(Lex)),'/bootstrap':label(!'::='),'/bootstrap':vis(Pattern::pattern('/bootstrap':number))])).
