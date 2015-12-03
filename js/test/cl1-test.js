@@ -133,4 +133,29 @@ describe('cl1', function(){
 	    assert.deepEqual(res.map(rec => rec.X.name), ['localhost#foo']);
 	}));
     });
+    describe('/cloudlog', function(){
+	it('should store and retrieve cloudlog files', $T(function*(){
+	    var ts = (new Date()).getTime();
+	    var content = "theTimeIs(foo, " + ts + "):-!.";
+	    var url = 'http://localhost:3003/cloudlog/time.clg';
+	    var resp = yield request({
+		method: 'PUT',
+		url: url,
+		headers: {'content-type': 'text/cloudlog'},
+		body: content,
+	    }, $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    assert.equal(resp[2], '{"status":"OK"}');
+
+	    yield setTimeout($R(), 10);
+	    resp = yield request(url, $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    assert.equal(resp[1].headers['content-type'].split(';')[0], 'text/cloudlog');
+	    assert.equal(resp[2], content);
+	}));
+
+    });
+
 });

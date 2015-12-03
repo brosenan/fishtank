@@ -151,7 +151,7 @@ ns._register('jsonBody', function() {
     return bodyParser.json();
 });
 ns._register('textBody', function() {
-    return bodyParser.text();
+    return bodyParser.text({type: 'text/*'});
 });
 ns._register('setStatus', function(status) {
     return (req, res, next) => {
