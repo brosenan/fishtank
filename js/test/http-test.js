@@ -101,6 +101,12 @@ describe('http', function(){
 	    assert.ifError(resp[0]);
 	    assert.equal(resp[1].statusCode, 402);
 	}));
+	it('should handle exceptions in the with/where handler by processing replacing the original handlers by the ones in the exception', $T(function*(){
+	    var resp = yield request('http://localhost:3002/throw', $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 400);
+	    assert.equal(resp[2], 'This comes from the exception');
+	}));
 
     });
     describe('.jsonToTerm(json)', function(){

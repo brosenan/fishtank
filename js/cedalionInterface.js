@@ -62,7 +62,9 @@ module.exports = function(logfile) {
 		    }
 		});
 	    } else if(data.substr(0, 2) === '! ') {
-		self.em.emit('error', Error(data.substr(2)));
+		let err = Error(data.substr(2));
+		err._exception = self.parser.parse(data.substr(2));
+		self.em.emit('error', err);
 	    }
 	} catch(e) {
 	    console.error(e.stack);

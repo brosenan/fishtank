@@ -5,7 +5,7 @@ var ipfs = require('ipfs-client');
 var bodyParser = require('body-parser');
 
 var Nodalion = require('./nodalion.js');
-var ns = Nodalion.namespace('/nodalion', ['serveHandlers', 'bind']);
+var ns = Nodalion.namespace('/nodalion', ['serveHandlers', 'bind', 'serviceException']);
 
 var setupRouter = $S.async(function*(router, nodalion, app) {
     var Method = {var:'Method'};
@@ -115,7 +115,14 @@ ns._register('with', function(Ctx, Impred, Handlers) {
 	var collect = fieldList.map(field => field.args[0]);
 	collect.forEach(key => {ctxValue[key] = req[key];});
 	ctxValue = exports.jsonToTerm(ctxValue);
-	var handlers = yield req.nodalion.findAll(Handlers, ns.bind(ctxValue, Ctx, {var:'T'}, Impred), $R());
+	var handlers;
+	try {
+	    handlers = yield req.nodalion.findAll(Handlers, ns.bind(ctxValue, Ctx, {var:'T'}, Impred), $R());
+	} catch(e) {
+	    if(e._exception && e._exception.name === ns.serviceException().name) {
+		handlers = [e._exception.args[0]];
+	    } else throw e;
+	}
 	if(handlers.length != 1) {
 	    throw Error('Got ' + handlers.length + ' solutions for with-where handler');
 	}

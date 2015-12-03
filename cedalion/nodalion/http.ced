@@ -34,3 +34,5 @@ serve(example:myApp,post,!'/hello',[jsonBody,with(jsonObj([field(!body,Details)]
 serve(example:myApp,post,!'/helloText',[textBody,with(jsonObj([field(!body,Name)]),'/impred':pred('/Functional':eval('/Functional':applyBinOp('/Functional':const(!'hello, '),'/Functional':concat,asString('/Functional':const(Name))),'/bootstrap':string,Greet)),[outputText(!'text/plain',Greet)])]).
 '/bootstrap':signature(setStatus(Status)::handler,[Status::'/bootstrap':number]).
 serve(example:myApp,get,!'/someStatus',[with(jsonObj([field(!query,Query)]),'/impred':pred('/Functional':eval('str2num'(asString(jsonMember('/Functional':const(Query),!status))),'/bootstrap':number,Status)),[setStatus(Status),outputText(!'text/plain',!'Sending your requested status')])]).
+serve(example:myApp,get,!'/throw',[with(jsonObj([]),'/impred':pred(builtin:throw(serviceException([setStatus(400),outputText(!'text/plain',!'This comes from the exception')]))),[outputText(!'text/plain',!'no exception')])]).
+'/bootstrap':signature(serviceException(Handlers)::'/bootstrap':exception,[Handlers::'/bootstrap':list(handler)]).
