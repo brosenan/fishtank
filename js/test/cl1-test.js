@@ -155,6 +155,19 @@ describe('cl1', function(){
 	    assert.equal(resp[1].headers['content-type'].split(';')[0], 'text/cloudlog');
 	    assert.equal(resp[2], content);
 	}));
+	it('should return 400 in case of a syntax error in a PUT', $T(function*(){
+	    var content = "this is not cloudlog";
+	    var url = 'http://localhost:3003/cloudlog/err.clg';
+	    var resp = yield request({
+		method: 'PUT',
+		url: url,
+		headers: {'content-type': 'text/cloudlog'},
+		body: content,
+	    }, $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 400);
+	    assert.equal(resp[2], '{"status":"ERROR","error":"Syntax Error"}');
+	}));
 
     });
 
