@@ -88,3 +88,7 @@ handleTask('/impred#localQueueEmpty'(Name), '/impred#no') :-
     localQueue(Name, _), !.
 handleTask('/impred#localQueueEmpty'(Name), '/impred#yes').
 
+handleTask('/impred#base64Encode'(!(Plain)), !(Enc)) :-
+    base64(Plain, Enc).
+handleTask('/impred#base64Decode'(!(Enc)), !(Plain)) :-
+    base64(Plain, Enc).

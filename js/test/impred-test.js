@@ -3,7 +3,7 @@ var assert = require('assert');
 var $S = require('suspend'), $R = $S.resume, $T = function(gen) { return function(done) { $S.run(gen, done); } };
 
 var Nodalion = require('../nodalion.js');
-var ns = Nodalion.namespace('/impred', ['testLocalStore', 'localStr', 'testNow', 'testUUID', 'testLocalQueue']);
+var ns = Nodalion.namespace('/impred', ['testLocalStore', 'localStr', 'testNow', 'testUUID', 'testLocalQueue', 'testBase64Encode', 'testBase64Decode']);
 
 var nodalion = new Nodalion('/tmp/impred-ced.log');
 
@@ -49,6 +49,28 @@ describe('impred', function(){
 		// Should be at least 128 bits
 		assert(id.length * 6 > 128, (id.length * 6) + ' > 128');
 	    });
+	}));
+    });
+    describe('base64Encode(Plain)', function(){
+	it('should base64-encode the given Plain text', $T(function*(){
+	    var X = {var:'X'};
+	    var plain = "the quick brown fox and so on and so forth....";
+	    var result = yield nodalion.findAll(X, ns.testBase64Encode(plain, X), $R());
+	    var enc = result[0];
+	    var buf = new Buffer(Buffer.byteLength(plain));
+	    buf.write(plain);
+	    assert.equal(enc, buf.toString('base64'));
+	}));
+    });
+    describe('base64Decode(Enc)', function(){
+	it('should decode the given base64-encoded string', $T(function*(){
+	    var X = {var:'X'};
+	    var plain = "the quick brown fox and so on and so forth....";
+	    var buf = new Buffer(Buffer.byteLength(plain));
+	    buf.write(plain);
+	    var result = yield nodalion.findAll(X, ns.testBase64Decode(buf.toString('base64'), X), $R());
+	    var dec = result[0];
+	    assert.equal(dec, plain);
 	}));
     });
 });

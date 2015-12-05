@@ -14,19 +14,19 @@ var ns = Nodalion.namespace('/nodalion', ['defaultQueueDomain']);
 var cl1 = Nodalion.namespace('/cl1', ['cl1']);
 var nodalion = new Nodalion('/tmp/cl1.log');
 
+var dbURL = 'mongodb://127.0.0.1:27017/cl1test';
 
 describe('cl1', function(){
     before($T(function*() {
+	var db = yield MongoClient.connect(dbURL, $R());
+	yield db.dropDatabase($R());
+
 	workQueue.connect(nodalion, 'amqp://localhost', ns.defaultQueueDomain());
-	nodalionMongo.db('mongodb://127.0.0.1:27017/test3');
+	nodalionMongo.db(dbURL);
 	var app = express();
 	app.use(nodalionHttp.app(nodalion, cl1.cl1()));
 	app.listen(3003);
 	yield setTimeout($R(), 10); // Give the app time to go up
-    }));
-    beforeEach($T(function*() {
-	var db = yield MongoClient.connect('mongodb://127.0.0.1:27017/cl1test', $R());
-	yield db.dropDatabase($R());
     }));
     describe('/static', function(){
 	it('should store and then retrieve content', $T(function*(){
@@ -168,7 +168,39 @@ describe('cl1', function(){
 	    assert.equal(resp[1].statusCode, 400);
 	    assert.equal(resp[2], '{"status":"ERROR","error":"Syntax Error"}');
 	}));
-
     });
+    it('should evaluate programs', $T(function*(){
+	var program = 'father(GF, F) -> father(F, C) -> grandfather(GF, C).\n' +
+	    'grandfather(GF, C) -> isGrandfather(GF, C) :- !.\n' +
+	    'father("abraham", "isacc").\n' +
+	    'father("abraham", "ismael").\n' +
+	    'father("isacc", "jacob").\n' +
+	    'father("isacc", "esau").\n';
+	var url = 'http://localhost:3003/cloudlog/fathers.clg';
+	var resp = yield request({
+	    method: 'PUT',
+	    url: url,
+	    headers: {'content-type': 'text/cloudlog'},
+	    body: program,
+	}, $RR());
+	assert.ifError(resp[0]);
+	assert.equal(resp[1].statusCode, 200);
+	assert.equal(resp[2], '{"status":"OK"}');
 
+	var query = 'isGrandfather(X, Y)';
+	resp = yield request({
+	    method: 'POST',
+	    url: 'http://localhost:3003/encode/q',
+	    headers: {'content-type': 'text/cloudlog'},
+	    body: query,
+	}, $RR());
+	assert.ifError(resp[0]);
+	assert.equal(resp[1].statusCode, 200);
+	url = JSON.parse(resp[2]).url;
+
+	resp = yield request(url + '?str-X=abraham', $RR());
+	assert.ifError(resp[0]);
+	assert.equal(resp[1].statusCode, 200);
+	assert.deepEqual(JSON.parse(resp[2]).map(x => x.Y), ['jacob', 'esau']);
+    }));
 });
