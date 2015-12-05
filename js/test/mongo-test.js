@@ -19,7 +19,9 @@ var ns = nodalion.namespace('/nodalion', ['trans',
 					  'addToCounter',
 					  'getAllCounters',
 					  'counterValue',
-					  'scan']);
+					  'scan',
+					  'deleteCounter',
+					  'checkCounter']);
 
 var impred = nodalion.namespace('/impred', ['task']);
 var example = nodalion.namespace('example', ['foo', 'bar', 'baz', 'bat']);
@@ -167,8 +169,32 @@ describe('nodalionMongo', function(){
 		var res = yield doTask(ns.trans('test2', 'foo', [ns.getAllCounters('fam')]), $R());
 		assert.deepEqual(res, [ns.counterValue('fam', 'key1', 1), ns.counterValue('fam', 'key2', 2), ns.counterValue('fam', 'key3', 3)]);
 	    }));
-
 	});
+	describe('op /nodalion:deleteCounter(family, key)', function(){
+	    it('should remove a counter', $T(function*(){
+		yield doTask(ns.trans('test2', 'foo', [ns.addToCounter('fam', 'key1', 1)]), $R());
+		yield doTask(ns.trans('test2', 'foo', [ns.deleteCounter('fam', 'key1')]), $R());
+		var res = yield doTask(ns.trans('test2', 'foo', [ns.getAllCounters('fam')]), $R());
+		assert.equal(res.length, 0);
+	    }));
+	});
+	describe('op /nodalion:checkCounter(family, key, value)', function(){
+	    it('should allow the transaction if family.key = value', $T(function*(){
+		yield doTask(ns.trans('test2', 'foo', [ns.addToCounter('fam', 'key1', 7)]), $R());
+		yield doTask(ns.trans('test2', 'foo', [ns.addToCounter('fam', 'key2', 1),
+						       ns.checkCounter('fam', 'key1', 7)]), $R());
+		var res = yield doTask(ns.trans('test2', 'foo', [ns.getAllCounters('fam')]), $R());
+		assert.equal(res.length, 2);
+	    }));
+	    it('should not allow the transaction if family.key != value', $T(function*(){
+		yield doTask(ns.trans('test2', 'foo', [ns.addToCounter('fam', 'key1', 7)]), $R());
+		yield doTask(ns.trans('test2', 'foo', [ns.addToCounter('fam', 'key2', 1),
+						       ns.checkCounter('fam', 'key1', 6)]), $R());
+		var res = yield doTask(ns.trans('test2', 'foo', [ns.getAllCounters('fam')]), $R());
+		assert.equal(res.length, 1); // key1 only
+	    }));
+	});
+
 
 	it('should integrate with Cedalion - 1', $T(function*(){
 	    var X = {var:'X'};

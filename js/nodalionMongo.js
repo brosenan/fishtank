@@ -187,6 +187,16 @@ ns._register('getAllCounters', function(family) {
 	fields[family] = 1;
     };
 });
+ns._register('deleteCounter', (family, key) => (update) => {
+    if(!update.$unset) {
+	update.$unset = {};
+    }
+    update.$unset['#' + family + '.' + encode(key)] = '';
+});
+ns._register('checkCounter', (family, key, value) => (update, fields, query, options) => {
+    query['#' + family + '.' + encode(key)] = value;
+    options.upsert = false;
+});
 
 ns._register('scan', function(table, row, type, goal) {
     return $S.async(function*(nodalion) {
