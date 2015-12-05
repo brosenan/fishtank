@@ -229,6 +229,11 @@ describe('nodalionMongo', function(){
 	    var result = yield n.findAll(X, ns.mongoTest(6, X), $R());
 	    assert.equal(result, 2);
 	}));
+	it('should integrate with Cedalion - 7', $T(function*(){
+	    var X = {var:'X'};
+	    var result = yield n.findAll(X, ns.mongoTest(7, X), $R());
+	    assert.equal(result[0], 1);
+	}));
     });
     describe('/nodalion#scan(Table, Row, Type, Goal)', function(){
 	it('should evaluate Goal for each Row in Table', $T(function*(){
@@ -241,8 +246,8 @@ describe('nodalionMongo', function(){
 	}));
 	it('should integrate with Cedalion', $T(function*(){
 	    var X = {var:'X'};
-	    var result = yield n.findAll(X, ns.mongoTest(7, X), $R());
-	    assert.equal(result, 2);
+	    var result = yield n.findAll(X, ns.mongoTest(10, X), $R());
+	    assert.equal(result[0], 2);
 	}));
 
     });
