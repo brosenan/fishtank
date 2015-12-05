@@ -62,7 +62,9 @@ describe('cl1', function(){
 	    assert.ifError(resp[0]);
 	    assert.equal(resp[1].statusCode, 200);
 	    assert.equal(resp[1].headers['content-type'].split(';')[0], 'application/json');
-	    assert.equal(JSON.parse(resp[2]).url, 'http://localhost:3003/q/QmNirCniYxrjgwsaVrak1bRLg9ooo4pXiY4gfeFtZAXoH1');
+	    var buf = new Buffer(Buffer.byteLength(term));
+	    buf.write(term);
+	    assert.equal(JSON.parse(resp[2]).url, 'http://localhost:3003/q/' + buf.toString('base64'));
 	}));
 	it('should fail for an invalid term', $T(function*(){
 	    var term = 'an invalid term';
@@ -197,6 +199,8 @@ describe('cl1', function(){
 	assert.ifError(resp[0]);
 	assert.equal(resp[1].statusCode, 200);
 	url = JSON.parse(resp[2]).url;
+
+	yield setTimeout($R(), 300); // Give the code enough time to propagate
 
 	resp = yield request(url + '?str-X=abraham', $RR());
 	assert.ifError(resp[0]);
