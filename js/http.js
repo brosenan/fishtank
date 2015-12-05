@@ -121,10 +121,10 @@ ns._register('with', function(Ctx, Impred, Handlers) {
 	} catch(e) {
 	    if(e._exception && e._exception.name === ns.serviceException().name) {
 		handlers = [e._exception.args[0]];
-	    } else throw e;
+	    } else return next(e);
 	}
 	if(handlers.length != 1) {
-	    throw Error('Got ' + handlers.length + ' solutions for with-where handler');
+	    return next(Error('Got ' + handlers.length + ' solutions for with-where handler'));
 	}
 	handlers = handlers[0].meaning().map(elem => elem.meaning());
 	walkSubstack(handlers, req, res, next);

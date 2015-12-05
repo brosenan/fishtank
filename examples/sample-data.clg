@@ -1,0 +1,7 @@
+follow("Alice", "Bob").
+tweet("Alice", text("Cloudlog Rocks!")).
+tweet("Alice", text("I am looking!")).
+
+follow("Bob", "Alice").
+tweet("Bob", text("I'm using Tweetlog")).
+tweet("Bob", text("I wonder if someone is looking...")).

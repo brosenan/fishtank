@@ -28,6 +28,7 @@
     "ipfs-client": "^0.1.2",
     "jison": "^0.4.15",
     "mongodb": "^2.0.39",
+    "morgan": "^1.6.1",
     "rabbit.js": "^0.4.4",
     "request": "^2.59.0",
     "suspend": "^0.6.1"
