@@ -171,6 +171,42 @@ describe('cl1', function(){
 	    assert.equal(resp[2], '{"status":"ERROR","error":"Syntax Error"}');
 	}));
     });
+    describe('/idx', function(){
+	it('should expose matching facts', $T(function*(){
+	    var facts = 'foo(1, "a"). foo(1, "b"). foo(2, "a").';
+	    var indexDef = 'cloudlog:index("foobar", foo(X, Y), Y, bs:string).';
+	    var index = 'cloudlog:key("foobar", X, bs:string)';
+	    var resp = yield request({
+		method: 'PUT',
+		url: 'http://localhost:3003/cloudlog/index-test.clg',
+		headers: {'content-type': 'text/cloudlog'},
+		body: facts + indexDef,
+	    }, $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    
+	    resp = yield request({
+		method: 'POST',
+		url: 'http://localhost:3003/encode/idx',
+		headers: {'content-type': 'text/cloudlog'},
+		body: index,
+	    }, $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    var url = JSON.parse(resp[2]).url;
+
+	    yield setTimeout($R(), 200);
+
+	    resp = yield request(url + '?str-X=a', $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    
+	    var res = JSON.parse(resp[2]);
+	    assert.deepEqual(res.map(fact => fact.Fact.args[0]), [1, 2]);
+	}));
+
+    });
+
     it('should evaluate programs', $T(function*(){
 	var program = 'father(GF, F) -> father(F, C) -> grandfather(GF, C).\n' +
 	    'grandfather(GF, C) -> isGrandfather(GF, C) :- !.\n' +
