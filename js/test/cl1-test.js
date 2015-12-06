@@ -174,8 +174,8 @@ describe('cl1', function(){
     describe('/idx', function(){
 	it('should expose matching facts', $T(function*(){
 	    var facts = 'foo(1, "a"). foo(1, "b"). foo(2, "a").';
-	    var indexDef = 'cloudlog:index("foobar", foo(X, Y), Y, bs:string).';
-	    var index = 'cloudlog:key("foobar", X, bs:string)';
+	    var indexDef = 'cloudlog:index(0, bar(Y), foo(X, Y)).';
+	    var index = 'bar(X)';
 	    var resp = yield request({
 		method: 'PUT',
 		url: 'http://localhost:3003/cloudlog/index-test.clg',
