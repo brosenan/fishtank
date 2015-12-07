@@ -1,9 +1,11 @@
 "use strict";
 var assert = require('assert');
+var fs = require('fs');
+var temp = require('temp');
 var $S = require('suspend'), $R = $S.resume, $T = function(gen) { return function(done) { $S.run(gen, done); } };
 
 var Nodalion = require('../nodalion.js');
-var ns = Nodalion.namespace('/impred', ['testLocalStore', 'localStr', 'testNow', 'testUUID', 'testLocalQueue', 'testBase64Encode', 'testBase64Decode']);
+var ns = Nodalion.namespace('/impred', ['testLocalStore', 'localStr', 'testNow', 'testUUID', 'testLocalQueue', 'testBase64Encode', 'testBase64Decode', 'testLoadNamespace']);
 
 var nodalion = new Nodalion('/tmp/impred-ced.log');
 
@@ -73,4 +75,15 @@ describe('impred', function(){
 	    assert.equal(dec, plain);
 	}));
     });
+    describe('loadNamespace(FileName, Namespace)', function(){
+	it('should load a namespace', $T(function*(){
+	    var X = {var:'X'};
+	    var content = "'/impred#foo'(1). '/impred#foo'(2). '/impred#foo'(3).";
+	    var file = yield temp.open({prefix: 'ced', suffix: '.pl'}, $R());
+	    fs.write(file.fd, content);
+	    var result = yield nodalion.findAll(X, ns.testLoadNamespace(file.path, X), $R());
+	    assert.deepEqual(result, [1, 2, 3]);
+	}));
+    });
+
 });

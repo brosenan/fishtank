@@ -10,3 +10,8 @@ clause('testBase64Encode'(Plain,Encoded),task('base64Encode'(Plain),Encoded,'/bo
 '/bootstrap':signature('base64Decode'(Enc)::task('/bootstrap':string),[Enc::'/bootstrap':string]).
 '/bootstrap':signature('testBase64Decode'(Enc,Plain)::impred,[Enc::'/bootstrap':string,Plain::'/bootstrap':string]).
 clause('testBase64Decode'(Enc,Plain),task('base64Decode'(Enc),Plain,'/bootstrap':string)).
+'/bootstrap':signature(testLoadNamespace(File,X)::impred,[File::'/bootstrap':string,X::'/bootstrap':number]).
+'/bootstrap':signature(loadNamespace(File,Namespace)::task('/nodalion':voidType),[File::'/bootstrap':string,Namespace::'/bootstrap':string]).
+'/bootstrap':signature(convertNamespace(Goal,Namespace)::task('/bootstrap':pred),[Goal::'/bootstrap':pred,Namespace::'/bootstrap':string]).
+foo(X):-builtin:fail.
+clause(testLoadNamespace(File,X),conj(task(loadNamespace(File,!'foo@'),_,'/nodalion':voidType),conj(task(convertNamespace(foo(X),!'foo@'),Goal,'/bootstrap':pred),pred((Goal,\+foo(X)))))).
