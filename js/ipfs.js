@@ -25,6 +25,7 @@ ns._register('ipfsCat', (Hash) => (nodalion, cb) => {
 });
 
 ns._register('ipfsToTmp', (Hash) => $S.async(function*(nodalion) {
+    if(typeof Hash !== 'string') throw Error('Hash must be a string.  Got: ' + JSON.stringify(Hash));
     var path = temp.path();
     var writer = fs.createWriteStream(path);
     var cat = ipfs.cat(Hash);
