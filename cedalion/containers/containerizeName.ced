@@ -6,3 +6,5 @@ containerizeName(Name,NamePrime,Cont):-builtin:if(specialName(Name,NamePrime),bu
 '/bootstrap':signature(specialName(Name,NamePrime)::'/bootstrap':pred,[Name::'/bootstrap':string,NamePrime::'/bootstrap':string]).
 specialName(Name,Name):-builtin:strcat(!'builtin#',_,Name).
 specialName(Name,Name):-'/bootstrap':listMember(Name,'/bootstrap':string,[! (:-),! (,),![],!.,! (=),! (>),! (\+)]).
+'/bootstrap':signature(uncontainerizeName(NamePrime,Name,Cont)::'/bootstrap':pred,[NamePrime::'/bootstrap':string,Name::'/bootstrap':string,Cont::'/bootstrap':string]).
+uncontainerizeName(NamePrime,Name,Cont):-'/Functional':eval('/Functional':applyBinOp('/Functional':const(Cont),'/Functional':concat,'/Functional':const(! (@))),'/bootstrap':string,Prefix),builtin:if(builtin:strcat(Prefix,Name,NamePrime),builtin:true,Name::'/bootstrap':string=NamePrime::'/bootstrap':string).
