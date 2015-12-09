@@ -75,15 +75,14 @@ describe('impred', function(){
 	    assert.equal(dec, plain);
 	}));
     });
-    describe('loadNamespace(FileName, Namespace)', function(){
-	it('should load a namespace', $T(function*(){
+    describe('loadCedalionImage(FileName, Prep, PrepIn, PrepOut)', function(){
+	it('should load clauses from the given file', $T(function*(){
 	    var X = {var:'X'};
-	    var content = "'/impred#foo'(1). '/impred#foo'(2). '/impred#foo'(3).";
+	    var content = "'/impred#foo'(1):-'builtin#true'. '/impred#foo'(2):-'builtin#true'. '/impred#foo'(3):-'builtin#true'.";
 	    var file = yield temp.open({prefix: 'ced', suffix: '.pl'}, $R());
 	    fs.write(file.fd, content);
 	    var result = yield nodalion.findAll(X, ns.testLoadNamespace(file.path, X), $R());
 	    assert.deepEqual(result, [1, 2, 3]);
 	}));
     });
-
 });

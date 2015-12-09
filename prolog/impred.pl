@@ -1,4 +1,4 @@
-:- [service, uuid, namespace].
+:- [service, uuid].
 
 % Suppress warnings from Cedalion
 :- style_check(-singleton).
@@ -92,8 +92,16 @@ handleTask('/impred#base64Encode'(!(Plain)), !(Enc)) :-
     base64(Plain, Enc).
 handleTask('/impred#base64Decode'(!(Enc)), !(Plain)) :-
     base64(Plain, Enc).
-handleTask('/impred#loadNamespace'(!FileName, !Namespace), _) :-
-    load_to_namespace(FileName, Namespace).
-handleTask('/impred#convertNamespace'(Goal1, !Namespace), Goal2) :-
-    convert_to_namespace(Goal1, Goal2, Namespace).
+handleTask('/impred#loadCedalionImage'(!FileName, Prep, In, Out), _) :-
+    open(FileName, read, Stream),
+    read(Stream, Clause),
+    loadCedalionImage(Clause, Stream, Prep, In, Out).
+
+loadCedalionImage(end_of_file, _, _, _, _) :- !.
+loadCedalionImage(Clause, Stream, Prep, In, Out) :-
+    copy_term([Prep, In, Out], [Prep1, Clause, Out1]),
+    Prep1,
+    assert(Out1),
+    read(Stream, Clause2),
+    loadCedalionImage(Clause2, Stream, Prep, In, Out).
 

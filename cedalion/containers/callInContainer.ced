@@ -1,0 +1,9 @@
+'/bootstrap':defAtom(exists::'/bootstrap':pred).
+exists:-builtin:true.
+'/bootstrap':signature(callInContainer(Cont,Goal)::'/bootstrap':pred,[Cont::'/bootstrap':string,Goal::'/bootstrap':pred]).
+'/bootstrap':signature(missingContainer(Cont)::'/bootstrap':exception,[Cont::'/bootstrap':string]).
+'/util':behavior(callInContainer(Cont,Goal)::'/bootstrap':pred,!'should throw an exception if the container is not loaded',builtin:catch((callInContainer(!foo,'/Functional':eval('/Functional':const(1),'/bootstrap':number,V)),builtin:fail),missingContainer(Cont),'/util':assertEqual(Cont,!foo,'/bootstrap':string))).
+'someContainerThatIsLoaded@/containers':exists:-builtin:true.
+'someContainerThatIsLoaded@/Functional':eval('someContainerThatIsLoaded@/Functional':const(X),T,X):-builtin:true.
+'/util':behavior(callInContainer(Cont,Goal)::'/bootstrap':pred,!'should evaluate Goal under Cont of Cont is loaded', (callInContainer(!someContainerThatIsLoaded,'/Functional':eval('/Functional':const(1),'/bootstrap':number,V)),'/util':assertEqual(V,1,'/bootstrap':number))).
+annotation:shrink((callInContainer(Cont,Goal):-containerize(exists::'/bootstrap':pred,Exists::'/bootstrap':pred,Cont),builtin:catch(Exists,_,builtin:throw(missingContainer(Cont))),containerize(Goal::'/bootstrap':pred,CGoal::'/bootstrap':pred,Cont),CGoal)).
