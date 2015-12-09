@@ -1,0 +1,8 @@
+'/bootstrap':signature(containerizeName(Name,NamePrime,Cont)::'/bootstrap':pred,[Name::'/bootstrap':string,NamePrime::'/bootstrap':string,Cont::'/bootstrap':string]).
+'/util':behavior(containerizeName(Name,NamePrime,Cont)::'/bootstrap':pred,!'should not containerize builtins', (containerizeName(!'builtin#succ',NamePrime,!foo),'/util':assertEqual(NamePrime,!'builtin#succ','/bootstrap':string))).
+'/util':behavior(containerizeName(Name,NamePrime,Cont)::'/bootstrap':pred,!'should not containerize special global-namespace names','/bootstrap':forall(('/bootstrap':listMember(Name,'/bootstrap':string,[! (:-),! (,),![],!.,! (=),! (>),! (\+)]),containerizeName(Name,NamePrime,!foo)),'/util':assertEqual(NamePrime,Name,'/bootstrap':string))).
+'/util':behavior(containerizeName(Name,NamePrime,Cont)::'/bootstrap':pred,!'should containerize arbitrary global-scope names', (containerizeName(!bar,NamePrime,!foo),'/util':assertEqual(NamePrime,!'foo@bar','/bootstrap':string))).
+containerizeName(Name,NamePrime,Cont):-builtin:if(specialName(Name,NamePrime),builtin:true,'/Functional':eval('/Functional':applyBinOp('/Functional':const(Cont),'/Functional':concat,'/Functional':applyBinOp('/Functional':const(! (@)),'/Functional':concat,'/Functional':const(Name))),'/bootstrap':string,NamePrime)).
+'/bootstrap':signature(specialName(Name,NamePrime)::'/bootstrap':pred,[Name::'/bootstrap':string,NamePrime::'/bootstrap':string]).
+specialName(Name,Name):-builtin:strcat(!'builtin#',_,Name).
+specialName(Name,Name):-'/bootstrap':listMember(Name,'/bootstrap':string,[! (:-),! (,),![],!.,! (=),! (>),! (\+)]).
