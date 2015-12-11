@@ -1,0 +1,6 @@
+:-('/containers#exists','builtin#true').
+:-('/cloudlog#isAxiom'(A),','('/cloudlog#axiom'(A),'builtin#true')).
+'/cloudlog#axiom'('foo#bar'(1)).
+'/cloudlog#axiom'('foo#bar'(2)).
+'/cloudlog#axiom'('foo#bar'(3)).
+'/cloudlog#axiom'('/cloudlog#rule'('foo#bar'(X), 'builtin#succ'(X, Y), '/cloudlog#clause'('foo#baz'(1, Y), '/cloudlog#true'))).

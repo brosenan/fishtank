@@ -84,7 +84,7 @@ describe('impred', function(){
 	    var result = yield nodalion.findAll(X, ns.testLoadNamespace(file.path, X), $R());
 	    assert.deepEqual(result, [1, 2, 3]);
 	}));
-	it('should load containers when needed', function(done){
+	it.skip('should load containers when needed', function(done){
 	    this.timeout(7000);
 	    $S.async(function*() {
 		var hash = "QmdHZHRfuJ2QBXfvaMr3ksh3gKyoxc15LhRhKgEKrf4wnj";

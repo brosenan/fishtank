@@ -4,6 +4,7 @@ var $S = require('suspend'), $R = $S.resume, $RR = $S.resumeRaw, $T = function(g
 var express = require('express');
 var request = require('request');
 var MongoClient = require('mongodb').MongoClient;
+var fs = require('fs');
 
 var Nodalion = require('../nodalion.js');
 var nodalionHttp = require('../http.js');
@@ -49,6 +50,30 @@ describe('cl1', function(){
 	    assert.equal(resp[1].headers['content-type'].split(';')[0], 'text/foo');
 	    assert.equal(resp[2], content);
 	}));
+	it('should take axioms from application/cedalion content', $T(function*(){
+	    var input = fs.createReadStream(__dirname + '/test1.cedimg');
+	    var req = request.put({url: 'http://localhost:3003/static/test1.cedimg',
+				   headers: {'content-type': 'application/cedalion'}});
+	    var resp = yield input.pipe(req).on('response', $RR());
+	    assert.equal(resp[0].statusCode, 200);
+
+	    var resp = yield request({method: 'POST',
+				      url: 'http://localhost:3003/encode/q',
+				      headers: {'content-type': 'text/plain'},
+				      body: 'foo:baz(1, X)',
+				     }, $RR());
+	    assert.equal(resp[1].statusCode, 200);
+	    var queryURL = JSON.parse(resp[2]);
+
+	    yield setTimeout($R(), 300);
+	    
+	    resp = yield request(queryURL, $RR());
+	    assert.equal(resp[1].statusCode, 200);
+	    var res = JSON.parse(resp[2]).map(x => x.X);
+	    assert.equal(res.length, 3);
+	    assert.equal(res.reduce((x, y) => x+y), 9);
+	}));
+
     });
     describe('/encode', function(){
 	it('should return a URL that represents the given term', $T(function*(){
