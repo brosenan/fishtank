@@ -1,0 +1,4 @@
+eclipse.preferences.version=1
+normalFont=1|Ubuntu|14.0|0|GTK|1|;
+prologInterpreter=/usr/bin/swipl
+symbolFont=1|Ubuntu|14.0|0|GTK|1|;

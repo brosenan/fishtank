@@ -7,7 +7,7 @@ annotation:shrink((axiomFamily(Axiom,Family,Key):-builtin:if(builtin:var(Axiom::
 '/util':behavior(axiomFamily(Axiom,Family,Key)::'/bootstrap':pred,!'should provide the first argument of a fact as key', (axiomFamily(example:someFact(1,2),Family,KeyPrime::'/bootstrap':number),'/util':assertEqual(KeyPrime,1,'/bootstrap':number))).
 '/bootstrap':signature(rule(Fact,Goal,Axiom)::axiom,[Fact::axiom,Goal::'/bootstrap':pred,Axiom::axiom]).
 '/bootstrap':projection(rule(Fact,Goal,Axiom)::axiom,'/bootstrap':horiz(['/bootstrap':vis(Fact::axiom),'/bootstrap':brackets('/bootstrap':vis(Goal::'/bootstrap':pred),123,125),'/bootstrap':symbol(8594),'/bootstrap':vis(Axiom::axiom)])).
-'/bootstrap':alias(rule(Fact,Goal,Axiom)::axiom,! (->)).
+'/bootstrap':alias(rule(Fact,Goal,Axiom)::axiom,!'{}->').
 '/util':behavior(axiomFamily(Axiom,Family,Key)::'/bootstrap':pred,!'should identify rules', (axiomFamily(rule(example:someFact(2,X),Goal,Axiom),Family,Key),'/util':assertEqual(Family,!rules,'/bootstrap':string))).
 '/util':behavior(axiomFamily(Axiom,Family,Key)::'/bootstrap':pred,!'should take the first argument of the fact triggerring the rule as key', (axiomFamily(rule(example:someFact(2,X),builtin:true,example:someFact(X,4)),Family,KeyPrime::'/bootstrap':number),'/util':assertEqual(KeyPrime,2,'/bootstrap':number))).
 '/util':behavior(axiomFamily(Axiom,Family,Key)::'/bootstrap':pred,!'should identify clauses', (axiomFamily(clause(example:somePred([1,2],X),true),Family,KeyPrime::'/bootstrap':number),'/util':assertEqual(Family,!clauses,'/bootstrap':string))).
