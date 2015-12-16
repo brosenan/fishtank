@@ -199,7 +199,7 @@ describe('cl1', function(){
     describe('/idx', function(){
 	it('should expose matching facts', $T(function*(){
 	    var facts = 'foo(1, "a"). foo(1, "b"). foo(2, "a").';
-	    var indexDef = 'cloudlog:index(0, bar(Y), foo(X, Y)).';
+	    var indexDef = 'cloudlog:index(bar(Y), foo(X, Y)).';
 	    var index = 'bar(X)';
 	    var resp = yield request({
 		method: 'PUT',
