@@ -15,5 +15,3 @@
 '/util':behavior(timeline(User,Elem)::'/cloudlog':axiom,!'should display all tweets of follwed users', ('/cloudlog':withSimulate([follows(user(!alice),user(!bob)),tweeted(user(!bob),text(!'Hello, Tweetlog'))],'/cl1':indexed(timelineKey(user(!alice)),TimelineEntry)),'/util':assertEqual(TimelineEntry,timeline(user(!alice),tweet(user(!bob),text(!'Hello, Tweetlog'))),'/cloudlog':axiom))).
 '/cloudlog':axiom('/cloudlog':rule(follows(A,B),'/cloudlog':rule(tweeted(B,T),timeline(A,tweet(B,T))))).
 '/cloudlog':axiom(cloudlog:index(timelineKey(User),timeline(User,_))).
-'/cloudlog':axiom(follows(user(!alice),user(!bob))).
-'/cloudlog':axiom(tweeted(user(!bob),text(!'Hello, Tweetlog'))).
