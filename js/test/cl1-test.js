@@ -253,7 +253,7 @@ describe('cl1', function(){
 	    ];
 	    var resp = yield request({
 		method: "POST",
-		url: url,
+		url: url + "?import-t=/test",
 		json: true,
 		body: body,
 	    }, $RR());
@@ -263,7 +263,7 @@ describe('cl1', function(){
 
 	    // Verify
 	    url = yield encode("/q", "t:myPred(X, Y)", $R());
-	    resp = yield request(url + "?num-X=1", $RR());
+	    resp = yield request(url + "?import-t=/test&num-X=1", $RR());
 	    assert.ifError(resp[0]);
 	    assert.equal(resp[1].statusCode, 200);
 	    var result = JSON.parse(resp[2]);
