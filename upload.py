@@ -4,6 +4,7 @@ import subprocess
 import mimetypes
 
 mimetypes.add_type('text/cloudlog', '.clg')
+mimetypes.add_type('application/cedalion', '.cedimg')
 
 parser = argparse.ArgumentParser(description='upload the contents of a directory to a server')
 parser.add_argument('directory', default='.', nargs='?', type=str, help='the directory from which to upload')
@@ -16,4 +17,4 @@ pairs = [(file, file[len(args.directory):]) for file in files if file]
 
 for (file, path) in pairs:
     contentType = mimetypes.guess_type(path)[0]
-    subprocess.check_call('curl -X PUT -d @%s -H "Content-Type: %s" %s%s' %(file, contentType, args.url, path), shell=True)
+    subprocess.check_call('curl -X PUT --data-binary @%s -H "Content-Type: %s" %s%s' %(file, contentType, args.url, path), shell=True)
