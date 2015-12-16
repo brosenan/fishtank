@@ -50,6 +50,26 @@ describe('cl1', function(){
 	    assert.equal(resp[1].headers['content-type'].split(';')[0], 'text/foo');
 	    assert.equal(resp[2], content);
 	}));
+	it('should store and then retrieve content with up to 3 path components', $T(function*(){
+	    var ts = (new Date()).getTime();
+	    var content = "The time is: " + ts;
+	    var resp = yield request({
+		method: 'PUT',
+		url: 'http://localhost:3003/static/foo/bar/baz.txt',
+		headers: {'content-type': 'text/foo'},
+		body: content,
+	    }, $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    assert.equal(resp[2], '{"status":"OK"}');
+
+	    yield setTimeout($R(), 10);
+	    resp = yield request('http://localhost:3003/static/foo/bar/baz.txt', $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    assert.equal(resp[1].headers['content-type'].split(';')[0], 'text/foo');
+	    assert.equal(resp[2], content);
+	}));
 	it('should take axioms from application/cedalion content', $T(function*(){
 	    var input = fs.createReadStream(__dirname + '/test1.cedimg');
 	    var req = request.put({url: 'http://localhost:3003/static/test1.cedimg',
