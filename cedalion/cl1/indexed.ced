@@ -3,5 +3,5 @@
 parseCloudlog(!idx,Str,CtxIn,indexed(Key,Fact)::'/cloudlog':pred,Ctx):-'/parsing':lexParseString('/cloudlog':term(Key::key,['/cloudlog':varName(Fact::'/cloudlog':axiom,!'Fact')|CtxIn],Ctx),Str,'/cloudlog':cloudlog).
 '/nodalion':serve('cl1','/nodalion':get,!'/idx/:hash',['/nodalion':with('/nodalion':jsonObj(['/nodalion':field(!params,Params),'/nodalion':field(!query,'/nodalion':jsonObj(QueryArgs)),'/nodalion':field(!hostname,'/nodalion':jsonStr(Domain))]),query(!idx,Params,Domain,QueryArgs,Results),['/nodalion':outputJson('/nodalion':jsonList(Results))])]).
 '/bootstrap':signature(cloudlog:key(Name,Key,T)::key,[Name::'/bootstrap':string,Key::T,T::'/bootstrap':type]).
-'/bootstrap':signature(cloudlog:index(Nothing,Key,Fact)::'/cloudlog':axiom,[Nothing::'/bootstrap':number,Key::key,Fact::'/cloudlog':axiom]).
-'/cloudlog':genericRule('/cloudlog':rule(cloudlog:index(_,Key,Fact),builtin:true,'/cloudlog':rule(Fact,builtin:true,'/cloudlog':clause(indexed(Key,Fact),'/cloudlog':true)))).
+'/bootstrap':signature(cloudlog:index(Key,Fact)::'/cloudlog':axiom,[Key::key,Fact::'/cloudlog':axiom]).
+'/cloudlog':genericRule('/cloudlog':rule(cloudlog:index(Key,Fact),builtin:true,'/cloudlog':rule(Fact,builtin:true,'/cloudlog':clause(indexed(Key,Fact),'/cloudlog':true)))).
