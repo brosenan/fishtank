@@ -232,7 +232,7 @@ describe('cl1', function(){
 
     });
 
-    it.only('should evaluate programs', $T(function*(){
+    it('should evaluate programs', $T(function*(){
 	var program = 'father(GF, F) -> father(F, C) -> grandfather(GF, C).\n' +
 	    'grandfather(GF, C) -> isGrandfather(GF, C) :- !.\n' +
 	    'father("abraham", "isacc").\n' +
