@@ -229,7 +229,47 @@ describe('cl1', function(){
 	    var res = JSON.parse(resp[2]);
 	    assert.deepEqual(res.map(fact => fact.Fact.args[0]), [1, 2]);
 	}));
+    });
+    var encode = $S.async(function*(path, text) {
+	var resp = yield request({
+	    method: "POST",
+	    url: "http://localhost:3003/encode" + path,
+	    headers: {"content-type": "text/cloudlog"},
+	    body: text,
+	}, $RR());
+	assert.ifError(resp[0]);
+	assert.equal(resp[1].statusCode, 200);
+	return JSON.parse(resp[2]).url;
+    });
+    describe('/f', function(){
+	it('should add axioms of a given pattern', $T(function*(){
+	    var pattern = "t:myPred(X, Y) :-!";
+	    var url = yield encode("/f", pattern, $R());
 
+	    // Add facts
+	    var body = [
+		{_count: 1, X: 1, Y: "a"},
+		{_count: 1, X: 1, Y: "b"},
+	    ];
+	    var resp = yield request({
+		method: "POST",
+		url: url,
+		json: true,
+		body: body,
+	    }, $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    assert.deepEqual(resp[2], {status:"OK"});
+
+	    // Verify
+	    url = yield encode("/q", "t:myPred(X, Y)", $R());
+	    resp = yield request(url + "?num-X=1", $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
+	    var result = JSON.parse(resp[2]);
+	    assert.equal(result.length, 2);
+	    assert.deepEqual(result.map(x => x.Y), ['a', 'b']);
+	}));
     });
 
     it('should evaluate programs', $T(function*(){
