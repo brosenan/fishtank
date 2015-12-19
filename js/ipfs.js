@@ -1,17 +1,20 @@
 "use strict";
-var ipfs = require('ipfs-client');
+var ipfs = require('./fake-ipfs.js');
 var temp = require('temp');
 var fs = require('fs');
 var $S = require('suspend'), $R = $S.resume, $RR = $S.resumeRaw, $T = function(gen) { return function(done) { $S.run(gen, done); } };
+var EventEmitter = require('events').EventEmitter;
 
 var Nodalion = require('./nodalion.js');
 var ns = Nodalion.namespace('/nodalion', []);
 
 ns._register('ipfsAdd', (Str) => (nodalion, cb) => {
-    var stream = {pipe: (outStream) => {
+    var stream = new EventEmitter();
+    stream.pipe = (outStream) => {
 	outStream.write(Str);
 	outStream.end();
-    }};
+	stream.emit('end');
+    }
     ipfs.add(stream, cb);
 });
 

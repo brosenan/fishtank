@@ -63,6 +63,8 @@ describe('cl1', function(){
 	    assert.equal(resp[1].statusCode, 200);
 	    assert.equal(resp[2], '{"status":"OK"}');
 
+	    yield setTimeout($R(), 50);
+
 	    yield setTimeout($R(), 10);
 	    resp = yield request('http://localhost:3003/static/foo/bar/baz.txt', $RR());
 	    assert.ifError(resp[0]);

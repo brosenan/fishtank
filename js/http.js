@@ -1,7 +1,7 @@
 "use strict";
 var express = require('express');
 var $S = require('suspend'), $R = $S.resume, $RR = $S.resumeRaw, $T = function(gen) { return function(done) { $S.run(gen, done); } };
-var ipfs = require('ipfs-client');
+var ipfs = require('./fake-ipfs.js');
 var bodyParser = require('body-parser');
 
 var Nodalion = require('./nodalion.js');

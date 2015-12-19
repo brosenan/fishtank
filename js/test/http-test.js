@@ -7,6 +7,7 @@ var request = require('request');
 var Nodalion = require('../nodalion.js');
 var nodalionHttp = require('../http.js');
 var cedParser = require('../cedParser.js');
+var ipfs = require('../fake-ipfs.js');
 
 var ns = Nodalion.namespace('/nodalion', ['http', 'jsonObj', 'jsonList', 'jsonStr', 'jsonNum', 'field']);
 var example = Nodalion.namespace('example', ['myApp']);
@@ -55,7 +56,8 @@ describe('http', function(){
 	    assert.equal(resp[2], '{"result":5}');
 	}));
 	it('should handle ipfs content requests', $T(function*(){
-	    var resp = yield request('http://localhost:3002/ipfs/QmTE9Xp76E67vkYeygbKJrsVj8W2LLcyUifuMHMEkyRfUL', $RR());
+	    var hash = yield ipfs.addString('Hello, World\n', $R());
+	    var resp = yield request('http://localhost:3002/ipfs/' + hash, $RR());
 	    assert.ifError(resp[0]);
 	    assert.equal(resp[1].statusCode, 200);
 	    assert.equal(resp[1].headers['content-type'].split(';')[0], 'text/foo');
@@ -70,7 +72,9 @@ describe('http', function(){
 	    }, $RR());
 	    assert.ifError(resp[0]);
 	    assert.equal(resp[1].statusCode, 200);
-	    assert.equal(resp[2], '{"url":"http://localhost:3002/ipfs/QmTE9Xp76E67vkYeygbKJrsVj8W2LLcyUifuMHMEkyRfUL"}');
+	    var url = JSON.parse(resp[2]).url;
+	    resp = yield request(url, $RR());
+	    assert.equal(resp[2], 'Hello, World\n');
 	}));
 
 	it('should handle json POST requests', $T(function*(){
