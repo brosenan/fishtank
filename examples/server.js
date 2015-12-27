@@ -1,7 +1,7 @@
 "use strict";
-var MONGODB_URL = 'mongodb://127.0.0.1:27017/cloudlog';
-var AMQP_URL = 'amqp://localhost';
-var HTTP_PORT = 8080;
+var MONGODB_URL = 'mongodb://mongo:27017/cloudlog';
+var AMQP_URL = 'amqp://rabbitmq';
+var HTTP_PORT = 80;
 var LOGIC_LOGFILE = '/tmp/server-logic.log';
 
 var express = require('express');
