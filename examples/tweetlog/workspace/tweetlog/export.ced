@@ -1,1 +1,2 @@
 '/util':export(!'examples/tweetlog/static/tweetlog.cedimg').
+'/util':export(!'../clg-angular/app/tweetlog.cedimg').

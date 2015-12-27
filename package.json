@@ -28,6 +28,7 @@
     "jison": "^0.4.15",
     "mongodb": "^2.0.39",
     "morgan": "^1.6.1",
+    "pkgcloud": "^1.1.0",
     "rabbit.js": "^0.4.4",
     "request": "^2.59.0",
     "suspend": "^0.6.1",

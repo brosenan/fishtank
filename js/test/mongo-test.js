@@ -51,7 +51,7 @@ function encodeUnknown(term) {
 describe('mongodb', function(){
 
     it('should work on the local machine', $T(function*(){
-	var db = yield MongoClient.connect('mongodb://127.0.0.1:27017/test', $R());
+	var db = yield MongoClient.connect('mongodb://mongo:27017/test', $R());
 	var coll = db.collection('test1');
 	yield coll.remove({}, $R());
 	yield coll.insert({_id: 'a', a:1}, $R());
@@ -67,12 +67,12 @@ describe('mongodb', function(){
 describe('nodalionMongo', function(){
     var coll;
     beforeEach($T(function*() {
-	var db = yield MongoClient.connect('mongodb://127.0.0.1:27017/test', $R());
+	var db = yield MongoClient.connect('mongodb://mongo:27017/test', $R());
 	coll = db.collection('test2');
 	yield coll.remove({}, $R());
     }));
     before(function() {
-	nodalionMongo.db('mongodb://127.0.0.1:27017/test');
+	nodalionMongo.db('mongodb://mongo:27017/test');
     });
     describe('.db(url)', function(){
 	it('should connect to a database', function(){

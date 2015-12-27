@@ -13,10 +13,11 @@ var dbListeners = [];
 var _nodalion;
 var _namesArr = [];
 var _namesMap = {};
+var _gettingList = false;
 
 function getDB(nodalion, cb) {
     if(_db) {
-	if(_namesArr.length == 0) {
+	if(!_gettingList) {
 	    updateNameMap(_db, nodalion, function(err) {
 		cb(err, _db);
 	    });
@@ -30,6 +31,11 @@ function getDB(nodalion, cb) {
 }
 
 var updateNameMap = $S.async(function*(db, nodalion) {
+    if(_gettingList) {
+	return;
+    } else {
+	_gettingList = true;
+    }
     var namesDoc = yield db.collection('_names').findOne({_id: 'names'}, $R());
     if(namesDoc) {
 	_namesArr = namesDoc.namesArr;
@@ -40,7 +46,7 @@ var updateNameMap = $S.async(function*(db, nodalion) {
     });
     yield serializeTerm.updateNameDict(nodalion, _namesMap, _namesArr, $R());
     if(_namesArr.length > oldLen) {
-	yield db.collection('_names').replaceOne({_id: 'names'}, {namesArr: _namesArr}, {upsert: true}, $R());
+	yield db.collection('_names').update({_id: 'names'}, {$set: {namesArr: _namesArr}}, {upsert: true}, $R());
     }
 });
 

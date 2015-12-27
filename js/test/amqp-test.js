@@ -13,7 +13,7 @@ function streamToList(stream, cb) {
 
 describe('rabbit.js', function(){
     it('should pass a message between a publisher and a subscriber', $T(function*(){
-	var context = require('rabbit.js').createContext();
+	var context = require('rabbit.js').createContext('amqp://rabbitmq');
 	//yield context.on('ready', $S.resumeRaw());
 	var pusher = context.socket('PUSH');
 	var worker1 = context.socket('WORKER', {prefetch: 1});

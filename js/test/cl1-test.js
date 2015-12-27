@@ -15,14 +15,14 @@ var ns = Nodalion.namespace('/nodalion', ['defaultQueueDomain']);
 var cl1 = Nodalion.namespace('/cl1', ['cl1']);
 var nodalion = new Nodalion('/tmp/cl1.log');
 
-var dbURL = 'mongodb://127.0.0.1:27017/cl1test';
+var dbURL = 'mongodb://mongo:27017/cl1test';
 
 describe('cl1', function(){
     before($T(function*() {
 	var db = yield MongoClient.connect(dbURL, $R());
 	yield db.dropDatabase($R());
 
-	workQueue.connect(nodalion, 'amqp://localhost', ns.defaultQueueDomain());
+	workQueue.connect(nodalion, 'amqp://rabbitmq', ns.defaultQueueDomain());
 	nodalionMongo.db(dbURL);
 	var app = express();
 	app.use(nodalionHttp.app(nodalion, cl1.cl1()));
@@ -87,7 +87,7 @@ describe('cl1', function(){
 	    assert.equal(resp[1].statusCode, 200);
 	    var queryURL = JSON.parse(resp[2]);
 
-	    yield setTimeout($R(), 300);
+	    yield setTimeout($R(), 500);
 	    
 	    resp = yield request(queryURL, $RR());
 	    assert.equal(resp[1].statusCode, 200);
@@ -242,7 +242,7 @@ describe('cl1', function(){
 	    assert.equal(resp[1].statusCode, 200);
 	    var url = JSON.parse(resp[2]).url;
 
-	    yield setTimeout($R(), 200);
+	    yield setTimeout($R(), 600);
 
 	    resp = yield request(url + '?str-X=a', $RR());
 	    assert.ifError(resp[0]);
@@ -323,7 +323,7 @@ describe('cl1', function(){
 	assert.equal(resp[1].statusCode, 200);
 	url = JSON.parse(resp[2]).url;
 
-	yield setTimeout($R(), 300); // Give the code enough time to propagate
+	yield setTimeout($R(), 700); // Give the code enough time to propagate
 
 	resp = yield request(url + '?str-X=abraham', $RR());
 	assert.ifError(resp[0]);

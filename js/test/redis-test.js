@@ -19,7 +19,7 @@ var doTask = function(term, cb) {
 var n = new nodalion('/tmp/mongo-ced.log');
 nodalionRedis.db({showFriendlyErrorStack: true});
 
-describe('ioredis', function(){
+describe.skip('ioredis', function(){
     it('should set and then get a value', $T(function*(){
 	var redis = new Redis({ showFriendlyErrorStack: true });
 	redis.set('foo', 'bar');
@@ -34,7 +34,7 @@ describe('ioredis', function(){
 });
 
 
-describe('nodalionRedis', function(){
+describe.skip('nodalionRedis', function(){
     describe('.db(options)', function(){
 	it('should define a database based on ioredis options', function(){
 	    nodalionRedis.db({showFriendlyErrorStack: true,

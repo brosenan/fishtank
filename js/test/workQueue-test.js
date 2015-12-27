@@ -36,12 +36,12 @@ example._register('sleep', function(ms) {
 describe('workQueue', function(){
     describe('.connect(nodalion, url, queueDomain)', function(){
 	it('should open a connection to the broker', function(){
-	    workQueue.connect(n, 'amqp://localhost', example.myQueueDomain());
+	    workQueue.connect(n, 'amqp://rabbitmq', example.myQueueDomain());
 	});
     });
     describe('/nodalion:enqueue(Queue, Term, Type)', function(){
 	it('should distribute work to queues', $T(function*(){
-	    workQueue.connect(n, 'amqp://localhost', example.myQueueDomain());
+	    workQueue.connect(n, 'amqp://rabbitmq', example.myQueueDomain());
 	    stored = [];
 	    yield doTask(ns.enqueue('example', "hello", {var:'T'}), $R());
 	    yield doTask(ns.enqueue('example', "world", {var:'T'}), $R());
