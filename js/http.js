@@ -1,7 +1,7 @@
 "use strict";
 var express = require('express');
 var $S = require('suspend'), $R = $S.resume, $RR = $S.resumeRaw, $T = function(gen) { return function(done) { $S.run(gen, done); } };
-var ipfs = require('./fake-ipfs.js');
+var objStore = require('./objStore.js');
 var bodyParser = require('body-parser');
 
 var Nodalion = require('./nodalion.js');
@@ -138,15 +138,15 @@ ns._register('header', function(Name, Value) {
     };
 });
 
-ns._register('ipfsGet', function(hash) {
+ns._register('objStoreGet', function(hash) {
     return function(req, res, next) {
-	ipfs.cat(hash).pipe(res);
+	objStore.cat(hash).pipe(res);
     };
 });
 
-ns._register('ipfsBody', function() {
+ns._register('objStoreBody', function() {
     return function(req, res, next) {
-	ipfs.add(req, function(err, hash) {
+	objStore.add(req, function(err, hash) {
 	    if(err) return next(err);
 	    req.body = hash;
 	    next();

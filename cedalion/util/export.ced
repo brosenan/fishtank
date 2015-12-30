@@ -1,6 +1,7 @@
 '/bootstrap':signature(export(Path)::'/bootstrap':statement,[Path::'/bootstrap':string]).
 '/bootstrap':projection(export(Path)::'/bootstrap':statement,'/bootstrap':horiz(['/bootstrap':label(!'Export to:'),'/bootstrap':vis(Path::'/bootstrap':string)])).
 export(!'prolog/cedalion.pl').
+'/bootstrap':unitTest(builtin:true).
 '/bootstrap':signature(exportTo(Path)::'/bootstrap':procedure,[Path::'/bootstrap':string]).
 '/bootstrap':signature(writeStatementsTo(Path)::'/bootstrap':procedure,[Path::'/bootstrap':string]).
 '/bootstrap':procedure(exportTo(Path),'/bootstrap':doProc(writeStatementsTo(Path))).

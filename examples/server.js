@@ -11,7 +11,7 @@ var Nodalion = require('../js/nodalion.js');
 var nodalionMongo = require('../js/nodalionMongo.js');
 var nodalionHttp = require('../js/http.js');
 var workQueue = require('../js/workQueue.js');
-require('../js/ipfs.js');
+require('../js/objStore.js');
 
 var ns = Nodalion.namespace('/nodalion', ['defaultQueueDomain']);
 var cl1 = Nodalion.namespace('/cl1', ['cl1']);
