@@ -4504,6 +4504,8 @@ rem(:-('/bootstrap#check'(A,::(B,'/bootstrap#statement'),C,'/bootstrap#marker'(A
 '/bootstrap#projection'(::('/util#export'(A),'/bootstrap#statement'),'/bootstrap#horiz'('.'('/bootstrap#label'(!('Export to:')),'.'('/bootstrap#vis'(::(A,'/bootstrap#string')),[])))).
 :-('builtin#loadedStatement'(!('/home/boaz/cloudlog1/cedalion/util/export.ced'),'/util#export'(!('prolog/cedalion.pl')),[]),'builtin#true').
 '/util#export'(!('prolog/cedalion.pl')).
+:-('builtin#loadedStatement'(!('/home/boaz/cloudlog1/cedalion/util/export.ced'),'/bootstrap#unitTest'('builtin#true'),[]),'builtin#true').
+'/bootstrap#unitTest'('builtin#true').
 :-('builtin#loadedStatement'(!('/home/boaz/cloudlog1/cedalion/util/export.ced'),'/bootstrap#signature'(::('/util#exportTo'(A),'/bootstrap#procedure'),'.'(::(A,'/bootstrap#string'),[])),'.'('builtin#varName'(::(A,B),!('Path')),[])),'builtin#true').
 '/bootstrap#signature'(::('/util#exportTo'(A),'/bootstrap#procedure'),'.'(::(A,'/bootstrap#string'),[])).
 :-('builtin#loadedStatement'(!('/home/boaz/cloudlog1/cedalion/util/export.ced'),'/bootstrap#signature'(::('/util#writeStatementsTo'(A),'/bootstrap#procedure'),'.'(::(A,'/bootstrap#string'),[])),'.'('builtin#varName'(::(A,B),!('Path')),[])),'builtin#true').

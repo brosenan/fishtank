@@ -5,7 +5,14 @@ var $S = require('suspend'), $R = $S.resume, $RR = $S.resumeRaw, $T = function(g
 var objStore = require('../objStore.js');
 
 var Nodalion = require('../nodalion.js');
-require('../objStore.js');
+require('../objStore.js').configure({
+    provider: 'amazon',
+    protocol: 'http://',
+    serversUrl: 'fakes3',
+    accessKeyId: 'ACCESS_KEY_ID',
+    accessKey: 'SECRET_ACCESS_KEY',
+    container: 'objStoreTest',
+});
 
 var ns = Nodalion.namespace('/nodalion', ['objStoreAdd', 'objStoreCat', 'objStoreToTmp']);
 var nodalion = new Nodalion('/tmp/objStore.log');

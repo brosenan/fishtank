@@ -74,6 +74,8 @@ describe('http', function(){
 	    assert.equal(resp[1].statusCode, 200);
 	    var url = JSON.parse(resp[2]).url;
 	    resp = yield request(url, $RR());
+	    assert.ifError(resp[0]);
+	    assert.equal(resp[1].statusCode, 200);
 	    assert.equal(resp[2], 'Hello, World\n');
 	}));
 

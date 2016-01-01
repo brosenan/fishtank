@@ -4,6 +4,14 @@ var $S = require('suspend'), $R = $S.resume, $RR = $S.resumeRaw, $T = function(g
 var express = require('express');
 var request = require('request');
 var MongoClient = require('mongodb').MongoClient;
+require('../objStore.js').configure({
+    provider: 'amazon',
+    protocol: 'http://',
+    serversUrl: 'fakes3',
+    accessKeyId: 'ACCESS_KEY_ID',
+    accessKey: 'SECRET_ACCESS_KEY',
+    container: 'objStoreTest',
+});
 var fs = require('fs');
 
 var Nodalion = require('../nodalion.js');
