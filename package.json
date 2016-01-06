@@ -25,7 +25,7 @@
   },
   "dependencies": {
       "morgan": "^1.6.1",
-      "nodalion": "^1.0.8",
+      "nodalion": "^1.0.9",
       "nodalion-http": "^1.0.1",
       "nodalion-amqp": "^1.0.1",
       "nodalion-mongo": "^1.0.2",
