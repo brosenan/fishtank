@@ -4,7 +4,8 @@
   "description": "A deductive database for the 21st century",
   "main": "index.js",
   "scripts": {
-    "test": "node ./node_modules/jison/lib/cli.js js/cedGrammar.jison && mv ./cedGrammar.js js/ && ./node_modules/mocha/bin/mocha -C -R dot js/test"
+    "test": "docker run -i --link=mongo --link=fakes3 --link=rabbitmq -v $PWD:/project -v /tmp:/tmp brosenan/nodalion npm run-script test-in-container",
+    "test-in-container": "./node_modules/mocha/bin/mocha -C -R dot"
   },
   "repository": {
     "type": "git",
@@ -17,21 +18,13 @@
   },
   "homepage": "https://github.com/brosenan/cloudlog1",
   "devDependencies": {
-    "mocha": "^2.2.5"
+    "mocha": "^2.2.5",
+    "nodalion-amqp": "^1.0.1",
+    "nodalion-mongo": "^1.0.2",
+    "nodalion-objstore": "^1.0.1"
   },
   "dependencies": {
-    "amqp": "^0.2.4",
-    "body-parser": "^1.14.1",
-    "byline": "^4.2.1",
-    "express": "^4.13.3",
-    "ioredis": "^1.7.4",
-    "jison": "^0.4.15",
-    "mongodb": "^2.0.39",
-    "morgan": "^1.6.1",
-    "pkgcloud": "^1.1.0",
-    "rabbit.js": "^0.4.4",
-    "request": "^2.59.0",
-    "suspend": "^0.6.1",
-    "temp": "^0.8.3"
+    "nodalion": "^1.0.7",
+    "nodalion-http": "^1.0.1"
   }
 }

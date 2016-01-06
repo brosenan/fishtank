@@ -1,5 +1,0 @@
-'/bootstrap':signature(forall(G1,G2)::impred,[G1::impred,G2::impred]).
-'/bootstrap':projection(forall(G1,G2)::impred,'/bootstrap':horiz(['/bootstrap':symbol(8704),'/bootstrap':vis(G1::impred),'/bootstrap':symbol(8658),'/bootstrap':vis(G2::impred)])).
-'/util':behavior(forall(G1,G2)::impred,!'should succeed if for all assigmnets that satisfy G1 also satisfy G2',simulate(forall(pred('/bootstrap':listMember(X,'/bootstrap':number,[1,2,3])),pred(builtin:greaterThen(X,0))),[],true)).
-'/util':behavior(forall(G1,G2)::impred,!'should fail if G1 holds but G2 does not',\+simulate(forall(pred('/bootstrap':listMember(X,'/bootstrap':number,[1,2,3])),pred(builtin:greaterThen(X,1))),[],true)).
-clause(forall(G1,G2),not(annotation:parentheses(conj(G1,not(G2))))).

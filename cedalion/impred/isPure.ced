@@ -1,7 +1,0 @@
-'/bootstrap':signature(isPure(Impred)::'/bootstrap':pred,[Impred::impred]).
-'/bootstrap':projection(isPure(Impred)::'/bootstrap':pred,'/bootstrap':horiz(['/bootstrap':label(!'pure:'),'/bootstrap':vis(Impred::impred)])).
-'/util':behavior(isPure(Impred)::'/bootstrap':pred,!'should succeed if Impred succeeds without continuations', (isPure(pred(X::'/bootstrap':number=2::'/bootstrap':number)),builtin:equals(X::'/bootstrap':number,2::'/bootstrap':number))).
-isPure(Impred):-solve(Impred,_,_,solution(_)).
-'/bootstrap':signature(addWithClause(Impred,Path,VNs)::'/bootstrap':procedure,[Impred::impred,Path::cpi:path,VNs::'/bootstrap':list('/bootstrap':varName)]).
-cpi:procedureCommand(addWithClause(Impred,Path,VNs),'/bootstrap':doProc(cpi:edit(Path,isPure(with(Task,Value,T,Impred))::'/bootstrap':pred,VNs))):- \+builtin:var(Impred::impred),solve(Impred,_,_,continuation(Task,Value,T,_,_)).
-'/bootstrap':contextMenuEntry(isPure(Impred)::'/bootstrap':pred,VNs,Path,!'Add With Clause',addWithClause(Impred,Path,VNs)).

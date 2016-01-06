@@ -1,7 +1,0 @@
-'/bootstrap':signature(clause(Head,Body)::'/bootstrap':statement,[Head::impred,Body::impred]).
-'/bootstrap':projection(clause(Head,Body)::'/bootstrap':statement,'/bootstrap':horiz(['/bootstrap':vis(Head::impred),'/bootstrap':label(! (:-)),'/bootstrap':vis(Body::impred)])).
-'/bootstrap':adapter(Head::impred,clause(Head,true)::'/bootstrap':statement).
-'/bootstrap':signature(greet(X)::impred,[X::'/bootstrap':string]).
-clause(greet(X),conj(task(userInput,Name,'/bootstrap':string),pred(builtin:strcat(!'Hello, ',Name,X)))).
-'/bootstrap':unitTest(simulate(greet(!'Hello, cedalion'),[task(userInput,!cedalion,'/bootstrap':string)],true)).
-clause(H,B)~>solve(H,X,T,C):-solve(B,X,T,C).

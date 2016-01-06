@@ -1,10 +1,10 @@
 "use strict";
 var assert = require('assert');
-var $S = require('suspend'), $R = $S.resume, $RR = $S.resumeRaw, $T = function(gen) { return function(done) { $S.run(gen, done); } };
+var $S = require('suspend'), $R = $S.resume, $RR = $S.resumeRaw, $T = gen => done => $S.run(gen, done);
 var express = require('express');
 var request = require('request');
 var MongoClient = require('mongodb').MongoClient;
-require('../objStore.js').configure({
+require('nodalion-objstore').configure({
     provider: 'amazon',
     protocol: 'http://',
     serversUrl: 'fakes3',
@@ -14,19 +14,23 @@ require('../objStore.js').configure({
 });
 var fs = require('fs');
 
-var Nodalion = require('../nodalion.js');
-var nodalionHttp = require('../http.js');
-var nodalionMongo = require('../nodalionMongo.js');
-var workQueue = require('../workQueue.js');
+var Nodalion = require('nodalion');
+var nodalionHttp = require('nodalion-http');
+var nodalionMongo = require('nodalion-mongo');
+var workQueue = require('nodalion-amqp');
 
 var ns = Nodalion.namespace('/nodalion', ['defaultQueueDomain']);
 var cl1 = Nodalion.namespace('/cl1', ['cl1']);
-var nodalion = new Nodalion('/tmp/cl1.log');
+var nodalion = new Nodalion(__dirname + '/../prolog/cedalion.pl', '/tmp/cl1.log');
 
 var dbURL = 'mongodb://mongo:27017/cl1test';
 
 describe('cl1', function(){
     before($T(function*() {
+	var impred = Nodalion.namespace('/impred', ['pred']);
+	var builtin = Nodalion.namespace('builtin', ['true']);
+	yield nodalion.findAll([], impred.pred(builtin.true()), $R());
+
 	var db = yield MongoClient.connect(dbURL, $R());
 	yield db.dropDatabase($R());
 
@@ -36,6 +40,7 @@ describe('cl1', function(){
 	app.use(nodalionHttp.app(nodalion, cl1.cl1()));
 	app.listen(3003);
 	yield setTimeout($R(), 10); // Give the app time to go up
+
     }));
     describe('/static', function(){
 	it('should store and then retrieve content', $T(function*(){
@@ -260,7 +265,7 @@ describe('cl1', function(){
 	    assert.deepEqual(res.map(fact => fact.Fact.args[0]), [1, 2]);
 	}));
     });
-    var encode = $S.async(function*(path, text) {
+    var encode = $S.callback(function*(path, text) {
 	var resp = yield request({
 	    method: "POST",
 	    url: "http://localhost:3003/encode" + path,
@@ -301,7 +306,7 @@ describe('cl1', function(){
 	    assert.deepEqual(result.map(x => x.Y), ['a', 'b']);
 	}));
     });
-
+    this.timeout(3000);
     it('should evaluate programs', $T(function*(){
 	var program = 'father(GF, F) -> father(F, C) -> grandfather(GF, C).\n' +
 	    'grandfather(GF, C) -> isGrandfather(GF, C) :- !.\n' +
@@ -331,8 +336,7 @@ describe('cl1', function(){
 	assert.equal(resp[1].statusCode, 200);
 	url = JSON.parse(resp[2]).url;
 
-	yield setTimeout($R(), 700); // Give the code enough time to propagate
-
+	yield setTimeout($R(), 500); // Give the code enough time to propagate
 	resp = yield request(url + '?str-X=abraham', $RR());
 	assert.ifError(resp[0]);
 	assert.equal(resp[1].statusCode, 200);

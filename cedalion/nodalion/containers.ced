@@ -1,6 +1,0 @@
-'/bootstrap':signature(objStoreToTmp(Hash)::'/impred':task('/bootstrap':string),[Hash::'/bootstrap':string]).
-'/bootstrap':signature(callWithContainers(Goal)::'/impred':impred,[Goal::'/bootstrap':pred]).
-annotation:shrink('/impred':clause(callWithContainers(Goal),'/impred':catch('/impred':pred(Goal),'/containers':missingContainer(Hash),'/impred':conj('/impred':task(objStoreToTmp(Hash),FileName,'/bootstrap':string),'/impred':conj('/impred':loadImageToContainer(FileName,Hash),callWithContainers(Goal)))))).
-'/bootstrap':signature(isVerySpecial(X)::'/bootstrap':pred,[X::'/bootstrap':string]).
-'/bootstrap':signature(testContainer(Hash,X)::'/impred':impred,[Hash::'/bootstrap':string,X::'/bootstrap':string]).
-'/impred':clause(testContainer(Hash,X),callWithContainers('/containers':callInContainer(Hash,isVerySpecial(X)))).

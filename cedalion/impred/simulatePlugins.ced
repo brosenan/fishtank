@@ -1,4 +1,0 @@
-'/bootstrap':signature(example:myTask(Str)::task('/bootstrap':string),[Str::'/bootstrap':string]).
-'/util':behavior(simulate(Impred,Having,Next)::'/bootstrap':pred,!'should consult a task simulator if one exists', (simulate(task(example:myTask(!foo),X,'/bootstrap':string),[],true),'/util':assertEqual(X,!'hello, foo','/bootstrap':string))).
-'/bootstrap':signature(simulateTask(Task,T,Having,Cont,RetVal,HavingPrime,ContPrime)::'/bootstrap':pred,[Task::task(T),T::'/bootstrap':type,Having::'/bootstrap':list(impred),Cont::impred,RetVal::T,HavingPrime::'/bootstrap':list(impred),ContPrime::impred]).
-simulateTask(example:myTask(Str),'/bootstrap':string,Having,Cont,StrPrime,Having,Cont):-builtin:strcat(!'hello, ',Str,StrPrime).

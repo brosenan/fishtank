@@ -1,6 +1,0 @@
-'/bootstrap':signature(url(Proto,Domain,Path,Query)::url,[Proto::'/bootstrap':string,Domain::'/bootstrap':string,Path::'/bootstrap':list('/bootstrap':string),Query::'/bootstrap':list(queryPair)]).
-'/bootstrap':projection(url(Proto,Domain,Path,Query)::url,'/bootstrap':horiz(['/bootstrap':vis(Proto::'/bootstrap':string),'/bootstrap':label(!'://'),'/bootstrap':vis(Domain::'/bootstrap':string),'/bootstrap':label(! (/)),cpi:vis(Path::'/bootstrap':list('/bootstrap':string),'/bootstrap':horizontal(0,0,'/bootstrap':label(! (/)),'/bootstrap':label(!''))),cpi:vis(Query::'/bootstrap':list(queryPair),'/bootstrap':horizontal(63,0,'/bootstrap':label(!'&'),'/bootstrap':label(!'')))])).
-'/bootstrap':defAtom(queryPair::'/bootstrap':type).
-'/bootstrap':signature(queryPair(Key,Value)::queryPair,[Key::'/bootstrap':string,Value::'/bootstrap':string]).
-'/bootstrap':projection(queryPair(Key,Value)::queryPair,'/bootstrap':horiz(['/bootstrap':vis(Key::'/bootstrap':string),'/bootstrap':label(! (=)),'/bootstrap':vis(Value::'/bootstrap':string)])).
-'/bootstrap':adapter(Key::'/bootstrap':string,queryPair(Key,Value)::queryPair).

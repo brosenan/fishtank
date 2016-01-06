@@ -1,7 +1,0 @@
-'/bootstrap':signature(assertionMatches(Assertion,Assertions)::'/bootstrap':pred,[Assertion::threadCond,Assertions::'/bootstrap':list(threadCond)]).
-assertionMatches(threadSeen(Thr,Trans),Assertions):-'/bootstrap':forall('/bootstrap':listMember(annotation:parentheses(threadNotSeen(Thr,TransPrime)),threadCond,Assertions),TransPrime>Trans).
-assertionMatches(threadNotSeen(Thr,Trans),Assertions):-'/bootstrap':forall('/bootstrap':listMember(annotation:parentheses(threadSeen(Thr,TransPrime)),threadCond,Assertions),Trans>TransPrime).
-'/util':behavior(assertionMatches(Assertion,Assertions)::'/bootstrap':pred,!'should not match Thr>=Trans with Thr<Trans1, if Trans1 < Trans',\+assertionMatches(threadSeen(!thr,3),[threadNotSeen(!thr,2)])).
-'/util':behavior(assertionMatches(Assertion,Assertions)::'/bootstrap':pred,!'should not match Thr>=Trans with Thr<Trans1, if Trans1 = Trans',\+assertionMatches(threadSeen(!thr,3),[threadNotSeen(!thr,3)])).
-'/util':behavior(assertionMatches(Assertion,Assertions)::'/bootstrap':pred,!'should not match Thr<Trans with Thr>=Trans1, if Trans1 > Trans',\+assertionMatches(threadNotSeen(!thr,2),[threadSeen(!thr,3)])).
-'/util':behavior(assertionMatches(Assertion,Assertions)::'/bootstrap':pred,!'should not match Thr<Trans with Thr>=Trans1, if Trans1 = Trans',\+assertionMatches(threadNotSeen(!thr,3),[threadSeen(!thr,3)])).

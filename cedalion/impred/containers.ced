@@ -1,7 +1,0 @@
-'/bootstrap':signature(testLoadNamespace(File,X)::impred,[File::'/bootstrap':string,X::'/bootstrap':number]).
-'/bootstrap':signature(foo(X)::'/bootstrap':pred,[X::'/bootstrap':number]).
-foo(4):-builtin:true.
-'/bootstrap':signature(loadCedalionImage(File,Prep,In,Out)::task('/nodalion':voidType),[File::'/bootstrap':string,Prep::'/bootstrap':pred,In::'/bootstrap':statement,Out::'/bootstrap':statement]).
-'/bootstrap':signature(loadImageToContainer(ImgFile,Container)::impred,[ImgFile::'/bootstrap':string,Container::'/bootstrap':string]).
-clause(loadImageToContainer(ImgFile,Container),task(loadCedalionImage(ImgFile,'/containers':containerize(In::'/bootstrap':statement,Out::'/bootstrap':statement,Container),In,Out),_,'/nodalion':voidType)).
-annotation:shrink(clause(testLoadNamespace(File,X),conj(loadImageToContainer(File,!foobar),conj(pred('/containers':containerize(foo(X)::'/bootstrap':pred,Goal::'/bootstrap':pred,!foobar)),pred((Goal,\+foo(X))))))).
