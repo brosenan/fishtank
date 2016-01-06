@@ -6,7 +6,7 @@
   "scripts": {
     "test": "docker run -i --link=mongo --link=fakes3 --link=rabbitmq -v $PWD:/project -v /tmp:/tmp brosenan/nodalion npm run-script test-in-container",
     "test-in-container": "./node_modules/mocha/bin/mocha -C -R dot",
-    "start": "docker run -it --rm --link=mongo --link=fakes3 --link=rabbitmq -v $PWD:/project -v /tmp:/tmp -v /var:/var -p 8080:80 brosenan/nodalion npm run-script start-in-container",
+    "start": "docker run -it --rm --link=mongo --link=rabbitmq -v $PWD:/project -v /tmp:/tmp -v /var:/var -p 8080:80 brosenan/nodalion npm run-script start-in-container",
       "start-in-container": "node server.js",
       "prepare-storage": "docker run -t -v /var:/var ubuntu mkdir -p /var/lib/storage/cloudlog"
   },
@@ -25,7 +25,7 @@
   },
   "dependencies": {
       "morgan": "^1.6.1",
-      "nodalion": "^1.0.7",
+      "nodalion": "^1.0.8",
       "nodalion-http": "^1.0.1",
       "nodalion-amqp": "^1.0.1",
       "nodalion-mongo": "^1.0.2",
