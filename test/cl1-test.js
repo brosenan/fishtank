@@ -21,7 +21,7 @@ var workQueue = require('nodalion-amqp');
 
 var ns = Nodalion.namespace('/nodalion', ['defaultQueueDomain']);
 var cl1 = Nodalion.namespace('/cl1', ['cl1']);
-var nodalion = new Nodalion(__dirname + '/../prolog/cedalion.pl', '/tmp/cl1.log');
+var nodalion = new Nodalion(__dirname + '/../cl1.cedimg', '/tmp/cl1.log');
 
 var dbURL = 'mongodb://mongo:27017/cl1test';
 
