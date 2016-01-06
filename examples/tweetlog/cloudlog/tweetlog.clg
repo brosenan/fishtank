@@ -1,3 +1,0 @@
-% Tweetlog
-follow(A, B) -> tweet(B, T) -> timeline(A, tweeted(B, T)) :-!.
-follow(A, B) -> timeline(B, followsYou(A)) :-!.

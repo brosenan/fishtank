@@ -7,17 +7,21 @@ var LOGIC_LOGFILE = '/tmp/server-logic.log';
 var express = require('express');
 var morgan = require('morgan');
 
-var Nodalion = require('../js/nodalion.js');
-var nodalionMongo = require('../js/nodalionMongo.js');
-var nodalionHttp = require('../js/http.js');
-var workQueue = require('../js/workQueue.js');
-require('../js/objStore.js');
+var Nodalion = require('nodalion');
+var nodalionMongo = require('nodalion-mongo');
+var nodalionHttp = require('nodalion-http');
+var workQueue = require('nodalion-amqp');
+require('nodalion-objstore').configure({
+    provider: 'filesystem',
+    root: '/var/lib/storage',
+    container: 'cloudlog',
+});
 
 var ns = Nodalion.namespace('/nodalion', ['defaultQueueDomain']);
 var cl1 = Nodalion.namespace('/cl1', ['cl1']);
 nodalionMongo.db(MONGODB_URL);
 
-var nodalion = new Nodalion(LOGIC_LOGFILE);
+var nodalion = new Nodalion(__dirname + '/cl1.cedimg', LOGIC_LOGFILE);
 
 workQueue.connect(nodalion, AMQP_URL, ns.defaultQueueDomain());
 
