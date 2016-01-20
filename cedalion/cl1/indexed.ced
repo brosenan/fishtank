@@ -5,3 +5,5 @@ parseCloudlog(!idx,Str,CtxIn,indexed(Key,Fact)::'/cloudlog':pred,Ctx):-'/parsing
 '/bootstrap':signature(cloudlog:key(Name,Key,T)::key,[Name::'/bootstrap':string,Key::T,T::'/bootstrap':type]).
 '/bootstrap':signature(cloudlog:index(Key,Fact)::'/cloudlog':axiom,[Key::key,Fact::'/cloudlog':axiom]).
 '/cloudlog':genericRule('/cloudlog':rule(cloudlog:index(Key,Fact),builtin:true,'/cloudlog':rule(Fact,builtin:true,'/cloudlog':clause(indexed(Key,Fact),'/cloudlog':true)))).
+'/bootstrap':signature(cloudlog:index(Key,Fact,Guard)::'/cloudlog':axiom,[Key::key,Fact::'/cloudlog':axiom,Guard::'/bootstrap':pred]).
+'/cloudlog':genericRule('/cloudlog':rule(cloudlog:index(Key,Fact,Guard),builtin:true,'/cloudlog':rule(Fact,Guard,'/cloudlog':clause(indexed(Key,Fact),'/cloudlog':true)))).
