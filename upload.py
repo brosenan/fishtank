@@ -21,10 +21,10 @@ except(FileNotFoundError):
     lastUploadTime = 0;
 
 files = subprocess.check_output('find %s -type f' % args.directory, shell=True).decode('utf-8').split('\n')
-pairs = [(file, file[len(args.directory):]) for file in files if file and os.stat(file).st_mtime > lastUploadTime]
+pairs = [(file, file[len(args.directory):]) for file in files if file and os.stat(file).st_mtime > lastUploadTime and os.stat(file).st_size > 0]
 
 for (file, path) in pairs:
-    contentType = mimetypes.guess_type(path)[0]
+    contentType = mimetypes.guess_type(path)[0] or 'application/octet-stream'
     subprocess.check_call('curl -X PUT --data-binary @%s -H "Content-Type: %s" %s%s' %(file, contentType, args.url, path), shell=True)
 
 subprocess.check_call(['touch', uploadIndicatorFile])
