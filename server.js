@@ -22,7 +22,7 @@ var ns = Nodalion.namespace('/nodalion', ['defaultQueueDomain']);
 var cl1 = Nodalion.namespace('/cl1', ['cl1']);
 nodalionMongo.db(MONGODB_URL);
 
-var nodalion = new Nodalion(__dirname + '/cedalion/cl1.cedimg', LOGIC_LOGFILE);
+var nodalion = new Nodalion(__dirname + '/cedalion/cl1/cl1.cedimg', LOGIC_LOGFILE);
 
 workQueue.connect(nodalion, AMQP_URL, ns.defaultQueueDomain());
 
