@@ -4,7 +4,7 @@ axiom(example:someFact(1,2)).
 '/bootstrap':signature(isAxiom(Axiom)::'/bootstrap':pred,[Axiom::axiom]).
 axiom(Axiom)~>isAxiom(Axiom):-builtin:true.
 '/bootstrap':signature(axiomForHash(Hash,Axiom)::'/bootstrap':pred,[Hash::'/bootstrap':string,Axiom::axiom]).
-axiomForHash(Hash,Axiom):-'/containers':callInContainer(Hash,isAxiom(Axiom1)),'/containers':uncontainerize(Axiom1::axiom,Axiom2::axiom,Hash),containerizeLocalGoals(Axiom2,Axiom,Hash).
+axiomForHash(Hash,Axiom):-'/containers':callInContainer(Hash,isAxiom(Axiom1)),containerizeLocalGoals(Axiom1,Axiom,Hash).
 '/bootstrap':signature(containerizeLocalGoals(AxiomIn,AxiomOut,Hash)::'/bootstrap':pred,[AxiomIn::axiom,AxiomOut::axiom,Hash::'/bootstrap':string]).
 '/util':behavior(containerizeLocalGoals(AxiomIn,AxiomOut,Hash)::'/bootstrap':pred,!'should pass a fact as-is', (containerizeLocalGoals(example:someFact(1,2),Axiom2,!'cl1foo'),'/util':assertEqual(Axiom2,example:someFact(1,2),axiom))).
 '/util':behavior(containerizeLocalGoals(AxiomIn,AxiomOut,Hash)::'/bootstrap':pred,!'should restrict guards to containers', (containerizeLocalGoals(rule(example:someFact(X,Y),'/Functional':gt('/Functional':const(X),'/Functional':const(Y),'/bootstrap':number),example:someFact(Y,X)),Axiom2,!'cl1foo'),'/util':assertEqual(Axiom2,rule(example:someFact(X,Y),'/containers':callInContainer(!'cl1foo','/Functional':gt('/Functional':const(X),'/Functional':const(Y),'/bootstrap':number)),example:someFact(Y,X)),axiom))).
