@@ -21,7 +21,7 @@ var workQueue = require('nodalion-amqp');
 
 var ns = Nodalion.namespace('/nodalion', ['defaultQueueDomain']);
 var cl1 = Nodalion.namespace('/cl1', ['cl1']);
-var nodalion = new Nodalion(__dirname + '/../cl1.cedimg', '/tmp/cl1.log');
+var nodalion = new Nodalion(__dirname + '/../cedalion/cl1/cl1.cedimg', '/tmp/cl1.log');
 
 var dbURL = 'mongodb://mongo:27017/cl1test';
 
@@ -63,12 +63,13 @@ describe('cl1', function(){
 	    assert.equal(resp[1].headers['content-type'].split(';')[0], 'text/foo');
 	    assert.equal(resp[2], content);
 	}));
-	it('should store and then retrieve content with up to 3 path components', $T(function*(){
+	it('should store and then retrieve content with up to 7 path components', $T(function*(){
 	    var ts = (new Date()).getTime();
+	    var url = 'http://localhost:3003/static/f1/f2/f3/f4/f5/f6/baz.txt';
 	    var content = "The time is: " + ts;
 	    var resp = yield request({
 		method: 'PUT',
-		url: 'http://localhost:3003/static/foo/bar/baz.txt',
+		url: url,
 		headers: {'content-type': 'text/foo'},
 		body: content,
 	    }, $RR());
@@ -79,18 +80,21 @@ describe('cl1', function(){
 	    yield setTimeout($R(), 50);
 
 	    yield setTimeout($R(), 10);
-	    resp = yield request('http://localhost:3003/static/foo/bar/baz.txt', $RR());
+	    resp = yield request(url, $RR());
 	    assert.ifError(resp[0]);
 	    assert.equal(resp[1].statusCode, 200);
 	    assert.equal(resp[1].headers['content-type'].split(';')[0], 'text/foo');
 	    assert.equal(resp[2], content);
 	}));
+	this.timeout(5000);
 	it('should take axioms from application/cedalion content', $T(function*(){
 	    var input = fs.createReadStream(__dirname + '/test1.cedimg');
 	    var req = request.put({url: 'http://localhost:3003/static/test1.cedimg',
 				   headers: {'content-type': 'application/cedalion'}});
 	    var resp = yield input.pipe(req).on('response', $RR());
-	    assert.equal(resp[0].statusCode, 200);
+	    if(resp[0].statusCode != 200) {
+		throw Error(resp[2]);
+	    }
 
 	    var resp = yield request({method: 'POST',
 				      url: 'http://localhost:3003/encode/q',
